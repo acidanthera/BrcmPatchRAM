@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D4F739F41A2E1D9400C2ADEF /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F739F21A2E1D9400C2ADEF /* zlib.cpp */; };
+		D4F739F51A2E1D9400C2ADEF /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F739F31A2E1D9400C2ADEF /* zlib.h */; };
+		D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
+		D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
+		D4F91B181A299E3E0030D10D /* IntelHex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B161A299E3E0030D10D /* IntelHex.cpp */; };
+		D4F91B191A299E3E0030D10D /* IntelHex.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B171A299E3E0030D10D /* IntelHex.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
+		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		D4F739F21A2E1D9400C2ADEF /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
+		D4F739F31A2E1D9400C2ADEF /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
+		D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F91B021A2998CE0030D10D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrcmPatchRAM.h; sourceTree = "<group>"; };
+		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; };
+		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		D4F91B161A299E3E0030D10D /* IntelHex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntelHex.cpp; sourceTree = "<group>"; };
+		D4F91B171A299E3E0030D10D /* IntelHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelHex.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D4F91AFA1A2998CE0030D10D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D4F91AF41A2998CE0030D10D = {
+			isa = PBXGroup;
+			children = (
+				D4F91B121A299C210030D10D /* IOKit.framework */,
+				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
+				D4F91AFF1A2998CE0030D10D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D4F91AFF1A2998CE0030D10D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D4F91B001A2998CE0030D10D /* BrcmPatchRAM */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */,
+				D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */,
+				D4F91B011A2998CE0030D10D /* Supporting Files */,
+				D4F91B161A299E3E0030D10D /* IntelHex.cpp */,
+				D4F91B171A299E3E0030D10D /* IntelHex.h */,
+				D45427691A2A045E000B0964 /* hci.h */,
+				D454276C1A2A07A7000B0964 /* Common.h */,
+				D4F739F21A2E1D9400C2ADEF /* zlib.cpp */,
+				D4F739F31A2E1D9400C2ADEF /* zlib.h */,
+			);
+			path = BrcmPatchRAM;
+			sourceTree = "<group>";
+		};
+		D4F91B011A2998CE0030D10D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D4F91B021A2998CE0030D10D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D4F91AFB1A2998CE0030D10D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */,
+				D4F91B191A299E3E0030D10D /* IntelHex.h in Headers */,
+				D4F739F51A2E1D9400C2ADEF /* zlib.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4F91B091A2998CE0030D10D /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */;
+			buildPhases = (
+				D4F91AF91A2998CE0030D10D /* Sources */,
+				D4F91AFA1A2998CE0030D10D /* Frameworks */,
+				D4F91AFB1A2998CE0030D10D /* Headers */,
+				D4F91AFC1A2998CE0030D10D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrcmPatchRAM;
+			productName = BrcmPatchRAM;
+			productReference = D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D4F91AF51A2998CE0030D10D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				TargetAttributes = {
+					D4F91AFD1A2998CE0030D10D = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = D4F91AF81A2998CE0030D10D /* Build configuration list for PBXProject "BrcmPatchRAM" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D4F91AF41A2998CE0030D10D;
+			productRefGroup = D4F91AFF1A2998CE0030D10D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D4F91AFC1A2998CE0030D10D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D4F91AF91A2998CE0030D10D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4F91B181A299E3E0030D10D /* IntelHex.cpp in Sources */,
+				D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */,
+				D4F739F41A2E1D9400C2ADEF /* zlib.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D4F91B071A2998CE0030D10D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D4F91B081A2998CE0030D10D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D4F91B0A1A2998CE0030D10D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_NAME = BrcmPatchRAM;
+				SDKROOT = macosx10.9;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		D4F91B0B1A2998CE0030D10D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.0d1;
+				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_VERSION = 1.0.0d1;
+				PRODUCT_NAME = BrcmPatchRAM;
+				SDKROOT = macosx10.9;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D4F91AF81A2998CE0030D10D /* Build configuration list for PBXProject "BrcmPatchRAM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4F91B071A2998CE0030D10D /* Debug */,
+				D4F91B081A2998CE0030D10D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4F91B091A2998CE0030D10D /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4F91B0A1A2998CE0030D10D /* Debug */,
+				D4F91B0B1A2998CE0030D10D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D4F91AF51A2998CE0030D10D /* Project object */;
+}

@@ -1,0 +1,7 @@
+Build
+DerivedData
+Distribute
+BrcmPatchRAM.xcodeproj/project.xcworkspace/xcuserdata
+BrcmPatchRAM.xcodeproj/xcuserdata
+*.xccheckout
+.DS_Store
