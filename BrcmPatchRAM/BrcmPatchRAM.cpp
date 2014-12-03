@@ -32,9 +32,6 @@
 
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 
-bool uploaded = false;
-//uint64_t uploaded = 0;
-
 /******************************************************************************
  * BrcmPatchRAM::probe - parse kernel extension Info.plist
  ******************************************************************************/
@@ -67,7 +64,7 @@ bool BrcmPatchRAM::init(OSDictionary *dictionary)
         mFirmwareData = decompressFirmware(firmware, &mFirmwareSize);
         
         if (mFirmwareData != NULL && mFirmwareSize != firmware->getLength())
-            IOLog("BrcmPatchRAM: Uncompressed firmware (%d bytes).\n", mFirmwareSize);
+            IOLog("BrcmPatchRAM: Uncompressed firmware (%d --> %d bytes).\n", firmware->getLength(), mFirmwareSize);
         
         firmware->release();
     }
@@ -82,10 +79,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 {
     if (!super::start(provider))
         return false;
-    
-    if (uploaded)
-        return false;
-    
+   
     IOLog("%s: Version 0.0.1 starting.\n", this->getName());
     
     // Cast to IOUSBDevice
@@ -102,25 +96,6 @@ bool BrcmPatchRAM::start(IOService *provider)
         IOLog("%s: No firmware data loaded.\n", this->getName());
         return false;
     }
-    
-    mFirmware = new class IntelHex();
-    
-    if (!mFirmware->load(mFirmwareData))
-    {
-        IOLog("%s: Failed to load IntelHex firmware.\n", this->getName());
-        return false;
-    }
-    else
-        IOLog("%s: IntelHex firmware loaded.\n", this->getName());
-  
-    // Retain this device
-    //device->retain();
-    
-    //resetDevice();
-    
-    //DEBUG_LOG("%s: Uptime #1 %lld", this->getName(), uploaded);
-    //clock_get_uptime(&uploaded);
-    //DEBUG_LOG("%s: Uptime #2 %lld", this->getName(), uploaded);
     
     // Print out additional device information
     printDeviceInfo();
@@ -142,60 +117,64 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
-            uint16_t firmwareVersion = 0; //getFirmwareVersion();
+            uint16_t firmwareVersion = getFirmwareVersion();
             
-            //IOLog("BrcmPatchRAM: Current firmware version %d.\n", firmwareVersion);
+            //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
             
             if (firmwareVersion == 0)
             {
-                //hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
-                //queueRead();
-            
-                // Initiate firmware upgrade
-                hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
-                queueRead();
-            
-                // Wait for mini driver download
-                IOSleep(5);
-            
-                // Write firmware data to bulk pipe
-                OSCollectionIterator* iterator = mFirmware->getInstructions();
-            
-                OSData* data;
-                while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                mFirmware = new class IntelHex();
+                
+                if (!mFirmware->load(mFirmwareData))
+                    IOLog("%s: Failed to load IntelHex firmware.\n", this->getName());
+                else
                 {
-                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                    IOLog("%s: IntelHex firmware loaded.\n", this->getName());
+           
+                    // Initiate firmware upgrade
+                    hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
                     queueRead();
+            
+                    // Wait for mini driver download
+                    IOSleep(5);
+            
+                    // Write firmware data to bulk pipe
+                    OSCollectionIterator* iterator = mFirmware->getInstructions();
+            
+                    OSData* data;
+                    while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                    {
+                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                        queueRead();
+                    }
+            
+                    hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
+                    queueRead();
+                    queueRead();
+                
+                    //IOSleep(25);
+            
+                    //hciCommand(&HCI_VSC_WAKEUP, sizeof(HCI_VSC_WAKEUP));
+                    //queueRead();
+            
+                    hciCommandSync(&HCI_RESET, sizeof(HCI_RESET));
+                    //queueRead();
+            
+                    //IOSleep(50);
+            
+                    resetDevice();
+                
+                    getDeviceStatus();
+                    
+                    IOLog("%s: Firmware PatchRAM applied successfully.\n", this->getName());
                 }
-            
-                hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
-                queueRead();
-                queueRead();
                 
-                //IOSleep(25);
-            
-                //hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
-                //queueRead();
-            
-                //hciCommand(&HCI_VSC_WAKEUP, sizeof(HCI_VSC_WAKEUP));
-                //queueRead();
-            
-                hciCommandSync(&HCI_RESET, sizeof(HCI_RESET));
-                //queueRead();
-            
-                //IOSleep(50);
-            
-                resetDevice();
-                
-                getDeviceStatus();
-                
-                //setConfiguration(0);
-                
-                uploaded = true;
+                if (mFirmware != NULL)
+                    delete mFirmware;
             }
         }
     }
-      
+    
     if (mInterruptPipe != NULL)
     {
         mInterruptPipe->Abort();
@@ -213,9 +192,6 @@ bool BrcmPatchRAM::start(IOService *provider)
         mInterface->close(this);
         mInterface->release();
     }
-    
-    if (mFirmware != NULL)
-        delete mFirmware;
     
     return false;
 }
@@ -321,7 +297,9 @@ bool BrcmPatchRAM::resetDevice()
  ******************************************************************************/
 bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
+    IOReturn result;
     const IOUSBConfigurationDescriptor* configurationDescriptor;
+    uint8_t currentConfiguration = 0xFF;
     
     // Find the first config/interface
     int numconf = 0;
@@ -344,6 +322,19 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
         return false;
     }
     
+    if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
+    {
+        IOLog("%s: Unable to retrieve active configuration (0x%08x).\n", this->getName(), result);
+        return false;
+    }
+    
+    // Device is already configured
+    if (currentConfiguration == configurationDescriptor->bConfigurationValue)
+    {
+        DEBUG_LOG("%s: Device configuration is already set to configuration index %d.\n", this->getName(), configurationIndex);
+        return true;
+    }
+    
     if (!mDevice->open(this))
     {
         IOLog("%s: Unable to open device for (re-)configuration.\n", this->getName());
@@ -351,9 +342,9 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     }
     
     // Set the configuration to the first configuration
-    if (mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true) != kIOReturnSuccess)
+    if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
-        IOLog("%s: Unable to (re-)configure device.\n", this->getName());
+        IOLog("%s: Unable to (re-)configure device (0x%08x).\n", this->getName(), result);
         mDevice->close(this);
         return false;
     }
@@ -472,7 +463,6 @@ IOReturn BrcmPatchRAM::queueRead()
                 // Wait until read is complete
                 while (mReadQueued)
                 {
-                    //DEBUG_LOG("%s: Still waiting on read...\n", this->getName());
                     IOSleep(1);
                 }
             }
@@ -515,16 +505,13 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
         case kIOReturnOverrun:
             DEBUG_LOG("%s: read - kIOReturnOverrun\n", this->getName());
             mInterruptPipe->ClearStall();
-            // fall through
         case kIOReturnSuccess:
         {
-            //DEBUG_LOG("%s: Queued read\n", this->getName());
             hciParseResponse(buffer->getBytesNoCopy(), buffer->getLength() - bufferSizeRemaining, NULL, NULL);
             break;
         }
         case kIOReturnNotResponding:
             DEBUG_LOG("%s: read - kIOReturnNotResponding\n", this->getName());
-            // fall through
         default:
             DEBUG_LOG("%s: read - Other (0x%08x)\n", this->getName(), status);
             break;
