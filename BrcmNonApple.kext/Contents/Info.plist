@@ -16,7 +16,7 @@
 	<string>1.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<key>BCM94352HMB</key>
+		<key>0489_E032</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.apple.driver.AppleUSBMergeNub</string>
@@ -27,14 +27,194 @@
 			<key>IOProviderMergeProperties</key>
 			<dict>
 				<key>USB Product Name</key>
-				<string>Broadcom Bluetooth 4.0 Controller (BCM94352HMB)</string>
+				<string>20702 Combo</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>57394</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_E07A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Lenovo NGFF (4352/20702)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>57466</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>04CA_200A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>LiteOn (4352 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>8202</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04CA_200B</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>LiteOn (4352 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>8203</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04CA_200C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>LiteOn (4352 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>8204</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>050D_065A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Belkin (20702)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>1626</integer>
+			<key>idVendor</key>
+			<integer>1293</integer>
+		</dict>
+		<key>0930_0221</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Toshiba (4352/20702A1)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>545</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0930_0223</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Toshiba NGFF (4352/20702A1)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>547</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0A5C_21E1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>HP SoftSailing (20702A1)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>8673</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0A5C_21E8</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Bluetooth USB Dongle (20702A1)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>8680</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0A5C_21FB</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>HP Supra 4352 (20702A1 Combo)</string>
 			</dict>
 			<key>idProduct</key>
 			<integer>8699</integer>
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
-		<key>BCM94352Z</key>
+		<key>0B05_17CB</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.apple.driver.AppleUSBMergeNub</string>
@@ -45,12 +225,232 @@
 			<key>IOProviderMergeProperties</key>
 			<dict>
 				<key>USB Product Name</key>
-				<string>Broadcom Bluetooth 4.0 Controller (BCM94352Z)</string>
+				<string>Asus (20702 standalone)</string>
 			</dict>
+			<key>idProduct</key>
+			<integer>6091</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>0B05_17CF</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Asus (4352/20702A1 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>6095</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>13D3_3404</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Azurewave (4352HMB)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>13316</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13D3_3411</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Dell Alienware (4352/20702A1 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>13329</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13D3_3413</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Azurewave (4360/20702 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>13331</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>413C_8143</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>USB Product Name</key>
+				<string>Dell DW1550 (4352/20702 combo)</string>
+			</dict>
+			<key>idProduct</key>
+			<integer>33091</integer>
+			<key>idVendor</key>
+			<integer>16700</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0489_E032</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57394</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0489_E07A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57466</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_04CA_200A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8202</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_04CA_200B</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8203</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_04CA_200C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8204</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_050D_065A</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>1626</integer>
+			<key>idVendor</key>
+			<integer>1293</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0930_0221</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>545</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0930_0223</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
 			<key>idProduct</key>
 			<integer>547</integer>
 			<key>idVendor</key>
 			<integer>2352</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0A5C_21E1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8673</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0A5C_21E8</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8680</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
 		</dict>
 		<key>BroadcomBluetoothHostControllerUSBTransport_0A5C_21FB</key>
 		<dict>
@@ -65,7 +465,7 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
-		<key>BroadcomBluetoothHostControllerUSBTransport__0930_0223</key>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0B05_17CB</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
@@ -74,9 +474,74 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
 			<key>idProduct</key>
-			<integer>547</integer>
+			<integer>6091</integer>
 			<key>idVendor</key>
-			<integer>2352</integer>
+			<integer>2821</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_0B05_17CF</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>6095</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_13D3_3404</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13316</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_13D3_3411</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13329</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_13D3_3413</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13331</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>BroadcomBluetoothHostControllerUSBTransport_413C_8143</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>33091</integer>
+			<key>idVendor</key>
+			<integer>16700</integer>
 		</dict>
 	</dict>
 </dict>

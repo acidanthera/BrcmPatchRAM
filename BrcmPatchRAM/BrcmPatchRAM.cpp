@@ -25,9 +25,7 @@
 #include <libkern/zlib.h>
 
 #include "Common.h"
-#include "IntelHex.h"
 #include "hci.h"
-#include "zlib.h"
 #include "BrcmPatchRAM.h"
 
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
@@ -45,11 +43,11 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
  * BrcmPatchRAM::init - parse kernel extension Info.plist
  ******************************************************************************/
 bool BrcmPatchRAM::init(OSDictionary *dictionary)
-{
+{    
     DEBUG_LOG("BrcmPatchRAM::init\n"); // this->getName() is not available yet
-    
+    /*
     OSData* firmware = OSDynamicCast(OSData, dictionary->getObject("Firmware"));
-    
+                     
     if (firmware == NULL)
     {
         IOLog("BrcmPatchRAM: No firmware configured for the matched device.\n");
@@ -68,7 +66,7 @@ bool BrcmPatchRAM::init(OSDictionary *dictionary)
         
         firmware->release();
     }
-    
+    */
     return super::init(dictionary);
 }
 
@@ -77,10 +75,12 @@ bool BrcmPatchRAM::init(OSDictionary *dictionary)
  ******************************************************************************/
 bool BrcmPatchRAM::start(IOService *provider)
 {
+    BrcmFirmwareStore* firmwareStore;
+    
+    IOLog("%s: Version 0.0.1 starting.\n", this->getName());
+
     if (!super::start(provider))
         return false;
-   
-    IOLog("%s: Version 0.0.1 starting.\n", this->getName());
     
     // Cast to IOUSBDevice
     mDevice = OSDynamicCast(IOUSBDevice, provider);
@@ -91,12 +91,6 @@ bool BrcmPatchRAM::start(IOService *provider)
         return false;
     }
 
-    if (mFirmwareData == NULL)
-    {
-        IOLog("%s: No firmware data loaded.\n", this->getName());
-        return false;
-    }
-    
     // Print out additional device information
     printDeviceInfo();
     
@@ -121,16 +115,12 @@ bool BrcmPatchRAM::start(IOService *provider)
             
             //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
             
-            if (firmwareVersion == 0)
+            if (firmwareVersion == 0 && (firmwareStore = getFirmwareStore()) != NULL)
             {
-                mFirmware = new class IntelHex();
+                OSArray* instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
                 
-                if (!mFirmware->load(mFirmwareData))
-                    IOLog("%s: Failed to load IntelHex firmware.\n", this->getName());
-                else
+                if (instructions != NULL)
                 {
-                    IOLog("%s: IntelHex firmware loaded.\n", this->getName());
-           
                     // Initiate firmware upgrade
                     hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
                     queueRead();
@@ -139,7 +129,7 @@ bool BrcmPatchRAM::start(IOService *provider)
                     IOSleep(5);
             
                     // Write firmware data to bulk pipe
-                    OSCollectionIterator* iterator = mFirmware->getInstructions();
+                    OSCollectionIterator* iterator = OSCollectionIterator::withCollection(instructions);
             
                     OSData* data;
                     while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
@@ -147,6 +137,8 @@ bool BrcmPatchRAM::start(IOService *provider)
                         bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
                         queueRead();
                     }
+                    
+                    OSSafeRelease(iterator);
             
                     hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
                     queueRead();
@@ -166,11 +158,8 @@ bool BrcmPatchRAM::start(IOService *provider)
                 
                     getDeviceStatus();
                     
-                    IOLog("%s: Firmware PatchRAM applied successfully.\n", this->getName());
+                    IOLog("%s: Firmware upgrade completed successfully.\n", this->getName());
                 }
-                
-                if (mFirmware != NULL)
-                    delete mFirmware;
             }
         }
     }
@@ -192,7 +181,7 @@ bool BrcmPatchRAM::start(IOService *provider)
         mInterface->close(this);
         mInterface->release();
     }
-    
+
     return false;
 }
 
@@ -202,7 +191,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 void BrcmPatchRAM::stop(IOService *provider)
 {
     DEBUG_LOG("%s: Stopping...\n", this->getName());
-    
+
     mStopping = true;
     
     if (mInterruptPipe != NULL)
@@ -222,14 +211,37 @@ void BrcmPatchRAM::stop(IOService *provider)
         mInterface->close(this);
         mInterface->release();
     }
-    
-    if (mFirmware != NULL)
-        delete mFirmware;
-    
-    if (mFirmwareData != NULL)
-        IOFree(mFirmwareData, mFirmwareSize);
    
     super::stop(provider);
+}
+
+/******************************************************************************
+ * BrcmPatchRAM::getFirmwareStore - Obtain referenced to the firmware data store
+ ******************************************************************************/
+BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
+{
+    BrcmFirmwareStore* firmwareStore = NULL;
+    
+    if (OSDictionary *matchingDictionary = serviceMatching(kBrcmFirmwareStoreService))
+    {
+        if (OSIterator *iterator = getMatchingServices(matchingDictionary))
+        {
+            while (IOService *service = (IOService*)iterator->getNextObject())
+            {
+                firmwareStore = OSDynamicCast(BrcmFirmwareStore, service);
+                break;
+            }
+            
+            OSSafeRelease(iterator);
+        }
+        
+        OSSafeRelease(matchingDictionary);
+    }
+    
+    if (firmwareStore == NULL)
+        IOLog("%s: BrcmFirmwareStore does not appear to be available.\n", this->getName());
+    
+    return firmwareStore;
 }
 
 /******************************************************************************

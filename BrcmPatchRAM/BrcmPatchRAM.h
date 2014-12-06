@@ -19,18 +19,17 @@
 #ifndef __BrcmPatchRAM__
 #define __BrcmPatchRAM__
 
+#include <IOKit/IOService.h>
+#include <IOKit/IOLib.h>
 #include <IOKit/usb/IOUSBDevice.h>
+
+#include "BrcmFirmwareStore.h"
 
 class BrcmPatchRAM : public IOService
 {
     private:
         typedef IOService super;
         OSDeclareDefaultStructors(BrcmPatchRAM);
-  
-        uint32_t mFirmwareSize = 0;
-        unsigned char* mFirmwareData = NULL;
-    
-        IntelHex* mFirmware = NULL;
     
         IOUSBDevice* mDevice = NULL;
         IOUSBInterface* mInterface = NULL;
@@ -39,6 +38,8 @@ class BrcmPatchRAM : public IOService
     
         bool volatile mStopping = false;
         bool volatile mReadQueued = false;
+    
+        BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();
         int getDeviceStatus();

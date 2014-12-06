@@ -7,26 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4F739F41A2E1D9400C2ADEF /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F739F21A2E1D9400C2ADEF /* zlib.cpp */; };
-		D4F739F51A2E1D9400C2ADEF /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F739F31A2E1D9400C2ADEF /* zlib.h */; };
+		D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
+		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
-		D4F91B181A299E3E0030D10D /* IntelHex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B161A299E3E0030D10D /* IntelHex.cpp */; };
-		D4F91B191A299E3E0030D10D /* IntelHex.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B171A299E3E0030D10D /* IntelHex.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmFirmwareStore.cpp; sourceTree = "<group>"; };
+		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		D4F739F21A2E1D9400C2ADEF /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
-		D4F739F31A2E1D9400C2ADEF /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F91B021A2998CE0030D10D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrcmPatchRAM.h; sourceTree = "<group>"; };
 		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; };
 		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
-		D4F91B161A299E3E0030D10D /* IntelHex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntelHex.cpp; sourceTree = "<group>"; };
-		D4F91B171A299E3E0030D10D /* IntelHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelHex.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,15 +56,13 @@
 		D4F91B001A2998CE0030D10D /* BrcmPatchRAM */ = {
 			isa = PBXGroup;
 			children = (
+				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
+				D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */,
 				D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */,
 				D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */,
 				D4F91B011A2998CE0030D10D /* Supporting Files */,
-				D4F91B161A299E3E0030D10D /* IntelHex.cpp */,
-				D4F91B171A299E3E0030D10D /* IntelHex.h */,
 				D45427691A2A045E000B0964 /* hci.h */,
 				D454276C1A2A07A7000B0964 /* Common.h */,
-				D4F739F21A2E1D9400C2ADEF /* zlib.cpp */,
-				D4F739F31A2E1D9400C2ADEF /* zlib.h */,
 			);
 			path = BrcmPatchRAM;
 			sourceTree = "<group>";
@@ -89,8 +83,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */,
-				D4F91B191A299E3E0030D10D /* IntelHex.h in Headers */,
-				D4F739F51A2E1D9400C2ADEF /* zlib.h in Headers */,
+				D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,9 +153,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4F91B181A299E3E0030D10D /* IntelHex.cpp in Sources */,
+				D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */,
 				D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */,
-				D4F739F41A2E1D9400C2ADEF /* zlib.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
