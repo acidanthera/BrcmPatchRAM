@@ -350,7 +350,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
         return NULL;
     }
     
-    IOLog("%s: Found firmware for firmware key \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
+    IOLog("%s: Retrieved firmware for firmware key \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
     
     OSData* firmwareData = decompressFirmware(configuredData);
     
@@ -398,9 +398,11 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
         instructions = loadFirmware(firmwareKey);
         
         // Add instructions to the firmwares cache
-        if (instructions == NULL)
+        if (instructions != NULL)
             mFirmwares->setObject(firmwareKey, instructions);
     }
+    else
+     IOLog("%s: Retrieved cached firmware for \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
     
     return instructions;
 }

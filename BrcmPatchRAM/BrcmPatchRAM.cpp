@@ -45,28 +45,6 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 bool BrcmPatchRAM::init(OSDictionary *dictionary)
 {    
     DEBUG_LOG("BrcmPatchRAM::init\n"); // this->getName() is not available yet
-    /*
-    OSData* firmware = OSDynamicCast(OSData, dictionary->getObject("Firmware"));
-                     
-    if (firmware == NULL)
-    {
-        IOLog("BrcmPatchRAM: No firmware configured for the matched device.\n");
-        return false;
-    }
-    
-    if (firmware != NULL)
-    {
-        firmware->retain();
-        IOLog("BrcmPatchRAM: Found configured firmware (%d bytes).\n", firmware->getLength());
-
-        mFirmwareData = decompressFirmware(firmware, &mFirmwareSize);
-        
-        if (mFirmwareData != NULL && mFirmwareSize != firmware->getLength())
-            IOLog("BrcmPatchRAM: Uncompressed firmware (%d --> %d bytes).\n", firmware->getLength(), mFirmwareSize);
-        
-        firmware->release();
-    }
-    */
     return super::init(dictionary);
 }
 
