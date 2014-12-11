@@ -145,6 +145,12 @@
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DelayBulkTransfer</key>
+			<integer>5</integer>
+			<key>DelayCommand</key>
+			<integer>5</integer>
+			<key>DelayMiniDriver</key>
+			<integer>5</integer>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1483.1651_v5747</string>
 			<key>IOClass</key>

@@ -283,27 +283,18 @@ exit_error:
 
 OSDefineMetaClassAndStructors(BrcmFirmwareStore, IOService)
 
-/******************************************************************************
- * BrcmFirmwareStore::probe - parse kernel extension Info.plist
- ******************************************************************************/
 IOService* BrcmFirmwareStore::probe(IOService *provider, SInt32 *probeScore)
 {
     DEBUG_LOG("%s::probe\n", this->getName());
     return super::probe(provider, probeScore);
 }
 
-/******************************************************************************
- * BrcmFirmwareStore::init - parse kernel extension Info.plist
- ******************************************************************************/
 bool BrcmFirmwareStore::init(OSDictionary *dictionary)
 {
     DEBUG_LOG("BrcmFirmwareStore::init\n"); // this->getName() is not available yet
     return super::init(dictionary);
 }
 
-/******************************************************************************
- * BrcmFirmwareStore::start - start kernel extension
- ******************************************************************************/
 bool BrcmFirmwareStore::start(IOService *provider)
 {
     DEBUG_LOG("%s::start\n", this->getName());
@@ -317,9 +308,6 @@ bool BrcmFirmwareStore::start(IOService *provider)
     return (super::start(provider));
 }
 
-/******************************************************************************
- * BrcmFirmwareStore::stop & free - stop and free kernel extension
- ******************************************************************************/
 void BrcmFirmwareStore::stop(IOService *provider)
 {
     DEBUG_LOG("%s::stop\n", this->getName());
@@ -336,7 +324,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     
     OSDictionary* firmwares = OSDynamicCast(OSDictionary, this->getProperty("Firmwares"));
     
-    if (firmwares == NULL)
+    if (!firmwares)
     {
         IOLog("%s: Unable to locate BrcmFirmwareStore configured firmwares.\n", this->getName());
         return NULL;
@@ -344,7 +332,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     
     OSData* configuredData = OSDynamicCast(OSData, firmwares->getObject(firmwareKey));
     
-    if (configuredData == NULL)
+    if (!configuredData)
     {
         IOLog("%s: No firmware for firmware key \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
         return NULL;
@@ -354,7 +342,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     
     OSData* firmwareData = decompressFirmware(configuredData);
     
-    if (firmwareData == NULL)
+    if (!firmwareData)
     {
         IOLog("%s: Failed to decompress firmware.\n", this->getName());
         return NULL;
@@ -368,7 +356,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     OSArray* instructions = parseFirmware(firmwareData);
     OSSafeRelease(firmwareData);
     
-    if (instructions == NULL)
+    if (!instructions)
     {
         IOLog("%s: Firmware is not valid IntelHex firmware.\n", this->getName());
         return NULL;
@@ -383,7 +371,7 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
 {
     DEBUG_LOG("%s::getFirmware\n", this->getName());
     
-    if (firmwareKey == NULL)
+    if (!firmwareKey || firmwareKey->getLength() == 0)
     {
         IOLog("%s: Current device has no FirmwareKey configured.\n", this->getName());
         return NULL;
@@ -392,13 +380,13 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
     OSArray* instructions = OSDynamicCast(OSArray, mFirmwares->getObject(firmwareKey));
     
     // Cached instructions found for firmwareKey?
-    if (instructions == NULL)
+    if (!instructions)
     {
         // Load instructions for firmwareKey
         instructions = loadFirmware(firmwareKey);
         
         // Add instructions to the firmwares cache
-        if (instructions != NULL)
+        if (instructions)
             mFirmwares->setObject(firmwareKey, instructions);
     }
     else
