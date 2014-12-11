@@ -89,7 +89,7 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
-            uint16_t firmwareVersion = getFirmwareVersion();
+            uint16_t firmwareVersion = 0;//getFirmwareVersion();
             
             //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
             
