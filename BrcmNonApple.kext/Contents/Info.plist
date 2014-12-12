@@ -544,5 +544,18 @@
 			<integer>16700</integer>
 		</dict>
 	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOUSBFamily</key>
+		<string>4.4</string>
+		<key>com.apple.kpi.iokit</key>
+		<string>11.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>11.0</string>
+		<key>com.apple.kpi.mach</key>
+		<string>11.0</string>
+		<key>com.no-one.BrcmPatchRAM</key>
+		<string>1.0</string>
+	</dict>
 </dict>
 </plist>
