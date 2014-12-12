@@ -34,7 +34,8 @@ typedef enum
 {
     HCI_EVENT_CONN_COMPLETE = 0x03,
     HCI_EVENT_COMMAND_COMPLETE = 0x0e,
-    HCI_EVENT_NUM_COMPLETED_PACKETS = 0x13
+    HCI_EVENT_NUM_COMPLETED_PACKETS = 0x13,
+    HCI_EVENT_LE_META = 0x3e
 } HCI_EVENT_TYPE;
 
 typedef struct __attribute__((packed))
