@@ -171,21 +171,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
     BrcmFirmwareStore* firmwareStore = NULL;
     
-    if (OSDictionary *matchingDictionary = serviceMatching(kBrcmFirmwareStoreService))
-    {
-        if (OSIterator *iterator = getMatchingServices(matchingDictionary))
-        {
-            while (IOService *service = (IOService*)iterator->getNextObject())
-            {
-                firmwareStore = OSDynamicCast(BrcmFirmwareStore, service);
-                break;
-            }
-            
-            OSSafeRelease(iterator);
-        }
-        
-        OSSafeRelease(matchingDictionary);
-    }
+    firmwareStore = OSDynamicCast(BrcmFirmwareStore, this->getResourceService()->getProperty(kBrcmFirmwareStoreService));
     
     if (!firmwareStore)
         IOLog("%s: BrcmFirmwareStore does not appear to be available.\n", this->getName());

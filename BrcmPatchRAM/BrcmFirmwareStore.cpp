@@ -299,19 +299,19 @@ bool BrcmFirmwareStore::start(IOService *provider)
 {
     DEBUG_LOG("%s::start\n", this->getName());
     
+    if (!super::start(provider))
+        return false;
+    
     mFirmwares = OSDictionary::withCapacity(1);
     
     IOService::publishResource(kBrcmFirmwareStoreService, this);
-    attach(provider);
-    registerService();
-    
-    return (super::start(provider));
+  
+    return true;
 }
 
 void BrcmFirmwareStore::stop(IOService *provider)
 {
     DEBUG_LOG("%s::stop\n", this->getName());
-    detach(provider);
     
     OSSafeRelease(mFirmwares);
     
