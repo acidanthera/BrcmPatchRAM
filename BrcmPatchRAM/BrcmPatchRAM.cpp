@@ -89,7 +89,7 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
-            uint16_t firmwareVersion = 0;//getFirmwareVersion();
+            uint16_t firmwareVersion = getFirmwareVersion();
             
             //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
             
@@ -122,7 +122,7 @@ bool BrcmPatchRAM::start(IOService *provider)
                     queueRead();
                     queueRead();
                 
-                    //IOSleep(25);
+                    IOSleep(100);
             
                     //hciCommand(&HCI_VSC_WAKEUP, sizeof(HCI_VSC_WAKEUP));
                     //queueRead();
@@ -130,7 +130,7 @@ bool BrcmPatchRAM::start(IOService *provider)
                     hciCommandSync(&HCI_RESET, sizeof(HCI_RESET));
                     //queueRead();
             
-                    //IOSleep(50);
+                    IOSleep(50);
             
                     resetDevice();
                 
@@ -502,6 +502,7 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
         }
         case kIOReturnNotResponding:
             DEBUG_LOG("%s: read - kIOReturnNotResponding\n", this->getName());
+            break;
         default:
             DEBUG_LOG("%s: read - Other (0x%08x)\n", this->getName(), status);
             break;
@@ -561,8 +562,8 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
                     DEBUG_LOG("%s: READ VERBOSE CONFIG complete (status: 0x%02x, length: %d bytes).\n",
                               this->getName(), event->status, header->length);
                     
-                    DEBUG_LOG("%s: Firmware version: 0x%04x.\n",
-                              this->getName(), *(uint16_t*)(((char*)response) + 10));
+                    DEBUG_LOG("%s: Firmware version: v%d.\n",
+                              this->getName(), (*(uint16_t*)(((char*)response) + 10)) + 4096);
                     break;
                 case HCI_OPCODE_DOWNLOAD_MINIDRIVER:
                     DEBUG_LOG("%s: DOWNLOAD MINIDRIVER complete (status: 0x%02x, length: %d bytes).\n",
@@ -606,6 +607,12 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
         }
         case HCI_EVENT_NUM_COMPLETED_PACKETS:
             DEBUG_LOG("%s: Number of completed packets.\n", this->getName());
+            break;
+        case HCI_EVENT_CONN_COMPLETE:
+            DEBUG_LOG("%s: Connection complete event.\n", this->getName());
+            break;
+        case HCI_EVENT_LE_META:
+            DEBUG_LOG("%s: Low-Energe meta event.\n", this->getName());
             break;
         default:
             DEBUG_LOG("%s: Unknown event code (0x%02x).\n", this->getName(), header->eventCode);
