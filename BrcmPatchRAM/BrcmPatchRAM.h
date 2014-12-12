@@ -27,6 +27,16 @@
 
 #define DEFAULT_DELAY 5
 
+enum DeviceState
+{
+    kUnknown,
+    kFirmwareVersion,
+    kMiniDriverComplete,
+    kInstructionWritten,
+    kFirmwareWritten,
+    kResetComplete,
+};
+
 class BrcmPatchRAM : public IOService
 {
     private:
@@ -45,6 +55,9 @@ class BrcmPatchRAM : public IOService
     
         IOUSBCompletion mInterruptCompletion;
         IOBufferMemoryDescriptor* mReadBuffer;
+    
+        volatile DeviceState mDeviceState = kUnknown;
+        volatile uint16_t mFirmareVersion = 0xFFFF;
     
         unsigned int getDelayValue(const char* key);
         BrcmFirmwareStore* getFirmwareStore();
@@ -67,6 +80,8 @@ class BrcmPatchRAM : public IOService
         IOReturn bulkWrite(void* data, uint16_t length);
     
         uint16_t getFirmwareVersion();
+    
+        bool performUpgrade();
     public:
         virtual IOService* probe(IOService *provider, SInt32 *probeScore);
         virtual bool init(OSDictionary *dictionary = NULL);

@@ -44,9 +44,7 @@ bool BrcmPatchRAM::init(OSDictionary *dictionary)
 
 bool BrcmPatchRAM::start(IOService *provider)
 {
-    BrcmFirmwareStore* firmwareStore;
-    
-    IOLog("%s: Version 0.9 starting.\n", this->getName());
+    IOLog("%s: Version 0.5a starting.\n", this->getName());
 
     if (!super::start(provider))
         return false;
@@ -80,50 +78,12 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe && mBulkPipe)
         {
-            if ((firmwareStore = getFirmwareStore()))
-            {
-                OSArray* instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
-                
-                if (instructions)
-                {
-                    // Read delay values
-                    mCommandDelay = getDelayValue("DelayCommand");
-                    mBulkTransferDelay = getDelayValue("DelayBulkTransfer");
-                    mMiniDriverDelay = getDelayValue("DelayMiniDriver");
-                    mResetDelay = getDelayValue("DelayReset");
-                    
-                    continousRead();
-                    
-                    // Initiate firmware upgrade
-                    hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
+            continousRead();
             
-                    // Wait for mini driver download
-                    IOSleep(mMiniDriverDelay);
-            
-                    // Write firmware data to bulk pipe
-                    OSCollectionIterator* iterator = OSCollectionIterator::withCollection(instructions);
-            
-                    OSData* data;
-                    while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    {
-                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
-                    }
-                    
-                    OSSafeRelease(iterator);
-            
-                    hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
-                    
-                    IOSleep(mResetDelay);
-                    
-                    hciCommand(&HCI_RESET, sizeof(HCI_RESET));
-            
-                    resetDevice();
-                
-                    getDeviceStatus();
-                    
-                    IOLog("%s: Firmware upgrade completed successfully.\n", this->getName());
-                }
-            }
+            if (performUpgrade())
+                IOLog("%s: Firmware upgrade completed successfully.\n", this->getName());
+            else
+                IOLog("%s: Firmware upgrade failed.\n", this->getName());
         }
     }
     
@@ -329,9 +289,7 @@ IOUSBPipe* BrcmPatchRAM::findPipe(uint8_t type, uint8_t direction)
     
     if (pipe)
     {
-        const IOUSBEndpointDescriptor* endpointDescriptor = pipe->GetEndpointDescriptor();
-        DEBUG_LOG("%s: Located pipe at 0x%02x.\n", this->getName(), endpointDescriptor->bEndpointAddress);
-        
+        DEBUG_LOG("%s: Located pipe at 0x%02x.\n", this->getName(), pipe->GetEndpointDescriptor()->bEndpointAddress);        
         return pipe;
     }
     else
@@ -387,6 +345,10 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
         case kIOReturnAborted:
             // Read loop is done, exit silently
             return;
+        case kIOReturnNotResponding:
+            IOLog("%s: Not responding - Delaying next read.\n", me->getName());
+            me->mInterruptPipe->ClearStall();
+            IOSleep(100);
         default:
             IOLog("%s: readCompletion - IO error (0x%08x)\n", me->getName(), status);
             break;
@@ -403,7 +365,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
         
         if (result == kIOUSBPipeStalled)
         {
-            me->mInterruptPipe->Reset();
+            me->mInterruptPipe->ClearStall();
             
             result = me->mInterruptPipe->Read(me->mReadBuffer, 0, 0, me->mReadBuffer->getLength(), &me->mInterruptCompletion);
             
@@ -453,24 +415,36 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
                     DEBUG_LOG("%s: READ VERBOSE CONFIG complete (status: 0x%02x, length: %d bytes).\n",
                               this->getName(), event->status, header->length);
                     
-                    DEBUG_LOG("%s: Firmware version: 0x%04x.\n",
-                              this->getName(), *(uint16_t*)(((char*)response) + 10));
+                    this->mFirmareVersion = *(uint16_t*)(((char*)response) + 10);
+                    
+                    DEBUG_LOG("%s: Firmware version: v%d.\n",
+                              this->getName(), this->mFirmareVersion + 0x1000);
+                    
+                    this->mDeviceState = kFirmwareVersion;
                     break;
                 case HCI_OPCODE_DOWNLOAD_MINIDRIVER:
                     DEBUG_LOG("%s: DOWNLOAD MINIDRIVER complete (status: 0x%02x, length: %d bytes).\n",
                               this->getName(), event->status, header->length);
+                    
+                    this->mDeviceState = kMiniDriverComplete;
                     break;
                 case HCI_OPCODE_LAUNCH_RAM:
                     //DEBUG_LOG("%s: LAUNCH RAM complete (status: 0x%02x, length: %d bytes).\n",
                     //          this->getName(), event->status, header->length);
+                    
+                    this->mDeviceState = kInstructionWritten;
                     break;
                 case HCI_OPCODE_END_OF_RECORD:
                     DEBUG_LOG("%s: END OF RECORD complete (status: 0x%02x, length: %d bytes).\n",
                               this->getName(), event->status, header->length);
+                    
+                    this->mDeviceState = kFirmwareWritten;
                     break;
                 case HCI_OPCODE_RESET:
                     DEBUG_LOG("%s: RESET complete (status: 0x%02x, length: %d bytes).\n",
                               this->getName(), event->status, header->length);
+                    
+                    this->mDeviceState = kResetComplete;
                     break;
                 default:
                     DEBUG_LOG("%s: Event COMMAND COMPLETE (opcode 0x%04x, status: 0x%02x, length: %d bytes).\n",
@@ -498,6 +472,12 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
         }
         case HCI_EVENT_NUM_COMPLETED_PACKETS:
             DEBUG_LOG("%s: Number of completed packets.\n", this->getName());
+            break;
+        case HCI_EVENT_CONN_COMPLETE:
+            DEBUG_LOG("%s: Connection complete event.\n", this->getName());
+            break;
+        case HCI_EVENT_LE_META:
+            DEBUG_LOG("%s: Low-Energe meta event.\n", this->getName());
             break;
         default:
             DEBUG_LOG("%s: Unknown event code (0x%02x).\n", this->getName(), header->eventCode);
@@ -537,5 +517,74 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, uint16_t length)
     IOSleep(mBulkTransferDelay);
 
     return result;
+}
+
+bool BrcmPatchRAM::performUpgrade()
+{
+    BrcmFirmwareStore* firmwareStore;
+    OSArray* instructions;
+    OSCollectionIterator* iterator;
+    OSData* data;
+    
+    mDeviceState = kUnknown;
+    
+    while (true)
+    {
+        switch (mDeviceState)
+        {
+            case kUnknown:
+                hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
+                break;
+            case kFirmwareVersion:
+                // Device does not require a firmware patch at this time
+                if (mFirmareVersion > 0)
+                    return true;
+                
+                // Unable to retrieve firmware store
+                if (!(firmwareStore = getFirmwareStore()))
+                    return false;
+                
+                instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+                
+                // Unable to retrieve firmware instructions
+                if (!instructions)
+                    return false;
+                
+                // Initiate firmware upgrade
+                hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
+                
+                break;
+            case kMiniDriverComplete:
+                // Write firmware data to bulk pipe
+                iterator = OSCollectionIterator::withCollection(instructions);
+                
+                if (!iterator)
+                    return false;
+                
+                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                else
+                    return false;
+                break;
+            case kInstructionWritten:
+                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                else
+                    // Firmware data fully written
+                    hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
+                break;
+            case kFirmwareWritten:
+                hciCommand(&HCI_RESET, sizeof(HCI_RESET));
+                break;
+            case kResetComplete:
+                resetDevice();
+                getDeviceStatus();
+                
+                return true;
+                break;
+        }
+        
+        IOSleep(1);
+    }
 }
 
