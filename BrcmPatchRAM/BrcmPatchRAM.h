@@ -36,7 +36,6 @@ class BrcmPatchRAM : public IOService
         IOUSBPipe* mInterruptPipe = NULL;
         IOUSBPipe* mBulkPipe = NULL;
     
-        bool volatile mStopping = false;
         bool volatile mReadQueued = false;
     
         BrcmFirmwareStore* getFirmwareStore();

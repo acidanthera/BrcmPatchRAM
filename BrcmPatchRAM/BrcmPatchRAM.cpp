@@ -68,14 +68,14 @@ bool BrcmPatchRAM::start(IOService *provider)
         IOLog("%s: Provider is not a USB device.\n", this->getName());
         return false;
     }
-
+    
     // Print out additional device information
     printDeviceInfo();
     
     // Set device configuration to composite configuration index 0
     if (!setConfiguration(0))
         return false;
-    
+
     // Obtain first interface
     getInterface();
     
@@ -89,7 +89,7 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
-            uint16_t firmwareVersion = getFirmwareVersion();
+            UInt16 firmwareVersion = getFirmwareVersion();
             
             //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
             
@@ -168,28 +168,7 @@ bool BrcmPatchRAM::start(IOService *provider)
  ******************************************************************************/
 void BrcmPatchRAM::stop(IOService *provider)
 {
-    DEBUG_LOG("%s: Stopping...\n", this->getName());
-
-    mStopping = true;
-    
-    if (mInterruptPipe != NULL)
-    {
-        mInterruptPipe->Abort();
-        mInterruptPipe->release();
-    }
-    
-    if (mBulkPipe != NULL)
-    {
-        mBulkPipe->Abort();
-        mBulkPipe->release();
-    }
-    
-    if (mInterface != NULL)
-    {
-        mInterface->close(this);
-        mInterface->release();
-    }
-   
+    DEBUG_LOG("%s: Stopping...\n", this->getName());  
     super::stop(provider);
 }
 
@@ -198,23 +177,7 @@ void BrcmPatchRAM::stop(IOService *provider)
  ******************************************************************************/
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
-    BrcmFirmwareStore* firmwareStore = NULL;
-    
-    if (OSDictionary *matchingDictionary = serviceMatching(kBrcmFirmwareStoreService))
-    {
-        if (OSIterator *iterator = getMatchingServices(matchingDictionary))
-        {
-            while (IOService *service = (IOService*)iterator->getNextObject())
-            {
-                firmwareStore = OSDynamicCast(BrcmFirmwareStore, service);
-                break;
-            }
-            
-            OSSafeRelease(iterator);
-        }
-        
-        OSSafeRelease(matchingDictionary);
-    }
+    BrcmFirmwareStore* firmwareStore = OSDynamicCast(BrcmFirmwareStore, this->getResourceService()->getProperty(kBrcmFirmwareStoreService));
     
     if (firmwareStore == NULL)
         IOLog("%s: BrcmFirmwareStore does not appear to be available.\n", this->getName());
@@ -289,10 +252,10 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
     IOReturn result;
     const IOUSBConfigurationDescriptor* configurationDescriptor;
-    uint8_t currentConfiguration = 0xFF;
+    UInt8 currentConfiguration = 0xFF;
     
     // Find the first config/interface
-    int numconf = 0;
+    UInt8 numconf = 0;
     
     if ((numconf = mDevice->GetNumConfigurations()) < (configurationIndex + 1))
     {
@@ -425,9 +388,6 @@ IOReturn BrcmPatchRAM::queueRead()
 {
     IOReturn result;
     
-    if (mStopping)
-        return false;
-    
     IOBufferMemoryDescriptor* buffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
     
     if (buffer != NULL)
@@ -511,7 +471,7 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
     mReadQueued = false;
 }
 
-IOReturn BrcmPatchRAM::hciCommand(void * command, uint16_t length)
+IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
 {
     IOReturn result;
     
@@ -531,12 +491,12 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, uint16_t length)
     return result;
 }
 
-IOReturn BrcmPatchRAM::hciCommandSync(void* command, uint16_t length)
+IOReturn BrcmPatchRAM::hciCommandSync(void* command, UInt16 length)
 {
     return this->hciCommandSync(command, length, NULL, NULL);
 }
 
-IOReturn BrcmPatchRAM::hciCommandSync(void* command, uint16_t length, void* output, uint8_t* outputLength)
+IOReturn BrcmPatchRAM::hciCommandSync(void* command, UInt16 length, void* output, UInt8* outputLength)
 {
     IOReturn result;
     
@@ -546,7 +506,7 @@ IOReturn BrcmPatchRAM::hciCommandSync(void* command, uint16_t length, void* outp
     return result;
 }
 
-IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength)
+IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* output, UInt8* outputLength)
 {
     HCI_RESPONSE* header = (HCI_RESPONSE*)response;
     
@@ -563,7 +523,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
                               this->getName(), event->status, header->length);
                     
                     DEBUG_LOG("%s: Firmware version: v%d.\n",
-                              this->getName(), (*(uint16_t*)(((char*)response) + 10)) + 4096);
+                              this->getName(), (*(UInt16*)(((char*)response) + 10)) + 4096);
                     break;
                 case HCI_OPCODE_DOWNLOAD_MINIDRIVER:
                     DEBUG_LOG("%s: DOWNLOAD MINIDRIVER complete (status: 0x%02x, length: %d bytes).\n",
@@ -612,7 +572,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
             DEBUG_LOG("%s: Connection complete event.\n", this->getName());
             break;
         case HCI_EVENT_LE_META:
-            DEBUG_LOG("%s: Low-Energe meta event.\n", this->getName());
+            DEBUG_LOG("%s: Low-Energy meta event.\n", this->getName());
             break;
         default:
             DEBUG_LOG("%s: Unknown event code (0x%02x).\n", this->getName(), header->eventCode);
@@ -627,7 +587,7 @@ IOReturn BrcmPatchRAM::interruptRead()
     return interruptRead(NULL, NULL);
 }
 
-IOReturn BrcmPatchRAM::interruptRead(void* output, uint8_t* length)
+IOReturn BrcmPatchRAM::interruptRead(void* output, UInt8* length)
 {
     IOReturn result;
     IOBufferMemoryDescriptor* buffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
@@ -660,7 +620,7 @@ IOReturn BrcmPatchRAM::interruptRead(void* output, uint8_t* length)
     return result;
 }
 
-IOReturn BrcmPatchRAM::bulkWrite(void* data, uint16_t length)
+IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
 {
     IOReturn result;
     IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress(data, length, kIODirectionIn);
@@ -690,13 +650,13 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, uint16_t length)
     return result;
 }
 
-uint16_t BrcmPatchRAM::getFirmwareVersion()
+UInt16 BrcmPatchRAM::getFirmwareVersion()
 {
     char response[0x20];
-    uint8_t length = sizeof(response);
+    UInt8 length = sizeof(response);
     
     if (hciCommandSync(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG), response, &length) == kIOReturnSuccess)
-        return *(uint16_t*)(((char*)response) + 10);
+        return *(UInt16*)(((char*)response) + 10);
 
     return 0xFFFF;
 }
