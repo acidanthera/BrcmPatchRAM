@@ -89,6 +89,7 @@ bool BrcmPatchRAM::start(IOService *provider)
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
+            // getFirmwareVersion additionally re-synchronizes outstanding responses
             UInt16 firmwareVersion = getFirmwareVersion();
             
             //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
@@ -655,8 +656,26 @@ UInt16 BrcmPatchRAM::getFirmwareVersion()
     char response[0x20];
     UInt8 length = sizeof(response);
     
-    if (hciCommandSync(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG), response, &length) == kIOReturnSuccess)
-        return *(UInt16*)(((char*)response) + 10);
+    if (hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG)) == kIOReturnSuccess)
+    {
+        // There might be other outstanding events pending,
+        // keep reading data until we find our matching response
+        for (int i = 0; i < 100; i++)
+        {
+            if (interruptRead(response, &length) == kIOReturnSuccess)
+            {
+                HCI_RESPONSE* header = (HCI_RESPONSE*)response;
+                
+                if (header->eventCode == HCI_EVENT_COMMAND_COMPLETE)
+                {
+                    HCI_COMMAND_COMPLETE* event = (HCI_COMMAND_COMPLETE*)response;
+                    
+                    if (event->opcode == HCI_OPCODE_READ_VERBOSE_CONFIG)
+                        return *(UInt16*)(((char*)response) + 10);
+                }
+            }
+        }
+    }
 
     return 0xFFFF;
 }
