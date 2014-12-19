@@ -9,13 +9,28 @@
 /* Begin PBXBuildFile section */
 		D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		D406C2F71A43C6F000AEFA2D /* BrcmNonApple.kext in CopyFiles */ = {isa = PBXBuildFile; fileRef = D406C2F21A43C6AF00AEFA2D /* BrcmNonApple.kext */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D406C2F11A43C69100AEFA2D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D406C2F71A43C6F000AEFA2D /* BrcmNonApple.kext in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmFirmwareStore.cpp; sourceTree = "<group>"; };
 		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
+		D406C2F21A43C6AF00AEFA2D /* BrcmNonApple.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; path = BrcmNonApple.kext; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,10 +51,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D4F91AF41A2998CE0030D10D = {
+		D406C2F51A43C6DB00AEFA2D /* PlugIns */ = {
+			isa = PBXGroup;
+			children = (
+				D406C2F21A43C6AF00AEFA2D /* BrcmNonApple.kext */,
+			);
+			name = PlugIns;
+			sourceTree = "<group>";
+		};
+		D406C2F61A43C6E200AEFA2D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				D4F91B121A299C210030D10D /* IOKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D4F91AF41A2998CE0030D10D = {
+			isa = PBXGroup;
+			children = (
+				D406C2F51A43C6DB00AEFA2D /* PlugIns */,
+				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
 			);
@@ -98,6 +130,8 @@
 				D4F91AFA1A2998CE0030D10D /* Frameworks */,
 				D4F91AFB1A2998CE0030D10D /* Headers */,
 				D4F91AFC1A2998CE0030D10D /* Resources */,
+				D406C2F11A43C69100AEFA2D /* CopyFiles */,
+				D406C2F81A43C72A00AEFA2D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -147,6 +181,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D406C2F81A43C72A00AEFA2D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${TARGET_BUILD_DIR}/../\ntar -czvf ${TARGET_NAME}.tar.gz Debug/${FULL_PRODUCT_NAME} Release/${FULL_PRODUCT_NAME}\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D4F91AF91A2998CE0030D10D /* Sources */ = {
