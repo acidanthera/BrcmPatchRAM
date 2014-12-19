@@ -55,7 +55,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 {
     BrcmFirmwareStore* firmwareStore;
     
-    IOLog("%s: Version 0.5 starting.\n", this->getName());
+    IOLog("%s: Version 0.6 starting.\n", this->getName());
 
     if (!super::start(provider))
         return false;
