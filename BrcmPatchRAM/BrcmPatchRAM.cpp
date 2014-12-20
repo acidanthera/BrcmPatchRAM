@@ -55,7 +55,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 {
     BrcmFirmwareStore* firmwareStore;
     
-    IOLog("%s: Version 0.6 starting.\n", this->getName());
+    IOLog("%s: Version 0.6a starting.\n", this->getName());
 
     if (!super::start(provider))
         return false;
@@ -428,7 +428,7 @@ IOReturn BrcmPatchRAM::queueRead()
     }
     else
     {
-        IOLog("BrcmPatchRAM: Unable to allocate read buffer.\n");
+        IOLog("%s: Unable to allocate read buffer.\n", this->getName());
         result = kIOReturnNoMemory;
     }
 
@@ -616,7 +616,10 @@ IOReturn BrcmPatchRAM::interruptRead(void* output, UInt8* length)
         buffer->release();
     }
     else
+    {
+        IOLog("%s: Unable to allocate interrupt read buffer.\n", this->getName());
         result = kIOReturnNoMemory;
+    }
   
     return result;
 }
@@ -646,7 +649,10 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
         buffer->release();
     }
     else
+    {
+        IOLog("%s: Unable to allocate bulk write buffer.\n", this->getName());
         result = kIOReturnNoMemory;
+    }
     
     return result;
 }
