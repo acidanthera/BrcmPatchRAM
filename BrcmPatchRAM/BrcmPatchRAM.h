@@ -43,10 +43,8 @@ class BrcmPatchRAM : public IOService
         typedef IOService super;
         OSDeclareDefaultStructors(BrcmPatchRAM);
     
-        unsigned int mCommandDelay;
-        unsigned int mBulkTransferDelay;
-        unsigned int mMiniDriverDelay;
-        unsigned int mResetDelay;
+        UInt16 mVendorId;
+        UInt16 mProductId;
     
         IOUSBDevice* mDevice = NULL;
         IOUSBInterface* mInterface = NULL;
