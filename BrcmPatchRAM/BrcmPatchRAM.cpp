@@ -358,7 +358,6 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
             IOSleep(100);
             break;
         default:
-            IOLog("%s [%04x:%04x]: readCompletion - IO error (0x%08x)\n", me->getName(), me->mVendorId, me->mProductId, status);
             break;
     }
     
