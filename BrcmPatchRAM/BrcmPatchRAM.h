@@ -31,6 +31,9 @@ class BrcmPatchRAM : public IOService
         typedef IOService super;
         OSDeclareDefaultStructors(BrcmPatchRAM);
     
+        UInt16 mVendorId;
+        UInt16 mProductId;
+    
         IOUSBDevice* mDevice = NULL;
         IOUSBInterface* mInterface = NULL;
         IOUSBPipe* mInterruptPipe = NULL;
