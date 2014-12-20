@@ -33,8 +33,8 @@ extern "C"
     
     typedef struct z_mem
     {
-        uint32_t alloc_size;
-        uint8_t data[0];
+        UInt32 alloc_size;
+        UInt8 data[0];
     } z_mem;
     
     /*
@@ -44,8 +44,8 @@ extern "C"
     {
         void* result = NULL;
         z_mem* zmem = NULL;
-        uint32_t total = num_items * size;
-        uint32_t allocSize =  total + sizeof(zmem);
+        UInt32 total = num_items * size;
+        UInt32 allocSize =  total + sizeof(zmem);
         
         zmem = (z_mem*)IOMalloc(allocSize);
         
@@ -60,7 +60,7 @@ extern "C"
     
     void z_free(void* notused __unused, void* ptr)
     {
-        uint32_t* skipper = (uint32_t *)ptr - 1;
+        UInt32* skipper = (UInt32 *)ptr - 1;
         z_mem* zmem = (z_mem*)skipper;
         IOFree((void*)zmem, zmem->alloc_size);
     }
@@ -78,7 +78,7 @@ OSData* BrcmFirmwareStore::decompressFirmware(OSData* firmware)
     OSData* result = NULL;
     
     // Verify if the data is compressed
-    uint16_t* magic = (uint16_t*)firmware->getBytesNoCopy();
+    UInt16* magic = (UInt16*)firmware->getBytesNoCopy();
     
     if (*magic != 0x0178     // Zlib no compression
         && *magic != 0x9c78  // Zlib default compression
@@ -141,7 +141,7 @@ OSData* BrcmFirmwareStore::decompressFirmware(OSData* firmware)
 /*
  * Validate if the current character is a valid hexadecimal character
  */
-static inline bool validHexChar(unsigned char hex)
+static inline bool validHexChar(UInt8 hex)
 {
     return (hex >= 'a' && hex <= 'f') || (hex >= 'A' && hex <= 'F') || (hex >= '0' && hex <= '9');
 }
@@ -149,7 +149,7 @@ static inline bool validHexChar(unsigned char hex)
 /*
  * Convert char '0-9,A-F' to hexadecimal values
  */
-static inline void hex_nibble(unsigned char hex, uint8_t &output)
+static inline void hex_nibble(UInt8 hex, UInt8 &output)
 {
     output <<= 4;
     
@@ -164,9 +164,9 @@ static inline void hex_nibble(unsigned char hex, uint8_t &output)
 /*
  * Two's complement checksum
  */
-static char check_sum(const uint8_t* data, uint16_t len)
+static char check_sum(const UInt8* data, UInt16 len)
 {
-    uint32_t crc = 0;
+    UInt32 crc = 0;
     
     for (int i = 0; i < len; i++)
         crc += *(data + i);
@@ -177,12 +177,12 @@ static char check_sum(const uint8_t* data, uint16_t len)
 OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
 {
     // Vendor Specific: Launch RAM
-    uint8_t HCI_VSC_LAUNCH_RAM[] { 0x4c, 0xfc };
+    UInt8 HCI_VSC_LAUNCH_RAM[] { 0x4c, 0xfc };
     
     OSArray* instructions = OSArray::withCapacity(1);
-    unsigned char* data = (unsigned char*)firmwareData->getBytesNoCopy();
-    uint32_t address = 0;
-    unsigned char binary[0x110];
+    UInt8* data = (UInt8*)firmwareData->getBytesNoCopy();
+    UInt32 address = 0;
+    UInt8 binary[0x110];
     
     if (*data != HEX_LINE_PREFIX)
     {
@@ -205,12 +205,12 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
         }
         
         // Parse line data
-        uint8_t length = binary[0];
-        uint16_t addr = binary[1] << 8 | binary[2];
-        uint8_t record_type = binary[3];
-        uint8_t checksum = binary[HEX_HEADER_SIZE + length];
+        UInt8 length = binary[0];
+        UInt16 addr = binary[1] << 8 | binary[2];
+        UInt8 record_type = binary[3];
+        UInt8 checksum = binary[HEX_HEADER_SIZE + length];
         
-        uint8_t calc_checksum = check_sum(binary, HEX_HEADER_SIZE  + length);
+        UInt8 calc_checksum = check_sum(binary, HEX_HEADER_SIZE  + length);
         
         if (checksum != calc_checksum)
         {

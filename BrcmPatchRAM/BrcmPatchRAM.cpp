@@ -57,14 +57,14 @@ bool BrcmPatchRAM::start(IOService *provider)
         IOLog("%s: Provider is not a USB device.\n", this->getName());
         return false;
     }
-
+    
     // Print out additional device information
     printDeviceInfo();
     
     // Set device configuration to composite configuration index 0
     if (!setConfiguration(0))
         return false;
-    
+
     // Obtain first interface
     mInterface = findInterface();
     
@@ -113,7 +113,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 
 void BrcmPatchRAM::stop(IOService *provider)
 {
-    DEBUG_LOG("%s: Stopping...\n", this->getName());   
+    DEBUG_LOG("%s: Stopping...\n", this->getName());
     super::stop(provider);
 }
 
@@ -194,10 +194,10 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
     IOReturn result;
     const IOUSBConfigurationDescriptor* configurationDescriptor;
-    uint8_t currentConfiguration = 0xFF;
+    UInt8 currentConfiguration = 0xFF;
     
     // Find the first config/interface
-    int numconf = 0;
+    UInt8 numconf = 0;
     
     if ((numconf = mDevice->GetNumConfigurations()) < (configurationIndex + 1))
     {
@@ -349,6 +349,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
             IOLog("%s: Not responding - Delaying next read.\n", me->getName());
             me->mInterruptPipe->ClearStall();
             IOSleep(100);
+            break;
         default:
             IOLog("%s: readCompletion - IO error (0x%08x)\n", me->getName(), status);
             break;
@@ -377,7 +378,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
     }
 }
 
-IOReturn BrcmPatchRAM::hciCommand(void * command, uint16_t length)
+IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
 {
     IOReturn result;
     
@@ -399,7 +400,7 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, uint16_t length)
     return result;
 }
 
-IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength)
+IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* output, UInt8* outputLength)
 {
     HCI_RESPONSE* header = (HCI_RESPONSE*)response;
     
@@ -477,7 +478,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, uint16_t length, void* o
             DEBUG_LOG("%s: Connection complete event.\n", this->getName());
             break;
         case HCI_EVENT_LE_META:
-            DEBUG_LOG("%s: Low-Energe meta event.\n", this->getName());
+            DEBUG_LOG("%s: Low-Energy meta event.\n", this->getName());
             break;
         default:
             DEBUG_LOG("%s: Unknown event code (0x%02x).\n", this->getName(), header->eventCode);
@@ -512,7 +513,10 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, uint16_t length)
         buffer->release();
     }
     else
+    {
+        IOLog("%s: Unable to allocate bulk write buffer.\n", this->getName());
         result = kIOReturnNoMemory;
+    }
     
     IOSleep(mBulkTransferDelay);
 
