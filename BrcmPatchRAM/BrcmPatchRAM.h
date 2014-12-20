@@ -48,9 +48,8 @@ class BrcmPatchRAM : public IOService
     
         bool resetDevice();
         bool setConfiguration(int configurationIndex);
-        void getInterface();
-        void getInterruptPipe();
-        void getBulkPipe();
+        IOUSBInterface* findInterface();
+        IOUSBPipe* findPipe(UInt8 type, UInt8 direction);
     
         IOReturn queueRead();
         static void interruptReadEntry(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);

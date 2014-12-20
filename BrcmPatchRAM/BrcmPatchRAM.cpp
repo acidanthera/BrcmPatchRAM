@@ -35,7 +35,7 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
  ******************************************************************************/
 bool BrcmPatchRAM::init(OSDictionary *dictionary)
 {    
-    DEBUG_LOG("BrcmPatchRAM::init\n"); // this->getName() is not available yet
+    DEBUG_LOG("BrcmPatchRAM::init\n"); // getName() is not available yet
     return super::init(dictionary);
 }
 
@@ -44,7 +44,7 @@ bool BrcmPatchRAM::init(OSDictionary *dictionary)
  ******************************************************************************/
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
-    DEBUG_LOG("%s::probe\n", this->getName());
+    DEBUG_LOG("%s::probe\n", getName());
     
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
@@ -56,7 +56,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
         return super::probe(provider, probeScore);
     }
     
-    IOLog("%s: Provider is not a USB device.\n", this->getName());
+    IOLog("%s: Provider is not a USB device.\n", getName());
     
     return NULL;
 }
@@ -69,7 +69,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 {
     BrcmFirmwareStore* firmwareStore;
     
-    IOLog("%s [%04x:%04x]: Version 0.6a starting.\n", this->getName(), mVendorId, mProductId);
+    IOLog("%s [%04x:%04x]: Version 0.6a starting.\n", getName(), mVendorId, mProductId);
 
     if (!super::start(provider))
         return false;
@@ -82,15 +82,15 @@ bool BrcmPatchRAM::start(IOService *provider)
         return false;
 
     // Obtain first interface
-    getInterface();
+    mInterface = findInterface();
     
     if (mInterface != NULL)
     {
         mInterface->retain();
         mInterface->open(this);
         
-        getInterruptPipe();
-        getBulkPipe();
+        mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
+        mBulkPipe = findPipe(kUSBBulk, kUSBOut);
         
         if (mInterruptPipe != NULL && mBulkPipe != NULL)
         {
@@ -142,7 +142,7 @@ bool BrcmPatchRAM::start(IOService *provider)
                 
                     getDeviceStatus();
                     
-                    IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", this->getName(), mVendorId, mProductId);
+                    IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
                 }
             }
         }
@@ -174,26 +174,20 @@ bool BrcmPatchRAM::start(IOService *provider)
  ******************************************************************************/
 void BrcmPatchRAM::stop(IOService *provider)
 {
-    DEBUG_LOG("%s [%04x:%04x]: Stopping...\n", this->getName(), mVendorId, mProductId);
+    DEBUG_LOG("%s [%04x:%04x]: Stopping...\n", getName(), mVendorId, mProductId);
     super::stop(provider);
 }
 
-/******************************************************************************
- * BrcmPatchRAM::getFirmwareStore - Obtain referenced to the firmware data store
- ******************************************************************************/
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
-    BrcmFirmwareStore* firmwareStore = OSDynamicCast(BrcmFirmwareStore, this->getResourceService()->getProperty(kBrcmFirmwareStoreService));
+    BrcmFirmwareStore* firmwareStore = OSDynamicCast(BrcmFirmwareStore, getResourceService()->getProperty(kBrcmFirmwareStoreService));
     
     if (firmwareStore == NULL)
-        IOLog("%s [%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", getName(), mVendorId, mProductId);
     
     return firmwareStore;
 }
 
-/******************************************************************************
- * BrcmPatchRAM::printDeviceInfo - Print USB device information
- ******************************************************************************/
 void BrcmPatchRAM::printDeviceInfo()
 {
     char product[255];
@@ -206,7 +200,7 @@ void BrcmPatchRAM::printDeviceInfo()
     mDevice->GetStringDescriptor(mDevice->GetSerialNumberStringIndex(), serial, sizeof(serial));
     
     IOLog("%s [%04x:%04x]: USB [%s v%d] \"%s\" by \"%s\"\n",
-          this->getName(),
+          getName(),
           mVendorId,
           mProductId,
           serial,
@@ -215,9 +209,6 @@ void BrcmPatchRAM::printDeviceInfo()
           manufacturer);
 }
 
-/******************************************************************************
- * BrcmPatchRAM::getDeviceStatus - Get USB device status
- ******************************************************************************/
 int BrcmPatchRAM::getDeviceStatus()
 {
     IOReturn result;
@@ -225,35 +216,30 @@ int BrcmPatchRAM::getDeviceStatus()
     
     if ((result = mDevice->GetDeviceStatus(&status)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to get device status (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to get device status (0x%08x).\n", getName(), mVendorId, mProductId, result);
         return 0;
     }
-    else DEBUG_LOG("%s [%04x:%04x]: Device status 0x%08x.\n", this->getName(), mVendorId, mProductId, (int)status);
+    else
+        DEBUG_LOG("%s [%04x:%04x]: Device status 0x%08x.\n", getName(), mVendorId, mProductId, (int)status);
     
     return (int)status;
 }
 
-/******************************************************************************
- * BrcmPatchRAM::resetDevice - Reset USB device
- ******************************************************************************/
 bool BrcmPatchRAM::resetDevice()
 {
     IOReturn result;
     
     if ((result = mDevice->ResetDevice()) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Failed to reset the device (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Failed to reset the device (0x%08x).\n", getName(), mVendorId, mProductId, result);
         return false;
     }
     else
-        DEBUG_LOG("%s [%04x:%04x]: Device reset.\n", this->getName(), mVendorId, mProductId);
+        DEBUG_LOG("%s [%04x:%04x]: Device reset.\n", getName(), mVendorId, mProductId);
     
     return true;
 }
 
-/******************************************************************************
- * BrcmPatchRAM::setConfiguration - Set USB device composite configuration
- ******************************************************************************/
 bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
     IOReturn result;
@@ -266,50 +252,50 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     if ((numconf = mDevice->GetNumConfigurations()) < (configurationIndex + 1))
     {
         IOLog("%s [%04x:%04x]: Composite configuration index %d is not available, %d total composite configurations.\n",
-              this->getName(), mVendorId, mProductId, configurationIndex, numconf);
+              getName(), mVendorId, mProductId, configurationIndex, numconf);
         return false;
     }
     else
-        DEBUG_LOG("%s [%04x:%04x]: Available composite configurations: %d.\n", this->getName(), mVendorId, mProductId, numconf);
+        DEBUG_LOG("%s [%04x:%04x]: Available composite configurations: %d.\n", getName(), mVendorId, mProductId, numconf);
     
     configurationDescriptor = mDevice->GetFullConfigurationDescriptor(configurationIndex);
     
     // Set the configuration to the requested configuration index
     if (!configurationDescriptor)
     {
-        IOLog("%s [%04x:%04x]: No configuration descriptor for configuration index: %d.\n", this->getName(), mVendorId, mProductId, configurationIndex);
+        IOLog("%s [%04x:%04x]: No configuration descriptor for configuration index: %d.\n", getName(), mVendorId, mProductId, configurationIndex);
         return false;
     }
     
     if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (0x%08x).\n", getName(), mVendorId, mProductId, result);
         return false;
     }
     
     // Device is already configured
     if (currentConfiguration == configurationDescriptor->bConfigurationValue)
     {
-        DEBUG_LOG("%s [%04x:%04x]: Device configuration is already set to configuration index %d.\n", this->getName(),
+        DEBUG_LOG("%s [%04x:%04x]: Device configuration is already set to configuration index %d.\n", getName(),
                   mVendorId, mProductId, configurationIndex);
         return true;
     }
     
     if (!mDevice->open(this))
     {
-        IOLog("%s [%04x:%04x]: Unable to open device for (re-)configuration.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Unable to open device for (re-)configuration.\n", getName(), mVendorId, mProductId);
         return false;
     }
     
     // Set the configuration to the first configuration
     if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (0x%08x).\n", getName(), mVendorId, mProductId, result);
         mDevice->close(this);
         return false;
     }
     
-    DEBUG_LOG("%s [%04x:%04x]: Set device configuration to configuration index %d successfully.\n", this->getName(),
+    DEBUG_LOG("%s [%04x:%04x]: Set device configuration to configuration index %d successfully.\n", getName(),
               mVendorId, mProductId, configurationIndex);
     
     mDevice->close(this);
@@ -317,10 +303,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     return true;
 }
 
-/******************************************************************************
- * BrcmPatchRAM::getInterface
- ******************************************************************************/
-void BrcmPatchRAM::getInterface()
+IOUSBInterface* BrcmPatchRAM::findInterface()
 {
     IOUSBFindInterfaceRequest request;
     IOUSBInterface* interface = NULL;
@@ -331,10 +314,10 @@ void BrcmPatchRAM::getInterface()
     request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
     request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
     
-    if ((interface = mDevice->FindNextInterface(NULL, &request)) != NULL)
+    if ((interface = mDevice->FindNextInterface(NULL, &request)))
     {
         DEBUG_LOG("%s [%04x:%04x]: Interface %d (class %02x, subclass %02x, protocol %02x) located.\n",
-                  this->getName(),
+                  getName(),
                   mVendorId,
                   mProductId,
                   interface->GetInterfaceNumber(),
@@ -342,58 +325,32 @@ void BrcmPatchRAM::getInterface()
                   interface->GetInterfaceSubClass(),
                   interface->GetInterfaceProtocol());
         
-        mInterface = interface;
-        return;
+        return interface;
     }
     
-    IOLog("%s [%04x:%04x]: No interface could be located.\n", this->getName(), mVendorId, mProductId);
+    IOLog("%s [%04x:%04x]: No interface could be located.\n", getName(), mVendorId, mProductId);
+    
+    return NULL;
 }
 
-/******************************************************************************
- * BrcmPatchRAM::getInterruptPipe
- ******************************************************************************/
-void BrcmPatchRAM::getInterruptPipe()
+IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
 {
     IOUSBFindEndpointRequest findEndpointRequest;
     
-    findEndpointRequest.direction = kUSBIn;
-    findEndpointRequest.type = kUSBInterrupt;
+    findEndpointRequest.type = type;
+    findEndpointRequest.direction = direction;
     
     IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest, true);
     
-    if (pipe != NULL)
+    if (pipe)
     {
-        const IOUSBEndpointDescriptor* endpointDescriptor = pipe->GetEndpointDescriptor();
-        DEBUG_LOG("%s [%04x:%04x]: Located interrupt pipe at 0x%02x.\n", this->getName(), mVendorId, mProductId, endpointDescriptor->bEndpointAddress);
-        
-        mInterruptPipe = pipe;
+        DEBUG_LOG("%s [%04x:%04x]: Located pipe at 0x%02x.\n", getName(), mVendorId, mProductId, pipe->GetEndpointDescriptor()->bEndpointAddress);
+        return pipe;
     }
     else
-        IOLog("%s [%04x:%04x]: Unable to locate interrupt pipe.\n", this->getName(), mVendorId, mProductId);
-}
-
-/******************************************************************************
- * BrcmPatchRAM::getBulkPipe
- ******************************************************************************/
-void BrcmPatchRAM::getBulkPipe()
-{
-    IOUSBFindEndpointRequest findEndpointRequest;
+        IOLog("%s [%04x:%04x]: Unable to locate pipe.\n", getName(), mVendorId, mProductId);
     
-    findEndpointRequest.direction = kUSBOut;
-    findEndpointRequest.type = kUSBBulk;
-    
-    IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest, true);
-    
-    if (pipe != NULL)
-    {
-        const IOUSBEndpointDescriptor* endpointDescriptor = pipe->GetEndpointDescriptor();
-        DEBUG_LOG("%s [%04x:%04x]: Located bulk pipe at 0x%02x.\n", this->getName(),
-                  mVendorId, mProductId, endpointDescriptor->bEndpointAddress);
-        
-        mBulkPipe = pipe;
-    }
-    else
-        IOLog("%s [%04x:%04x]: Unable to locate bulk pipe.\n", this->getName(), mVendorId, mProductId);
+    return NULL;
 }
 
 IOReturn BrcmPatchRAM::queueRead()
@@ -418,28 +375,26 @@ IOReturn BrcmPatchRAM::queueRead()
             if ((result = mInterruptPipe->Read(buffer, 0, 0, buffer->getLength(), &completion)) != kIOReturnSuccess)
             {
                 mReadQueued = false;
-                IOLog("%s [%04x:%04x]: Error initiating read (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+                IOLog("%s [%04x:%04x]: Error initiating read (0x%08x).\n", getName(), mVendorId, mProductId, result);
             }
             else
             {
                 // Wait until read is complete
                 while (mReadQueued)
-                {
                     IOSleep(1);
-                }
             }
             
             if ((result = buffer->complete()) != kIOReturnSuccess)
-             IOLog("%s [%04x:%04x]: Failed to complete queued read memory buffer (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+             IOLog("%s [%04x:%04x]: Failed to complete queued read memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
         }
         else
-            IOLog("%s [%04x:%04x]: Failed to prepare queued read memory buffer (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to prepare queued read memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
         
         buffer->release();
     }
     else
     {
-        IOLog("%s [%04x:%04x]: Unable to allocate read buffer.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Unable to allocate read buffer.\n", getName(), mVendorId, mProductId);
         result = kIOReturnNoMemory;
     }
 
@@ -458,14 +413,14 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
     
     if (buffer == NULL)
     {
-        IOLog("%s [%04x:%04x]: Queued read, buffer is NULL.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Queued read, buffer is NULL.\n", getName(), mVendorId, mProductId);
         return;
     }
     
     switch (status)
     {
         case kIOReturnOverrun:
-            DEBUG_LOG("%s [%04x:%04x]: read - kIOReturnOverrun\n", this->getName(), mVendorId, mProductId);
+            DEBUG_LOG("%s [%04x:%04x]: read - kIOReturnOverrun\n", getName(), mVendorId, mProductId);
             mInterruptPipe->ClearStall();
         case kIOReturnSuccess:
         {
@@ -473,10 +428,10 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
             break;
         }
         case kIOReturnNotResponding:
-            DEBUG_LOG("%s [%04x:%04x]: read - kIOReturnNotResponding\n", this->getName(), mVendorId, mProductId);
+            DEBUG_LOG("%s [%04x:%04x]: read - kIOReturnNotResponding\n", getName(), mVendorId, mProductId);
             break;
         default:
-            DEBUG_LOG("%s [%04x:%04x]: read - Other (0x%08x)\n", this->getName(), mVendorId, mProductId, status);
+            DEBUG_LOG("%s [%04x:%04x]: read - Other (0x%08x)\n", getName(), mVendorId, mProductId, status);
             break;
     }
     
@@ -498,14 +453,14 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
     };
     
     if ((result = mInterface->DeviceRequest(&request)) != kIOReturnSuccess)
-        IOLog("%s [%04x:%04x]: device request failed (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: device request failed (0x%08x).\n", getName(), mVendorId, mProductId, result);
    
     return result;
 }
 
 IOReturn BrcmPatchRAM::hciCommandSync(void* command, UInt16 length)
 {
-    return this->hciCommandSync(command, length, NULL, NULL);
+    return hciCommandSync(command, length, NULL, NULL);
 }
 
 IOReturn BrcmPatchRAM::hciCommandSync(void* command, UInt16 length, void* output, UInt8* outputLength)
@@ -532,31 +487,31 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
             {
                 case HCI_OPCODE_READ_VERBOSE_CONFIG:
                     DEBUG_LOG("%s [%04x:%04x]: READ VERBOSE CONFIG complete (status: 0x%02x, length: %d bytes).\n",
-                              this->getName(), mVendorId, mProductId, event->status, header->length);
+                              getName(), mVendorId, mProductId, event->status, header->length);
                     
                     DEBUG_LOG("%s [%04x:%04x]: Firmware version: v%d.\n",
-                              this->getName(),
+                              getName(),
                               mVendorId, mProductId, (*(UInt16*)(((char*)response) + 10)) + 4096);
                     break;
                 case HCI_OPCODE_DOWNLOAD_MINIDRIVER:
                     DEBUG_LOG("%s [%04x:%04x]: DOWNLOAD MINIDRIVER complete (status: 0x%02x, length: %d bytes).\n",
-                              this->getName(), mVendorId, mProductId, event->status, header->length);
+                              getName(), mVendorId, mProductId, event->status, header->length);
                     break;
                 case HCI_OPCODE_LAUNCH_RAM:
                     //DEBUG_LOG("%s [%04x:%04x]: LAUNCH RAM complete (status: 0x%02x, length: %d bytes).\n",
-                    //          this->getName(), mVendorId, mProductId, event->status, header->length);
+                    //          getName(), mVendorId, mProductId, event->status, header->length);
                     break;
                 case HCI_OPCODE_END_OF_RECORD:
                     DEBUG_LOG("%s [%04x:%04x]: END OF RECORD complete (status: 0x%02x, length: %d bytes).\n",
-                              this->getName(), mVendorId, mProductId, event->status, header->length);
+                              getName(), mVendorId, mProductId, event->status, header->length);
                     break;
                 case HCI_OPCODE_RESET:
                     DEBUG_LOG("%s [%04x:%04x]: RESET complete (status: 0x%02x, length: %d bytes).\n",
-                              this->getName(), mVendorId, mProductId, event->status, header->length);
+                              getName(), mVendorId, mProductId, event->status, header->length);
                     break;
                 default:
                     DEBUG_LOG("%s [%04x:%04x]: Event COMMAND COMPLETE (opcode 0x%04x, status: 0x%02x, length: %d bytes).\n",
-                              this->getName(), mVendorId, mProductId, event->opcode, event->status, header->length);
+                              getName(), mVendorId, mProductId, event->opcode, event->status, header->length);
                     break;                    
             }
             
@@ -567,7 +522,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                 // Return the received data
                 if (*outputLength >= length)
                 {
-                    DEBUG_LOG("%s [%04x:%04x]: Returning output data %d bytes.\n", this->getName(), mVendorId, mProductId, length);
+                    DEBUG_LOG("%s [%04x:%04x]: Returning output data %d bytes.\n", getName(), mVendorId, mProductId, length);
                     
                     *outputLength = length;
                     memcpy(output, response, length);
@@ -579,16 +534,16 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
             break;
         }
         case HCI_EVENT_NUM_COMPLETED_PACKETS:
-            DEBUG_LOG("%s [%04x:%04x]: Number of completed packets.\n", this->getName(), mVendorId, mProductId);
+            DEBUG_LOG("%s [%04x:%04x]: Number of completed packets.\n", getName(), mVendorId, mProductId);
             break;
         case HCI_EVENT_CONN_COMPLETE:
-            DEBUG_LOG("%s [%04x:%04x]: Connection complete event.\n", this->getName(), mVendorId, mProductId);
+            DEBUG_LOG("%s [%04x:%04x]: Connection complete event.\n", getName(), mVendorId, mProductId);
             break;
         case HCI_EVENT_LE_META:
-            DEBUG_LOG("%s [%04x:%04x]: Low-Energy meta event.\n", this->getName(), mVendorId, mProductId);
+            DEBUG_LOG("%s [%04x:%04x]: Low-Energy meta event.\n", getName(), mVendorId, mProductId);
             break;
         default:
-            DEBUG_LOG("%s [%04x:%04x]: Unknown event code (0x%02x).\n", this->getName(), mVendorId, mProductId, header->eventCode);
+            DEBUG_LOG("%s [%04x:%04x]: Unknown event code (0x%02x).\n", getName(), mVendorId, mProductId, header->eventCode);
             break;
     }
     
@@ -617,22 +572,22 @@ IOReturn BrcmPatchRAM::interruptRead(void* output, UInt8* length)
             if ((result = mInterruptPipe->Read(buffer, 0, 0, reqCount, (IOUSBCompletion*)NULL, &readCount)) == kIOReturnSuccess)
                 result = hciParseResponse(buffer->getBytesNoCopy(), readCount, output, length);
             else
-                IOLog("%s [%04x:%04x]: Failed to read from interrupt pipe sychronously (0x%08x).\n", this->getName(),
+                IOLog("%s [%04x:%04x]: Failed to read from interrupt pipe sychronously (0x%08x).\n", getName(),
                       mVendorId, mProductId, result);
         }
         else
-            IOLog("%s [%04x:%04x]: Failed to prepare interrupt read memory buffer (0x%08x).\n", this->getName(),
+            IOLog("%s [%04x:%04x]: Failed to prepare interrupt read memory buffer (0x%08x).\n", getName(),
                   mVendorId, mProductId, result);
         
         if ((result = buffer->complete()) != kIOReturnSuccess)
-            IOLog("%s [%04x:%04x]: Failed to complete interrupt read memory buffer (0x%08x).\n", this->getName(),
+            IOLog("%s [%04x:%04x]: Failed to complete interrupt read memory buffer (0x%08x).\n", getName(),
                   mVendorId, mProductId, result);
         
         buffer->release();
     }
     else
     {
-        IOLog("%s [%04x:%04x]: Unable to allocate interrupt read buffer.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Unable to allocate interrupt read buffer.\n", getName(), mVendorId, mProductId);
         result = kIOReturnNoMemory;
     }
   
@@ -650,22 +605,22 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
         {
             if ((result = mBulkPipe->Write(buffer, 0, 0, buffer->getLength(), (IOUSBCompletion*)NULL)) == kIOReturnSuccess)
             {
-                //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", this->getName(), length);
+                //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", getName(), length);
             }
             else
-                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (0x%08x).\n", getName(), mVendorId, mProductId, result);
         }
         else
-           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
         
         if ((result = buffer->complete()) != kIOReturnSuccess)
-            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (0x%08x).\n", this->getName(), mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
         
         buffer->release();
     }
     else
     {
-        IOLog("%s [%04x:%04x]: Unable to allocate bulk write buffer.\n", this->getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Unable to allocate bulk write buffer.\n", getName(), mVendorId, mProductId);
         result = kIOReturnNoMemory;
     }
     
