@@ -14,6 +14,33 @@ The firmware applied is extracted from the Windows drivers and the functionality
 
 Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
 
+####Supported Devices
+
+BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
+
+The following devices are supported at the moment:
+
+*Devices marked with * are tested successfully*
+
+  * ``[0489:e032]`` 20702 Combo USB
+  * ``[0489:e07a]`` Lenovo NGFF (4352 / 20702)
+  * ``[04ca:200a]`` LiteOn (4352 Combo)
+  * ``[04ca:200b]`` LiteOn (4352 Combo)
+  * ``[04ca:200c]`` LiteOn (4352 Combo)
+  * ``[050d:065a]`` Belkin (20702)
+  * ``[0930:0221]`` Toshiba (4352 / 20702)
+  * ``[0930:0223]`` Toshiba NGFF (4352 / 20702) *
+  * ``[0a5c:21e1]`` HP Softsailing (20702A1)
+  * ``[0a5c:21e6]`` non-UHE Lenovo Bluetooth (20702)
+  * ``[0a5c:21e8]`` Bluetooth USB Dongle (20702A1) *
+  * ``[0a5c:21fb]`` HP Supra 4352 (20702A1 Combo)
+  * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
+  * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
+  * ``[13d3:3404]`` Azurewave (4352HMB) *
+  * ``[13d3:3411]`` Dell Alienware (4352/20702A1 combo) *
+  * ``[13d3:3413]`` Azurewave (4360/20702 combo)
+  * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
+  
 ####Installation
 
 BrcmPatchRAM can be installed either through Clover kext injection or placed in /System/Library/Extensions for legacy installations.
@@ -22,12 +49,11 @@ BrcmPatchRAM can be installed either through Clover kext injection or placed in 
 
 BrcmPatchRAM consists of 3 parts:
 
- - BrcmPatchRAM itself communicates with supported Broadcom Bluetooth USB devices (as configured in the Info.plist), and detects if they require a firmware update. 
+ * BrcmPatchRAM itself communicates with supported Broadcom Bluetooth USB devices (as configured in the Info.plist), and detects if they require a firmware update. 
  
-  If a firmware update is required, the matching firmware data will be uploaded to the 
-	device and the device will be reset.
+  If a firmware update is required, the matching firmware data will be uploaded to the device and the device will be reset.
 	
- - BrcmFirmwareStore is a shared resource which holds all the configured firmwares for different Broadcom Bluetooth USB devices.
+ * BrcmFirmwareStore is a shared resource which holds all the configured firmwares for different Broadcom Bluetooth USB devices.
 
    Some devices require device specific firmware, while others can use the newest version available in the Windows drivers without issue.
 
@@ -35,7 +61,7 @@ BrcmPatchRAM consists of 3 parts:
 
 	Firmwares can be stored using zlib compression in order to keep the configuration size manageable.
 	
- - BrcmNonApple is a code-less Plug-In kext which ensures that the default Apple Broadcom Bluetooth USB drivers are matched against the 3rd party devices supported by BrcmPatchRAM.
+ * BrcmNonApple is a code-less Plug-In kext which ensures that the default Apple Broadcom Bluetooth USB drivers are matched against the 3rd party devices supported by BrcmPatchRAM.
 
    Through the plist configuration 3rd party devices are handled using com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport.
 	Additionally a device description is merged which is used in the System profiler to identify the device.
@@ -45,7 +71,7 @@ This means that for all intents and purposes your device will be native on OS X 
 
 It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through Clover or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
 
-For Clover use the following kext patch:
+Clover users can make use of the following kext patch:
 
     <dict>
         <key>Comment</key>
@@ -76,10 +102,10 @@ If the firmware upload failed with an error, try installing the debug version of
 
 In order to report an error log an issue on github with the following information:
   
- - Device product ID
- - Device vendor ID
- - BrcmPatchRAM version used
- - Dump of BrcmPatchRAM debug output from /var/log/system.log showing the firmware upload failure
+ * Device product ID
+ * Device vendor ID
+ * BrcmPatchRAM version used
+ * Dump of BrcmPatchRAM debug output from /var/log/system.log showing the firmware upload failure
 
 ####Firmware Compatibility
 
@@ -111,15 +137,15 @@ http://drivers.softpedia.com/get/BLUETOOTH/Broadcom/ASUS-X99-DELUXE-Broadcom-Blu
 
 In order to get the device specific firmware for your device take the following steps:
 
- - Look up your USB device vendor and product ID, in this example we will be using the BCM94352Z PCI NGFF WiFi/BT combo card, for which the vendor is 0930 and product ID 0233.
+ * Look up your USB device vendor and product ID, in this example we will be using the BCM94352Z PCI NGFF WiFi/BT combo card, for which the vendor is 0930 and product ID 0233.
   
- - Extract the Windows Bluetooth driver package and open the bcbtums-win8x64-brcm.inf file.
+ * Extract the Windows Bluetooth driver package and open the bcbtums-win8x64-brcm.inf file.
   
- - Find your vendor / device ID combination in the .inf file
+ * Find your vendor / device ID combination in the .inf file
     
         %BRCM20702.DeviceDesc%=BlueRAMUSB0223, USB\VID_0930&PID_0223       ; 20702A1 Toshiba 4352
 				
- - Locate the mentioned "RAMUSB0223" device in the .inf file:
+ * Locate the mentioned "RAMUSB0223" device in the .inf file:
   
 		;;;;;;;;;;;;;RAMUSB0223;;;;;;;;;;;;;;;;;
 		[RAMUSB0223.CopyList]
@@ -128,27 +154,27 @@ In order to get the device specific firmware for your device take the following 
 		BCM20702A1_001.002.014.1443.1457.hex
 	
 		
- -  Copy the firmware hex file matching your device from the Windows package, in this case "BCM20702A1_001.002.014.1443.1457.hex"
+ *  Copy the firmware hex file matching your device from the Windows package, in this case "BCM20702A1_001.002.014.1443.1457.hex"
 	
 	
- -  The firmware file can now optionally be compressed using the included zlib.pl script:
+ *  The firmware file can now optionally be compressed using the included zlib.pl script:
 	
 	    zlib.pl deflate BCM20702A1_001.002.014.1443.1457.hex > BCM20702A1_001.002.014.1443.1457.zhx
 	
- - After this a hex dump can be created for pasting into a plist editor:
+ * After this a hex dump can be created for pasting into a plist editor:
 	
 	    xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.dmp
 		
- - Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
+ * Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
  
   Note that the version number displayed in OS X is the last number in the file name (1457 in our sample) + 4096.
 
   So in this case the firmware version in OS X would be: "*c14 v5553*".
 	
- - After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
+ * After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
  
  Configure the earlier firmware using its unique firmware key.
  
- - Open the BrcmNonApple.kext Info.plist and configured your device for both AppleUSBMergeNub as well as BroadcomBluetoothHostControllerUSBTransport.
+ * Open the BrcmNonApple.kext Info.plist and configured your device for both AppleUSBMergeNub as well as BroadcomBluetoothHostControllerUSBTransport.
  
  To do this make a copy of an existing device and modify the device vendor id, product id and USB description as required.
