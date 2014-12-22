@@ -216,7 +216,7 @@ int BrcmPatchRAM::getDeviceStatus()
     
     if ((result = mDevice->GetDeviceStatus(&status)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to get device status (0x%08x).\n", getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to get device status (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         return 0;
     }
     else
@@ -231,7 +231,7 @@ bool BrcmPatchRAM::resetDevice()
     
     if ((result = mDevice->ResetDevice()) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Failed to reset the device (0x%08x).\n", getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         return false;
     }
     else
@@ -269,7 +269,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     
     if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (0x%08x).\n", getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         return false;
     }
     
@@ -290,7 +290,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     // Set the configuration to the first configuration
     if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (0x%08x).\n", getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         mDevice->close(this);
         return false;
     }
@@ -375,7 +375,7 @@ IOReturn BrcmPatchRAM::queueRead()
             if ((result = mInterruptPipe->Read(buffer, 0, 0, buffer->getLength(), &completion)) != kIOReturnSuccess)
             {
                 mReadQueued = false;
-                IOLog("%s [%04x:%04x]: Error initiating read (0x%08x).\n", getName(), mVendorId, mProductId, result);
+                IOLog("%s [%04x:%04x]: Error initiating read (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
             }
             else
             {
@@ -385,10 +385,10 @@ IOReturn BrcmPatchRAM::queueRead()
             }
             
             if ((result = buffer->complete()) != kIOReturnSuccess)
-             IOLog("%s [%04x:%04x]: Failed to complete queued read memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
+             IOLog("%s [%04x:%04x]: Failed to complete queued read memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         }
         else
-            IOLog("%s [%04x:%04x]: Failed to prepare queued read memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to prepare queued read memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         
         buffer->release();
     }
@@ -431,7 +431,7 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
             DEBUG_LOG("%s [%04x:%04x]: read - kIOReturnNotResponding\n", getName(), mVendorId, mProductId);
             break;
         default:
-            DEBUG_LOG("%s [%04x:%04x]: read - Other (0x%08x)\n", getName(), mVendorId, mProductId, status);
+            DEBUG_LOG("%s [%04x:%04x]: read - Other (\"%s\" 0x%08x)\n", getName(), mVendorId, mProductId, getReturn(status), status);
             break;
     }
     
@@ -453,7 +453,7 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
     };
     
     if ((result = mInterface->DeviceRequest(&request)) != kIOReturnSuccess)
-        IOLog("%s [%04x:%04x]: device request failed (0x%08x).\n", getName(), mVendorId, mProductId, result);
+        IOLog("%s [%04x:%04x]: device request failed (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
    
     return result;
 }
@@ -572,16 +572,16 @@ IOReturn BrcmPatchRAM::interruptRead(void* output, UInt8* length)
             if ((result = mInterruptPipe->Read(buffer, 0, 0, reqCount, (IOUSBCompletion*)NULL, &readCount)) == kIOReturnSuccess)
                 result = hciParseResponse(buffer->getBytesNoCopy(), readCount, output, length);
             else
-                IOLog("%s [%04x:%04x]: Failed to read from interrupt pipe sychronously (0x%08x).\n", getName(),
-                      mVendorId, mProductId, result);
+                IOLog("%s [%04x:%04x]: Failed to read from interrupt pipe sychronously (\"%s\" 0x%08x).\n", getName(),
+                      mVendorId, mProductId, getReturn(result), result);
         }
         else
-            IOLog("%s [%04x:%04x]: Failed to prepare interrupt read memory buffer (0x%08x).\n", getName(),
-                  mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to prepare interrupt read memory buffer (\"%s\" 0x%08x).\n", getName(),
+                  mVendorId, mProductId, getReturn(result), result);
         
         if ((result = buffer->complete()) != kIOReturnSuccess)
-            IOLog("%s [%04x:%04x]: Failed to complete interrupt read memory buffer (0x%08x).\n", getName(),
-                  mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to complete interrupt read memory buffer (\"%s\" 0x%08x).\n", getName(),
+                  mVendorId, mProductId, getReturn(result), result);
         
         buffer->release();
     }
@@ -608,13 +608,13 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
                 //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", getName(), length);
             }
             else
-                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (0x%08x).\n", getName(), mVendorId, mProductId, result);
+                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         }
         else
-           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
+           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         
         if ((result = buffer->complete()) != kIOReturnSuccess)
-            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (0x%08x).\n", getName(), mVendorId, mProductId, result);
+            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
         
         buffer->release();
     }
@@ -656,4 +656,117 @@ UInt16 BrcmPatchRAM::getFirmwareVersion()
     return 0xFFFF;
 }
 
-
+const char* BrcmPatchRAM::getReturn(IOReturn result)
+{
+    switch (result)
+    {
+        case kIOReturnSuccess:
+            return "Success";
+        case kIOReturnError:
+            return "General error";
+        case kIOReturnNoMemory:
+            return "Unable to allocate memory";
+        case kIOReturnNoResources:
+            return "Resource shortage";
+        case kIOReturnIPCError:
+            return "Error while executing IPC";
+        case kIOReturnNoDevice:
+            return "No such device";
+        case kIOReturnNotPrivileged:
+            return "Privilege violation";
+        case kIOReturnBadArgument:
+            return "Invalid argument specified";
+        case kIOReturnLockedRead:
+            return "Device is read locked";
+        case kIOReturnLockedWrite:
+            return "Device is write locked";
+        case kIOReturnExclusiveAccess:
+            return "Exclusive access requested on already open device";
+        case kIOReturnBadMessageID:
+            return "Sent & received messages have different msg_id";
+        case kIOReturnUnsupported:
+            return "Unsupported function";
+        case kIOReturnVMError:
+            return "Miscellaneous VM failure";
+        case kIOReturnInternalError:
+            return "Internal error";
+        case kIOReturnIOError:
+            return "General I/O error";
+        case kIOReturnCannotLock:
+            return "Unable to aquire device lock";
+        case kIOReturnNotOpen:
+            return "Device is not open";
+        case kIOReturnNotReadable:
+            return "Device does not support reading";
+        case kIOReturnNotWritable:
+            return "Device does not support writing";
+        case kIOReturnNotAligned:
+            return "Alignment error";
+        case kIOReturnBadMedia:
+            return "Media error";
+        case kIOReturnStillOpen:
+            return "Device(s) still open";
+        case kIOReturnRLDError:
+            return "RLD failure";
+        case kIOReturnDMAError:
+            return "DMA failure";
+        case kIOReturnBusy:
+            return "Device busy";
+        case kIOReturnTimeout:
+            return "I/O timeout";
+        case kIOReturnOffline:
+            return "Device offline";
+        case kIOReturnNotReady:
+            return "Device not ready";
+        case kIOReturnNotAttached:
+            return "Device not attached";
+        case kIOReturnNoChannels:
+            return "No DMA channels left";
+        case kIOReturnNoSpace:
+            return "No space for data";
+        case kIOReturnPortExists:
+            return "Port already exists";
+        case kIOReturnCannotWire:
+            return "Unable to wire down phyiscal memory";
+        case kIOReturnNoInterrupt:
+            return "No interrupt attached";
+        case kIOReturnNoFrames:
+            return "No DMA frames enqueued";
+        case kIOReturnMessageTooLarge:
+            return "Oversized message received on interrupt port";
+        case kIOReturnNotPermitted:
+            return "Not permitted";
+        case kIOReturnNoPower:
+            return "No power to device";
+        case kIOReturnNoMedia:
+            return "Media not present";
+        case kIOReturnUnformattedMedia:
+            return "Media not formatted";
+        case kIOReturnUnsupportedMode:
+            return "No such mode";
+        case kIOReturnUnderrun:
+            return "Data underrun";
+        case kIOReturnOverrun:
+            return "Data overrun";
+        case kIOReturnDeviceError:
+            return "Device is not working properly";
+        case kIOReturnNoCompletion:
+            return "Completion routine is required";
+        case kIOReturnAborted:
+            return "Operation aborted";
+        case kIOReturnNoBandwidth:
+            return "Bus bandwidth would be exceeded";
+        case kIOReturnNotResponding:
+            return "Device is not responding";
+        case kIOReturnIsoTooOld:
+            return "Isochronous I/O request for distant past";
+        case kIOReturnIsoTooNew:
+            return "Isochronous I/O request for distant future";
+        case kIOReturnNotFound:
+            return "Data was not found";
+        case kIOReturnInvalid:
+            return "Invalid return";
+        default:
+            return "Unknown";
+    }
+}

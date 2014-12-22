@@ -41,6 +41,8 @@ class BrcmPatchRAM : public IOService
     
         bool volatile mReadQueued = false;
     
+        static const char* getReturn(IOReturn result);
+    
         BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();
