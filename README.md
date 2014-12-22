@@ -25,7 +25,7 @@ The following devices are supported at the moment:
   * ``[0489:e032]`` 20702 Combo USB
   * ``[0489:e07a]`` Lenovo NGFF (4352 / 20702)
   * ``[04ca:200a]`` LiteOn (4352 Combo)
-  * ``[04ca:200b]`` LiteOn (4352 Combo)
+  * ``[04ca:200b]`` LiteOn (4352 Combo) *
   * ``[04ca:200c]`` LiteOn (4352 Combo)
   * ``[050d:065a]`` Belkin (20702)
   * ``[0930:0221]`` Toshiba (4352 / 20702)
