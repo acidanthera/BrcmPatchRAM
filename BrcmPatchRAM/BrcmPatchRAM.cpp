@@ -715,7 +715,7 @@ const char* BrcmPatchRAM::getReturn(IOReturn result)
         case kIOReturnTimeout:
             return "I/O timeout";
         case kIOReturnOffline:
-            return "Device offline";
+            return "Device off-line";
         case kIOReturnNotReady:
             return "Device not ready";
         case kIOReturnNotAttached:
@@ -727,7 +727,7 @@ const char* BrcmPatchRAM::getReturn(IOReturn result)
         case kIOReturnPortExists:
             return "Port already exists";
         case kIOReturnCannotWire:
-            return "Unable to wire down phyiscal memory";
+            return "Unable to wire down physical memory";
         case kIOReturnNoInterrupt:
             return "No interrupt attached";
         case kIOReturnNoFrames:
