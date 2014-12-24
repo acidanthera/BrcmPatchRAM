@@ -58,6 +58,9 @@ class BrcmPatchRAM : public IOService
         volatile uint16_t mFirmareVersion = 0xFFFF;
     
         unsigned int getDelayValue(const char* key);
+
+        static const char* getReturn(IOReturn result);
+
         BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();
