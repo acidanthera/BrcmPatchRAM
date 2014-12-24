@@ -441,11 +441,17 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     DEBUG_LOG("%s [%04x:%04x]: END OF RECORD complete (status: 0x%02x, length: %d bytes).\n",
                               getName(), mVendorId, mProductId, event->status, header->length);
                     
+                    // Allow device to process the firmware update
+                    IOSleep(100);
+                    
                     mDeviceState = kFirmwareWritten;
                     break;
                 case HCI_OPCODE_RESET:
                     DEBUG_LOG("%s [%04x:%04x]: RESET complete (status: 0x%02x, length: %d bytes).\n",
                               getName(), mVendorId, mProductId, event->status, header->length);
+                    
+                    // Allow device to complete the reset
+                    IOSleep(50);
                     
                     mDeviceState = kResetComplete;
                     break;
