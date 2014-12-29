@@ -207,6 +207,23 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
+		<key>0A5C_21EC</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1459_v5555</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>IOResourceMatch</key>
+			<string>BrcmFirmwareStore</string>
+			<key>idProduct</key>
+			<integer>8684</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0A5C_21FB</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
