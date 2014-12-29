@@ -33,6 +33,7 @@ The following devices are supported at the moment:
   * ``[0a5c:21e1]`` HP Softsailing (20702A1)
   * ``[0a5c:21e6]`` non-UHE Lenovo Bluetooth (20702)
   * ``[0a5c:21e8]`` Bluetooth USB Dongle (20702A1) *
+  * ``[0a5c:21ec]`` Inateck Bluetooth (20702A1)
   * ``[0a5c:21fb]`` HP Supra 4352 (20702A1 Combo)
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
