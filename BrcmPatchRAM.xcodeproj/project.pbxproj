@@ -28,7 +28,7 @@
 /* Begin PBXFileReference section */
 		D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmFirmwareStore.cpp; sourceTree = "<group>"; };
 		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
-		D438E7A71A59297700F42407 /* BrcmNonApple.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmNonApple.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmNonApple.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		D438E7AA1A59297800F42407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
@@ -87,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */,
+				D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,6 +144,7 @@
 				D438E7A31A59297700F42407 /* Frameworks */,
 				D438E7A41A59297700F42407 /* Headers */,
 				D438E7A51A59297700F42407 /* Resources */,
+				D42D3C001A594935006C4C8C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -150,7 +152,7 @@
 			);
 			name = BrcmNonApple;
 			productName = BrcmNonApple;
-			productReference = D438E7A71A59297700F42407 /* BrcmNonApple.kext */;
+			productReference = D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
 		D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */ = {
@@ -222,6 +224,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D42D3C001A594935006C4C8C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "tar -czf $BUILD_DIR/BrcmPatchRAM.tar.gz $BUILD_DIR/Debug $BUILD_DIR/Release";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D438E7A21A59297700F42407 /* Sources */ = {
