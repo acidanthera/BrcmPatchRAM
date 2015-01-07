@@ -73,18 +73,18 @@ This means that for all intents and purposes your device will be native on OS X 
 It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through Clover or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
 
 Clover users can make use of the following kext patch:
-
-    <dict>
-        <key>Comment</key>
-        <string>IOBluetoothFamily - Continuity &amp; Hand-off</string>
-        <key>Find</key>
-        <data>i4eMAQAA</data>
-        <key>Name</key>
-        <string>IOBluetoothFamily</string>
-        <key>Replace</key>
-        <data>uA8AAACQ</data>
-    </dict>
-	
+```XML
+<dict>
+    <key>Comment</key>
+    <string>IOBluetoothFamily - Continuity &amp; Hand-off</string>
+    <key>Find</key>
+    <data>i4eMAQAA</data>
+    <key>Name</key>
+    <string>IOBluetoothFamily</string>
+    <key>Replace</key>
+    <data>uA8AAACQ</data>
+</dict>
+```	
 ####Troubleshooting
 
 After installing BrcmPatchRAM, even though your Bluetooth icon may show up, it could be that the firmware has not been properly updated.
@@ -94,9 +94,9 @@ Verify the firmware is updated by going to System Information and check the Blue
 If the version number is "4096", this means no firmware was updated for your device and it will not work properly.
 
 Verify any errors in the system log by running the following command in the terminal:
-
+```bash
     cat /var/log/system.log | grep -i brcm[fp]
-	
+```	
 Ensure you check only the latest boot messages, as the system.log might go back several days.
 
 If the firmware upload failed with an error, try installing the debug version of BrcmPatchRAM in order to get more detailed information in the log.
@@ -143,29 +143,29 @@ In order to get the device specific firmware for your device take the following 
  * Extract the Windows Bluetooth driver package and open the bcbtums-win8x64-brcm.inf file.
   
  * Find your vendor / device ID combination in the .inf file
-    
-        %BRCM20702.DeviceDesc%=BlueRAMUSB0223, USB\VID_0930&PID_0223       ; 20702A1 Toshiba 4352
-				
+```dosini
+%BRCM20702.DeviceDesc%=BlueRAMUSB0223, USB\VID_0930&PID_0223       ; 20702A1 Toshiba 4352
+```
  * Locate the mentioned "RAMUSB0223" device in the .inf file:
-  
-		;;;;;;;;;;;;;RAMUSB0223;;;;;;;;;;;;;;;;;
-		[RAMUSB0223.CopyList]
-		bcbtums.sys
-		btwampfl.sys
-		BCM20702A1_001.002.014.1443.1457.hex
-	
+```dosini
+;;;;;;;;;;;;;RAMUSB0223;;;;;;;;;;;;;;;;;
+[RAMUSB0223.CopyList]
+bcbtums.sys
+btwampfl.sys
+BCM20702A1_001.002.014.1443.1457.hex
+```	
 		
  *  Copy the firmware hex file matching your device from the Windows package, in this case "BCM20702A1_001.002.014.1443.1457.hex"
 	
 	
  *  The firmware file can now optionally be compressed using the included zlib.pl script:
-	
-	    zlib.pl deflate BCM20702A1_001.002.014.1443.1457.hex > BCM20702A1_001.002.014.1443.1457.zhx
-	
+```bash	
+zlib.pl deflate BCM20702A1_001.002.014.1443.1457.hex > BCM20702A1_001.002.014.1443.1457.zhx
+```	
  * After this a hex dump can be created for pasting into a plist editor:
-	
-	    xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.dmp
-		
+```bash	
+xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.dmp
+```		
  * Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
  
   Note that the version number displayed in OS X is the last number in the file name (1457 in our sample) + 4096.
@@ -176,6 +176,6 @@ In order to get the device specific firmware for your device take the following 
  
  Configure the earlier firmware using its unique firmware key.
  
- * Open the BrcmNonApple.kext Info.plist and configured your device for both AppleUSBMergeNub as well as BroadcomBluetoothHostControllerUSBTransport.
+ * Open the BrcmNonApple.kext Info.plist and configured your device for both `AppleUSBMergeNub` as well as `BroadcomBluetoothHostControllerUSBTransport`.
  
  To do this make a copy of an existing device and modify the device vendor id, product id and USB description as required.
