@@ -1,5 +1,7 @@
 ###BrcmPatchRAM
 
+__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
+
 Most Broadcom USB Bluetooth devices make use of a system called RAMUSB.
 
 RAMUSB allows the firmware for the device to be updated on-the-fly, however any updates previously applied are lost when shutting down the machine.
