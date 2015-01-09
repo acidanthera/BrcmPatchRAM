@@ -57,7 +57,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
 bool BrcmPatchRAM::start(IOService *provider)
 {
-    IOLog("%s [%04x:%04x]: Version 0.6a starting.\n", getName(), mVendorId, mProductId);
+    IOLog("%s [%04x:%04x]: Version 0.7 starting.\n", getName(), mVendorId, mProductId);
 
     if (!super::start(provider))
         return false;

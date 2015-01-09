@@ -177,7 +177,7 @@ static char check_sum(const UInt8* data, UInt16 len)
 OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
 {
     // Vendor Specific: Launch RAM
-    UInt8 HCI_VSC_LAUNCH_RAM[] { 0x4c, 0xfc };
+    UInt8 HCI_VSC_LAUNCH_RAM[] = { 0x4c, 0xfc };
     
     OSArray* instructions = OSArray::withCapacity(1);
     UInt8* data = (UInt8*)firmwareData->getBytesNoCopy();
