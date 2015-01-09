@@ -312,12 +312,9 @@ void BrcmPatchRAM::continousRead()
     mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
     mReadBuffer->prepare();
     
-    mInterruptCompletion =
-    {
-        .target = this,
-        .action = readCompletion,
-        .parameter = NULL
-    };
+    mInterruptCompletion.target = this;
+    mInterruptCompletion.action = readCompletion;
+    mInterruptCompletion.parameter = NULL;
     
     IOReturn result;
     
