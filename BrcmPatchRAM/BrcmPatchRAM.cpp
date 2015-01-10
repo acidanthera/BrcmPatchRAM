@@ -34,6 +34,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
     DEBUG_LOG("%s::probe\n", getName());
     
+    IOLog("%s [%04x:%04x]: Version 0.8 starting.\n", getName(), mVendorId, mProductId);
+    
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
     if (mDevice != NULL)
