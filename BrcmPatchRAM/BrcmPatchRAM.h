@@ -30,11 +30,14 @@
 enum DeviceState
 {
     kUnknown,
+    kInitialize,
     kFirmwareVersion,
     kMiniDriverComplete,
+    kInstructionWrite,
     kInstructionWritten,
     kFirmwareWritten,
     kResetComplete,
+    kUpdateComplete
 };
 
 class BrcmPatchRAM : public IOService
@@ -54,11 +57,12 @@ class BrcmPatchRAM : public IOService
         IOUSBCompletion mInterruptCompletion;
         IOBufferMemoryDescriptor* mReadBuffer;
     
-        volatile DeviceState mDeviceState = kUnknown;
+        volatile DeviceState mDeviceState = kInitialize;
         volatile uint16_t mFirmareVersion = 0xFFFF;
     
         unsigned int getDelayValue(const char* key);
 
+        static const char* getState(DeviceState deviceState);
         static const char* getReturn(IOReturn result);
 
         BrcmFirmwareStore* getFirmwareStore();
@@ -85,9 +89,6 @@ class BrcmPatchRAM : public IOService
         bool performUpgrade();
     public:
         virtual IOService* probe(IOService *provider, SInt32 *probeScore);
-        virtual bool init(OSDictionary *dictionary = NULL);
-        virtual bool start(IOService *provider);
-        virtual void stop(IOService *provider);
 };
 
 #endif //__BrcmPatchRAM__

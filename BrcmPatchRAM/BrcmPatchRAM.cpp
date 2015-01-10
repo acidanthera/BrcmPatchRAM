@@ -30,12 +30,6 @@
 
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 
-bool BrcmPatchRAM::init(OSDictionary *dictionary)
-{
-    DEBUG_LOG("BrcmPatchRAM::init\n"); // getName() is not available yet
-    return super::init(dictionary);
-}
-
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
     DEBUG_LOG("%s::probe\n", getName());
@@ -44,91 +38,69 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     if (mDevice != NULL)
     {
+        mDevice->retain();
+        mDevice->open(this);
+        
         mVendorId = mDevice->GetVendorID();
         mProductId = mDevice->GetProductID();
         
-        return super::probe(provider, probeScore);
+        // Print out additional device information
+        printDeviceInfo();
+        
+        // Set device configuration to composite configuration index 0
+        if (!setConfiguration(0))
+            return false;
+        
+        // Obtain first interface
+        mInterface = findInterface();
+        
+        if (mInterface)
+        {
+            mInterface->retain();
+            mInterface->open(this);
+            
+            mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
+            mBulkPipe = findPipe(kUSBBulk, kUSBOut);
+           
+            if (mInterruptPipe && mBulkPipe)
+            {
+                if (performUpgrade())
+                    IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
+                else
+                    IOLog("%s [%04x:%04x]: Firmware upgrade failed.\n", getName(), mVendorId, mProductId);
+            }
+        }
+        
+        if (mReadBuffer)
+            mReadBuffer->release();
+        
+        if (mInterruptPipe)
+        {
+            mInterruptPipe->Abort();
+            mInterruptPipe->release();
+        }
+        
+        if (mBulkPipe)
+        {
+            mBulkPipe->Abort();
+            mBulkPipe->release();
+        }
+        
+        if (mInterface)
+        {
+            mInterface->close(this);
+            mInterface->release();
+        }
+        
+        mDevice->close(this);
+        mDevice->release();
+        
+        return NULL;
     }
     
     IOLog("%s: Provider is not a USB device.\n", getName());
     
     return NULL;
-}
-
-bool BrcmPatchRAM::start(IOService *provider)
-{
-    IOLog("%s [%04x:%04x]: Version 0.7 starting.\n", getName(), mVendorId, mProductId);
-
-    if (!super::start(provider))
-        return false;
-    
-    // Print out additional device information
-    printDeviceInfo();
-    
-    // Set device configuration to composite configuration index 0
-    if (!setConfiguration(0))
-        return false;
-
-    // Obtain first interface
-    mInterface = findInterface();
-    
-    if (mInterface)
-    {
-        mInterface->retain();
-        mInterface->open(this);
-        
-        mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
-        mBulkPipe = findPipe(kUSBBulk, kUSBOut);
-        
-        if (mInterruptPipe && mBulkPipe)
-        {
-            continousRead();
-            
-            if (performUpgrade())
-                IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
-            else
-                IOLog("%s [%04x:%04x]: Firmware upgrade failed.\n", getName(), mVendorId, mProductId);
-        }
-    }
-    
-    if (mReadBuffer)
-        mReadBuffer->release();
-    
-    if (mInterruptPipe)
-    {
-        mInterruptPipe->Abort();
-        mInterruptPipe->release();
-    }
-    
-    if (mBulkPipe)
-    {
-        mBulkPipe->Abort();
-        mBulkPipe->release();
-    }
-    
-    if (mInterface)
-    {
-        mInterface->close(this);
-        mInterface->release();
-    }
-
-    return false;
-}
-
-void BrcmPatchRAM::stop(IOService *provider)
-{
-    DEBUG_LOG("%s [%04x:%04x]: Stopping...\n", getName(), mVendorId, mProductId);
-    super::stop(provider);
-}
-
-unsigned int BrcmPatchRAM::getDelayValue(const char* key)
-{
-    OSNumber* value = OSDynamicCast(OSNumber, getProperty(key));
-    
-    if (value)
-        return value->unsigned32BitValue();
-    else
-        return DEFAULT_DELAY;        
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
@@ -228,19 +200,13 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     }
     
     // Device is already configured
-    if (currentConfiguration == configurationDescriptor->bConfigurationValue)
+    if (currentConfiguration != 0)
     {
         DEBUG_LOG("%s [%04x:%04x]: Device configuration is already set to configuration index %d.\n", getName(),
                   mVendorId, mProductId, configurationIndex);
         return true;
     }
-    
-    if (!mDevice->open(this))
-    {
-        IOLog("%s [%04x:%04x]: Unable to open device for (re-)configuration.\n", getName(), mVendorId, mProductId);
-        return false;
-    }
-    
+
     // Set the configuration to the first configuration
     if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
@@ -251,8 +217,6 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     
     DEBUG_LOG("%s [%04x:%04x]: Set device configuration to configuration index %d successfully.\n", getName(),
               mVendorId, mProductId, configurationIndex);
-    
-    mDevice->close(this);
     
     return true;
 }
@@ -298,11 +262,11 @@ IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
     
     if (pipe)
     {
-        DEBUG_LOG("%s [%04x:%04x]: Located pipe at 0x%02x.\n", getName(), mVendorId, mProductId, pipe->GetEndpointDescriptor()->bEndpointAddress);
+        DEBUG_LOG("%s [%04x:%04x]: Located pipe type %d at 0x%02x.\n", getName(), mVendorId, mProductId, type, pipe->GetEndpointDescriptor()->bEndpointAddress);
         return pipe;
     }
     else
-        IOLog("%s [%04x:%04x]: Unable to locate pipe.\n", getName(), mVendorId, mProductId);
+        IOLog("%s [%04x:%04x]: Unable to locate pipe type %d.\n", getName(), mVendorId, mProductId, type);
     
     return NULL;
 }
@@ -346,16 +310,26 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
             me->hciParseResponse(me->mReadBuffer->getBytesNoCopy(), me->mReadBuffer->getLength() - bufferSizeRemaining, NULL, NULL);
             break;
         case kIOReturnAborted:
+            IOLog("%s [%04x:%04x]: readCompletion - Return aborted (0x%08x)\n", me->getName(), me->mVendorId, me->mProductId, status);
             // Read loop is done, exit silently
             return;
+        case kIOReturnNoDevice:
+            IOLog("%s [%04x:%04x]: readCompletion - No such device (0x%08x)\n", me->getName(), me->mVendorId, me->mProductId, status);
+            break;
+        case kIOUSBTransactionTimeout:
+            IOLog("%s [%04x:%04x]: readCompletion - Transaction timeout (0x%08x)\n", me->getName(), me->mVendorId, me->mProductId, status);
+            break;
         case kIOReturnNotResponding:
             IOLog("%s [%04x:%04x]: Not responding - Delaying next read.\n", me->getName(), me->mVendorId, me->mProductId);
             me->mInterruptPipe->ClearStall();
-            IOSleep(100);
             break;
         default:
             break;
     }
+    
+    // Exit if device update has completed
+    if (me->mDeviceState == kUpdateComplete)
+        return;
     
     // Queue the next read, only if not aborted
     IOReturn result;
@@ -419,7 +393,11 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     DEBUG_LOG("%s [%04x:%04x]: Firmware version: v%d.\n",
                               getName(), mVendorId, mProductId, mFirmareVersion + 0x1000);
                     
-                    mDeviceState = kFirmwareVersion;
+                    // Device does not require a firmware patch at this time
+                    if (mFirmareVersion > 0)
+                        mDeviceState = kUpdateComplete;
+                    else
+                        mDeviceState = kFirmwareVersion;
                     break;
                 case HCI_OPCODE_DOWNLOAD_MINIDRIVER:
                     DEBUG_LOG("%s [%04x:%04x]: DOWNLOAD MINIDRIVER complete (status: 0x%02x, length: %d bytes).\n",
@@ -437,17 +415,11 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     DEBUG_LOG("%s [%04x:%04x]: END OF RECORD complete (status: 0x%02x, length: %d bytes).\n",
                               getName(), mVendorId, mProductId, event->status, header->length);
                     
-                    // Allow device to process the firmware update
-                    IOSleep(100);
-                    
                     mDeviceState = kFirmwareWritten;
                     break;
                 case HCI_OPCODE_RESET:
                     DEBUG_LOG("%s [%04x:%04x]: RESET complete (status: 0x%02x, length: %d bytes).\n",
                               getName(), mVendorId, mProductId, event->status, header->length);
-                    
-                    // Allow device to complete the reset
-                    IOSleep(50);
                     
                     mDeviceState = kResetComplete;
                     break;
@@ -483,6 +455,9 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
             break;
         case HCI_EVENT_LE_META:
             DEBUG_LOG("%s [%04x:%04x]: Low-Energy meta event.\n", getName(), mVendorId, mProductId);
+            break;
+        case HCI_EVENT_HARDWARE_ERROR:
+            DEBUG_LOG("%s [%04x:%04x]: Hardware error event.\n", getName(), mVendorId, mProductId);
             break;
         default:
             DEBUG_LOG("%s [%04x:%04x]: Unknown event code (0x%02x).\n", getName(), mVendorId, mProductId, header->eventCode);
@@ -531,66 +506,114 @@ bool BrcmPatchRAM::performUpgrade()
     OSArray* instructions;
     OSCollectionIterator* iterator;
     OSData* data;
+    DeviceState previousState = kUnknown;
     
-    mDeviceState = kUnknown;
+    mDeviceState = kInitialize;
     
     while (true)
     {
-        switch (mDeviceState)
+        // Trigger on device state change
+        if (mDeviceState != previousState)
         {
-            case kUnknown:
-                hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
-                break;
-            case kFirmwareVersion:
-                // Device does not require a firmware patch at this time
-                if (mFirmareVersion > 0)
+            if (mDeviceState != kInstructionWrite && mDeviceState != kInstructionWritten)
+                DEBUG_LOG("%s [%04x:%04x]: State \"%s\" --> \"%s\".\n", getName(), mVendorId, mProductId, getState(previousState), getState(mDeviceState));
+         
+            // Update previous state
+            previousState = mDeviceState;
+            
+            switch (mDeviceState)
+            {
+                case kInitialize:
+                {
+                    hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
+                    
+                    continousRead();
+                    continue;
+                }
+                case kFirmwareVersion:
+                    // Unable to retrieve firmware store
+                    if (!(firmwareStore = getFirmwareStore()))
+                        return false;
+                    
+                    instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+                    
+                    // Unable to retrieve firmware instructions
+                    if (!instructions)
+                        return false;
+                    
+                    // Initiate firmware upgrade
+                    hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
+                    
+                    continue;
+                case kMiniDriverComplete:
+                    // Write firmware data to bulk pipe
+                    iterator = OSCollectionIterator::withCollection(instructions);
+                    
+                    if (!iterator)
+                        return false;
+                    
+                    // Write first 2 instructions to trigger response
+                    if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                    
+                    if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+
+                    continue;
+                case kInstructionWrite:
+                    if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                    else
+                        // Firmware data fully written
+                        hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
+
+                    continue;
+                case kFirmwareWritten:
+                    hciCommand(&HCI_RESET, sizeof(HCI_RESET));
+                    continue;
+                case kResetComplete:
+                    resetDevice();
+                    getDeviceStatus();
+                    
+                    mDeviceState = kUpdateComplete;
+                    continue;
+                case kInstructionWritten:
+                    mDeviceState = kInstructionWrite;
+                    continue;
+                case kUnknown:
+                    // Un-used during processing
+                    continue;
+                case kUpdateComplete:
                     return true;
-                
-                // Unable to retrieve firmware store
-                if (!(firmwareStore = getFirmwareStore()))
-                    return false;
-                
-                instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
-                
-                // Unable to retrieve firmware instructions
-                if (!instructions)
-                    return false;
-                
-                // Initiate firmware upgrade
-                hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
-                
-                break;
-            case kMiniDriverComplete:
-                // Write firmware data to bulk pipe
-                iterator = OSCollectionIterator::withCollection(instructions);
-                
-                if (!iterator)
-                    return false;
-                
-                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
-                else
-                    return false;
-                break;
-            case kInstructionWritten:
-                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
-                else
-                    // Firmware data fully written
-                    hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
-                break;
-            case kFirmwareWritten:
-                hciCommand(&HCI_RESET, sizeof(HCI_RESET));
-                break;
-            case kResetComplete:
-                resetDevice();
-                getDeviceStatus();
-                
-                return true;
-                break;
+            }
         }
         
-        IOSleep(1);
+        IOSleep(10);
+    }
+}
+
+const char* BrcmPatchRAM::getState(DeviceState deviceState)
+{
+    switch (deviceState)
+    {
+        case kUnknown:
+            return "Unknown";
+        case kInitialize:
+            return "Initialize";
+        case kFirmwareVersion:
+            return "Firmware version";
+        case kMiniDriverComplete:
+            return "Mini-driver complete";
+        case kInstructionWrite:
+            return "Instruction write";
+        case kInstructionWritten:
+            return "Instruction written";
+        case kFirmwareWritten:
+            return "Firmware written";
+        case kResetComplete:
+            return "Reset complete";
+        case kUpdateComplete:
+            return "Update complete";
     }
 }
 
@@ -704,6 +727,66 @@ const char* BrcmPatchRAM::getReturn(IOReturn result)
             return "Data was not found";
         case kIOReturnInvalid:
             return "Invalid return";
+        case kIOUSBUnknownPipeErr:
+            return "Pipe ref not recognized";
+        case kIOUSBTooManyPipesErr:
+            return "Too many pipes";
+        case kIOUSBNoAsyncPortErr:
+            return "No async port";
+        case kIOUSBNotEnoughPipesErr:
+            return "Not enough pipes in interface";
+        case kIOUSBNotEnoughPowerErr:
+            return "Not enough power for selected configuration";
+        case kIOUSBEndpointNotFound:
+            return "Endpoint not found";
+        case kIOUSBConfigNotFound:
+            return "Configuration not found";
+        case kIOUSBTransactionTimeout:
+            return "Transaction timed out";
+        case kIOUSBTransactionReturned:
+            return "The transaction has been returned to the caller";
+        case kIOUSBPipeStalled:
+            return "Pipe has stalled, error needs to be cleared";
+        case kIOUSBInterfaceNotFound:
+            return "Interface reference not recognized";
+        case kIOUSBLowLatencyBufferNotPreviouslyAllocated:
+            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
+        case kIOUSBLowLatencyFrameListNotPreviouslyAllocated:
+            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
+        case kIOUSBHighSpeedSplitError:
+            return "Error to hub on high speed bus trying to do split transaction";
+        case kIOUSBSyncRequestOnWLThread:
+            return "A synchronous USB request was made on the workloop thread.";
+        case kIOUSBDeviceNotHighSpeed:
+            return "The device is not a high speed device.";
+//        case kIOUSBDevicePortWasNotSuspended:
+//            return "Port was not suspended";
+        case kIOUSBClearPipeStallNotRecursive:
+            return "IOUSBPipe::ClearPipeStall should not be called rescursively";
+        case kIOUSBLinkErr:
+            return "USB link error";
+        case kIOUSBNotSent2Err:
+            return "Transaction not sent";
+        case kIOUSBNotSent1Err:
+            return "Transaction not sent";
+        case kIOUSBBufferUnderrunErr:
+            return "Buffer Underrun (Host hardware failure on data out)";
+        case kIOUSBBufferOverrunErr:
+            return "Buffer Overrun (Host hardware failure on data out)";
+        case kIOUSBReserved2Err:
+            return "Reserved";
+        case kIOUSBReserved1Err:
+            return "Reserved";
+        case kIOUSBWrongPIDErr:
+            return "Pipe stall, Bad or wrong PID";
+        case kIOUSBPIDCheckErr:
+            return "Pipe stall, PID CRC error";
+        case kIOUSBDataToggleErr:
+            return "Pipe stall, Bad data toggle";
+        case kIOUSBBitstufErr:
+            return "Pipe stall, bitstuffing";
+        case kIOUSBCRCErr:
+            return "Pipe stall, bad CRC";
         default:
             return "Unknown";
     }
