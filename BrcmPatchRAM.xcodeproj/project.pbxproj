@@ -279,6 +279,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BrcmPatchRAM.kext/Contents/PlugIns";
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmNonApple/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmNonApple";
