@@ -265,6 +265,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BrcmPatchRAM.kext/Contents/PlugIns";
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmNonApple/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmNonApple";
@@ -306,6 +307,7 @@
 		D4F91B0A1A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
@@ -318,6 +320,7 @@
 		D4F91B0B1A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
