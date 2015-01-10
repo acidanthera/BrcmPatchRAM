@@ -274,7 +274,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     }
     
     // Device is already configured
-    if (currentConfiguration == configurationDescriptor->bConfigurationValue)
+    if (currentConfiguration != 0)
     {
         DEBUG_LOG("%s [%04x:%04x]: Device configuration is already set to configuration index %d.\n", getName(),
                   mVendorId, mProductId, configurationIndex);
@@ -766,6 +766,66 @@ const char* BrcmPatchRAM::getReturn(IOReturn result)
             return "Data was not found";
         case kIOReturnInvalid:
             return "Invalid return";
+        case kIOUSBUnknownPipeErr:
+            return "Pipe ref not recognized";
+        case kIOUSBTooManyPipesErr:
+            return "Too many pipes";
+        case kIOUSBNoAsyncPortErr:
+            return "No async port";
+        case kIOUSBNotEnoughPipesErr:
+            return "Not enough pipes in interface";
+        case kIOUSBNotEnoughPowerErr:
+            return "Not enough power for selected configuration";
+        case kIOUSBEndpointNotFound:
+            return "Endpoint not found";
+        case kIOUSBConfigNotFound:
+            return "Configuration not found";
+        case kIOUSBTransactionTimeout:
+            return "Transaction timed out";
+        case kIOUSBTransactionReturned:
+            return "The transaction has been returned to the caller";
+        case kIOUSBPipeStalled:
+            return "Pipe has stalled, error needs to be cleared";
+        case kIOUSBInterfaceNotFound:
+            return "Interface reference not recognized";
+        case kIOUSBLowLatencyBufferNotPreviouslyAllocated:
+            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
+        case kIOUSBLowLatencyFrameListNotPreviouslyAllocated:
+            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
+        case kIOUSBHighSpeedSplitError:
+            return "Error to hub on high speed bus trying to do split transaction";
+        case kIOUSBSyncRequestOnWLThread:
+            return "A synchronous USB request was made on the workloop thread.";
+        case kIOUSBDeviceNotHighSpeed:
+            return "The device is not a high speed device.";
+//        case kIOUSBDevicePortWasNotSuspended:
+//            return "Port was not suspended";
+        case kIOUSBClearPipeStallNotRecursive:
+            return "IOUSBPipe::ClearPipeStall should not be called rescursively";
+        case kIOUSBLinkErr:
+            return "USB link error";
+        case kIOUSBNotSent2Err:
+            return "Transaction not sent";
+        case kIOUSBNotSent1Err:
+            return "Transaction not sent";
+        case kIOUSBBufferUnderrunErr:
+            return "Buffer Underrun (Host hardware failure on data out)";
+        case kIOUSBBufferOverrunErr:
+            return "Buffer Overrun (Host hardware failure on data out)";
+        case kIOUSBReserved2Err:
+            return "Reserved";
+        case kIOUSBReserved1Err:
+            return "Reserved";
+        case kIOUSBWrongPIDErr:
+            return "Pipe stall, Bad or wrong PID";
+        case kIOUSBPIDCheckErr:
+            return "Pipe stall, PID CRC error";
+        case kIOUSBDataToggleErr:
+            return "Pipe stall, Bad data toggle";
+        case kIOUSBBitstufErr:
+            return "Pipe stall, bitstuffing";
+        case kIOUSBCRCErr:
+            return "Pipe stall, bad CRC";
         default:
             return "Unknown";
     }
