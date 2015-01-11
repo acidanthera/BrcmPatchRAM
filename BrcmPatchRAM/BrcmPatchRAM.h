@@ -40,9 +40,7 @@ class BrcmPatchRAM : public IOService
         IOUSBPipe* mBulkPipe = NULL;
     
         bool volatile mReadQueued = false;
-    
-        static const char* getReturn(IOReturn result);
-    
+   
         BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();
@@ -73,6 +71,8 @@ class BrcmPatchRAM : public IOService
         virtual bool init(OSDictionary *dictionary = NULL);
         virtual bool start(IOService *provider);
         virtual void stop(IOService *provider);
+    
+        virtual const char* stringFromReturn(IOReturn rtn);
 };
 
 #endif //__BrcmPatchRAM__
