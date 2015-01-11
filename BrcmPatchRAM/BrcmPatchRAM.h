@@ -25,6 +25,8 @@
 
 #include "BrcmFirmwareStore.h"
 
+#define kDisplayName "DisplayName"
+
 class BrcmPatchRAM : public IOService
 {
     private:

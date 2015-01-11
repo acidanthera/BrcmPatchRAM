@@ -43,6 +43,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     if (mDevice != NULL)
     {
+        OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
+        
+        if (displayName)
+            provider->setProperty(kUSBProductString, displayName);
+        
         BrcmFirmwareStore* firmwareStore;
         
         mDevice->retain();
@@ -508,6 +513,15 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
             break;
         case HCI_EVENT_CONN_COMPLETE:
             DEBUG_LOG("%s [%04x:%04x]: Connection complete event.\n", getName(), mVendorId, mProductId);
+            break;
+        case HCI_EVENT_DISCONN_COMPLETE:
+            DEBUG_LOG("%s [%04x:%04x]: Disconnection complete. event\n", getName(), mVendorId, mProductId);
+            break;
+        case HCI_EVENT_HARDWARE_ERROR:
+            DEBUG_LOG("%s [%04x:%04x]: Hardware error\n", getName(), mVendorId, mProductId);
+            break;
+        case HCI_EVENT_MODE_CHANGE:
+            DEBUG_LOG("%s [%04x:%04x]: Mode change event.\n", getName(), mVendorId, mProductId);
             break;
         case HCI_EVENT_LE_META:
             DEBUG_LOG("%s [%04x:%04x]: Low-Energy meta event.\n", getName(), mVendorId, mProductId);
