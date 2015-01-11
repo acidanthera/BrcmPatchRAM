@@ -35,6 +35,10 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
  ******************************************************************************/
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
+    uint64_t start_time, end_time, nano_secs;
+    
+    clock_get_uptime(&start_time);
+    
     DEBUG_LOG("%s::probe\n", getName());
     
     IOLog("%s [%04x:%04x]: Version 0.8 starting.\n", getName(), mVendorId, mProductId);
@@ -157,6 +161,12 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
     else
         IOLog("%s: Provider is not a USB device.\n", getName());
+    
+    clock_get_uptime(&end_time);
+    absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
+    uint64_t milli_secs = nano_secs / 1000000;
+    
+    IOLog("%s: Processing time %llu.%llu seconds.\n", getName(), milli_secs / 10000, milli_secs % 1000);
     
     return NULL;
 }
