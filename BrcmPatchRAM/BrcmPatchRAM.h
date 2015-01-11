@@ -25,7 +25,7 @@
 
 #include "BrcmFirmwareStore.h"
 
-#define DEFAULT_DELAY 5
+#define kDisplayName "DisplayName"
 
 enum DeviceState
 {

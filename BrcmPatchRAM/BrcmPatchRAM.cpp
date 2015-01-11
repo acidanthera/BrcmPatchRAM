@@ -40,7 +40,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     if (mDevice != NULL)
     {
-        OSString* displayName = OSDynamicCast(OSString, getProperty("DisplayName"));
+        OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
         
         if (displayName)
             provider->setProperty(kUSBProductString, displayName);
@@ -601,27 +601,19 @@ bool BrcmPatchRAM::performUpgrade()
 
 const char* BrcmPatchRAM::getState(DeviceState deviceState)
 {
-    switch (deviceState)
-    {
-        case kUnknown:
-            return "Unknown";
-        case kInitialize:
-            return "Initialize";
-        case kFirmwareVersion:
-            return "Firmware version";
-        case kMiniDriverComplete:
-            return "Mini-driver complete";
-        case kInstructionWrite:
-            return "Instruction write";
-        case kInstructionWritten:
-            return "Instruction written";
-        case kFirmwareWritten:
-            return "Firmware written";
-        case kResetComplete:
-            return "Reset complete";
-        case kUpdateComplete:
-            return "Update complete";
-    }
+    static const IONamedValue state_values[] = {
+        {kUnknown,            "Unknown"              },
+        {kInitialize,         "Initialize"           },
+        {kFirmwareVersion,    "Firmware version"     },
+        {kMiniDriverComplete, "Mini-driver complete" },
+        {kInstructionWrite,   "Instruction write"    },
+        {kInstructionWritten, "Instruction written"  },
+        {kFirmwareWritten,    "Firmware written"     },
+        {kResetComplete,      "Reset complete"       },
+        {kUpdateComplete,     "Update complete"      }
+    };
+
+    return IOFindNameForValue(deviceState, state_values);
 }
 
 const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
