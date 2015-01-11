@@ -22,6 +22,8 @@
 	<dict>
 		<key>0489_E032</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>20702 Combo USB</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -39,6 +41,8 @@
 		</dict>
 		<key>0489_E07A</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Lenovo NGFF (4352 / 20702)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -56,6 +60,8 @@
 		</dict>
 		<key>04CA_200A</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>LiteOn (4352 Combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -73,6 +79,8 @@
 		</dict>
 		<key>04CA_200B</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>LiteOn (4352 Combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -90,6 +98,8 @@
 		</dict>
 		<key>04CA_200C</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>LiteOn (4352 Combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -107,6 +117,8 @@
 		</dict>
 		<key>050D_065A</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Belkin (20702)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -124,6 +136,8 @@
 		</dict>
 		<key>0930_0221</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Toshiba (4352 / 20702)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -160,6 +174,8 @@
 		</dict>
 		<key>0A5C_21E1</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>HP Softsailing (20702A1)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -177,6 +193,8 @@
 		</dict>
 		<key>0A5C_21E6</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>non-UHE Lenovo Bluetooth (20702)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -194,6 +212,8 @@
 		</dict>
 		<key>0A5C_21E8</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>IOGear GBU-512 Bluetooth Dongle</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -211,6 +231,8 @@
 		</dict>
 		<key>0A5C_21EC</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Inateck Bluetooth (20702A1)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -228,6 +250,8 @@
 		</dict>
 		<key>0A5C_21FB</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>HP Supra 4352 (20702A1 Combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -245,6 +269,8 @@
 		</dict>
 		<key>0B05_17CB</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Asus BT-400 Bluetooth Dongle</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -262,6 +288,8 @@
 		</dict>
 		<key>0B05_17CF</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Asus (4352/20702A1 combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -279,6 +307,8 @@
 		</dict>
 		<key>13D3_3404</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Azurewave (4352HMB)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -296,6 +326,8 @@
 		</dict>
 		<key>13D3_3411</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Dell Alienware (4352/20702A1 combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -313,6 +345,8 @@
 		</dict>
 		<key>13D3_3413</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Azurewave (4360/20702 combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
@@ -330,6 +364,8 @@
 		</dict>
 		<key>413C_8143</key>
 		<dict>
+			<key>DisplayName</key>
+			<string>Dell DW1550 (4352/20702 combo)</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>FirmwareKey</key>
