@@ -64,6 +64,7 @@ class BrcmPatchRAM : public IOService
 
         static const char* getState(DeviceState deviceState);
 
+        void publishPersonality();
         BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();

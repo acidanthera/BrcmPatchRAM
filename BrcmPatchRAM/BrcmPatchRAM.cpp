@@ -21,6 +21,8 @@
 #include <IOKit/IOMessage.h>
 
 #include <IOKit/usb/IOUSBInterface.h>
+#include <IOKit/IOKitKeys.h>
+#include <IOKit/IOCatalogue.h>
 
 #include <kern/clock.h>
 #include <libkern/zlib.h>
@@ -116,7 +118,26 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     IOLog("%s: Processing time %llu.%llu seconds.\n", getName(), milli_secs / 10000, milli_secs % 1000);
     
+    publishPersonality();
+    
     return NULL;
+}
+
+void BrcmPatchRAM::publishPersonality()
+{
+    OSDictionary* dict = OSDictionary::withCapacity(5);
+    
+    dict->setObject("CFBundleIdentifier", OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
+    dict->setObject(kIOClassKey,          OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
+    dict->setObject(kIOProviderClassKey,  OSString::withCString("IOUSBDevice"));
+    dict->setObject(kUSBProductID,        OSNumber::withNumber(mProductId, 16));
+    dict->setObject(kUSBVendorID,         OSNumber::withNumber(mVendorId, 16));
+    
+    OSArray* array = OSArray::withCapacity(1);
+    array->setObject(dict);
+    
+    // Add new personality into the kernel
+    gIOCatalogue->addDrivers(array);
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
