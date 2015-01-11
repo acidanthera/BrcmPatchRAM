@@ -40,6 +40,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     if (mDevice != NULL)
     {
+        OSString* displayName = OSDynamicCast(OSString, getProperty("DisplayName"));
+        
+        if (displayName)
+            provider->setProperty(kUSBProductString, displayName);
+        
         mDevice->retain();
         mDevice->open(this);
         
