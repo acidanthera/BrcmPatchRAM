@@ -150,7 +150,7 @@ int BrcmPatchRAM::getDeviceStatus()
     
     if ((result = mDevice->GetDeviceStatus(&status)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to get device status (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+        IOLog("%s [%04x:%04x]: Unable to get device status (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         return 0;
     }
     else DEBUG_LOG("%s [%04x:%04x]: Device status 0x%08x.\n", getName(), mVendorId, mProductId, (int)status);
@@ -164,7 +164,7 @@ bool BrcmPatchRAM::resetDevice()
     
     if ((result = mDevice->ResetDevice()) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+        IOLog("%s [%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         return false;
     }
     else
@@ -202,7 +202,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     
     if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+        IOLog("%s [%04x:%04x]: Unable to retrieve active configuration (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         return false;
     }
     
@@ -217,7 +217,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     // Set the configuration to the first configuration
     if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
-        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+        IOLog("%s [%04x:%04x]: Unable to (re-)configure device (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         mDevice->close(this);
         return false;
     }
@@ -374,7 +374,7 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
     };
     
     if ((result = mInterface->DeviceRequest(&request)) != kIOReturnSuccess)
-        IOLog("%s [%04x:%04x]: device request failed (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+        IOLog("%s [%04x:%04x]: device request failed (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
    
     return result;
 }
@@ -488,13 +488,13 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
                 //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", getName(), length);
             }
             else
-                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+                IOLog("%s [%04x:%04x]: Failed to write to bulk pipe (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         }
         else
-           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+           IOLog("%s [%04x:%04x]: Failed to prepare bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         
         if ((result = buffer->complete()) != kIOReturnSuccess)
-            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, getReturn(result), result);
+            IOLog("%s [%04x:%04x]: Failed to complete bulk write memory buffer (\"%s\" 0x%08x).\n", getName(), mVendorId, mProductId, stringFromReturn(result), result);
         
         buffer->release();
     }
@@ -624,177 +624,52 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
     }
 }
 
-const char* BrcmPatchRAM::getReturn(IOReturn result)
+const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
 {
-    switch (result)
-    {
-        case kIOReturnSuccess:
-            return "Success";
-        case kIOReturnError:
-            return "General error";
-        case kIOReturnNoMemory:
-            return "Unable to allocate memory";
-        case kIOReturnNoResources:
-            return "Resource shortage";
-        case kIOReturnIPCError:
-            return "Error while executing IPC";
-        case kIOReturnNoDevice:
-            return "No such device";
-        case kIOReturnNotPrivileged:
-            return "Privilege violation";
-        case kIOReturnBadArgument:
-            return "Invalid argument specified";
-        case kIOReturnLockedRead:
-            return "Device is read locked";
-        case kIOReturnLockedWrite:
-            return "Device is write locked";
-        case kIOReturnExclusiveAccess:
-            return "Exclusive access requested on already open device";
-        case kIOReturnBadMessageID:
-            return "Sent & received messages have different msg_id";
-        case kIOReturnUnsupported:
-            return "Unsupported function";
-        case kIOReturnVMError:
-            return "Miscellaneous VM failure";
-        case kIOReturnInternalError:
-            return "Internal error";
-        case kIOReturnIOError:
-            return "General I/O error";
-        case kIOReturnCannotLock:
-            return "Unable to aquire device lock";
-        case kIOReturnNotOpen:
-            return "Device is not open";
-        case kIOReturnNotReadable:
-            return "Device does not support reading";
-        case kIOReturnNotWritable:
-            return "Device does not support writing";
-        case kIOReturnNotAligned:
-            return "Alignment error";
-        case kIOReturnBadMedia:
-            return "Media error";
-        case kIOReturnStillOpen:
-            return "Device(s) still open";
-        case kIOReturnRLDError:
-            return "RLD failure";
-        case kIOReturnDMAError:
-            return "DMA failure";
-        case kIOReturnBusy:
-            return "Device busy";
-        case kIOReturnTimeout:
-            return "I/O timeout";
-        case kIOReturnOffline:
-            return "Device off-line";
-        case kIOReturnNotReady:
-            return "Device not ready";
-        case kIOReturnNotAttached:
-            return "Device not attached";
-        case kIOReturnNoChannels:
-            return "No DMA channels left";
-        case kIOReturnNoSpace:
-            return "No space for data";
-        case kIOReturnPortExists:
-            return "Port already exists";
-        case kIOReturnCannotWire:
-            return "Unable to wire down physical memory";
-        case kIOReturnNoInterrupt:
-            return "No interrupt attached";
-        case kIOReturnNoFrames:
-            return "No DMA frames enqueued";
-        case kIOReturnMessageTooLarge:
-            return "Oversized message received on interrupt port";
-        case kIOReturnNotPermitted:
-            return "Not permitted";
-        case kIOReturnNoPower:
-            return "No power to device";
-        case kIOReturnNoMedia:
-            return "Media not present";
-        case kIOReturnUnformattedMedia:
-            return "Media not formatted";
-        case kIOReturnUnsupportedMode:
-            return "No such mode";
-        case kIOReturnUnderrun:
-            return "Data underrun";
-        case kIOReturnOverrun:
-            return "Data overrun";
-        case kIOReturnDeviceError:
-            return "Device is not working properly";
-        case kIOReturnNoCompletion:
-            return "Completion routine is required";
-        case kIOReturnAborted:
-            return "Operation aborted";
-        case kIOReturnNoBandwidth:
-            return "Bus bandwidth would be exceeded";
-        case kIOReturnNotResponding:
-            return "Device is not responding";
-        case kIOReturnIsoTooOld:
-            return "Isochronous I/O request for distant past";
-        case kIOReturnIsoTooNew:
-            return "Isochronous I/O request for distant future";
-        case kIOReturnNotFound:
-            return "Data was not found";
-        case kIOReturnInvalid:
-            return "Invalid return";
-        case kIOUSBUnknownPipeErr:
-            return "Pipe ref not recognized";
-        case kIOUSBTooManyPipesErr:
-            return "Too many pipes";
-        case kIOUSBNoAsyncPortErr:
-            return "No async port";
-        case kIOUSBNotEnoughPipesErr:
-            return "Not enough pipes in interface";
-        case kIOUSBNotEnoughPowerErr:
-            return "Not enough power for selected configuration";
-        case kIOUSBEndpointNotFound:
-            return "Endpoint not found";
-        case kIOUSBConfigNotFound:
-            return "Configuration not found";
-        case kIOUSBTransactionTimeout:
-            return "Transaction timed out";
-        case kIOUSBTransactionReturned:
-            return "The transaction has been returned to the caller";
-        case kIOUSBPipeStalled:
-            return "Pipe has stalled, error needs to be cleared";
-        case kIOUSBInterfaceNotFound:
-            return "Interface reference not recognized";
-        case kIOUSBLowLatencyBufferNotPreviouslyAllocated:
-            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
-        case kIOUSBLowLatencyFrameListNotPreviouslyAllocated:
-            return "Attempted to use user land low latency isoc calls w/out calling PrepareBuffer";
-        case kIOUSBHighSpeedSplitError:
-            return "Error to hub on high speed bus trying to do split transaction";
-        case kIOUSBSyncRequestOnWLThread:
-            return "A synchronous USB request was made on the workloop thread.";
-        case kIOUSBDeviceNotHighSpeed:
-            return "The device is not a high speed device.";
-//        case kIOUSBDevicePortWasNotSuspended:
-//            return "Port was not suspended";
-        case kIOUSBClearPipeStallNotRecursive:
-            return "IOUSBPipe::ClearPipeStall should not be called rescursively";
-        case kIOUSBLinkErr:
-            return "USB link error";
-        case kIOUSBNotSent2Err:
-            return "Transaction not sent";
-        case kIOUSBNotSent1Err:
-            return "Transaction not sent";
-        case kIOUSBBufferUnderrunErr:
-            return "Buffer Underrun (Host hardware failure on data out)";
-        case kIOUSBBufferOverrunErr:
-            return "Buffer Overrun (Host hardware failure on data out)";
-        case kIOUSBReserved2Err:
-            return "Reserved";
-        case kIOUSBReserved1Err:
-            return "Reserved";
-        case kIOUSBWrongPIDErr:
-            return "Pipe stall, Bad or wrong PID";
-        case kIOUSBPIDCheckErr:
-            return "Pipe stall, PID CRC error";
-        case kIOUSBDataToggleErr:
-            return "Pipe stall, Bad data toggle";
-        case kIOUSBBitstufErr:
-            return "Pipe stall, bitstuffing";
-        case kIOUSBCRCErr:
-            return "Pipe stall, bad CRC";
-        default:
-            return "Unknown";
-    }
+    static const IONamedValue IOReturn_values[] = {
+        {kIOReturnIsoTooOld,          "Isochronous I/O request for distant past"     },
+        {kIOReturnIsoTooNew,          "Isochronous I/O request for distant future"   },
+        {kIOReturnNotFound,           "Data was not found"                           },
+        {kIOUSBUnknownPipeErr,        "Pipe ref not recognized"                      },
+        {kIOUSBTooManyPipesErr,       "Too many pipes"                               },
+        {kIOUSBNoAsyncPortErr,        "No async port"                                },
+        {kIOUSBNotEnoughPowerErr,     "Not enough power for selected configuration"  },
+        {kIOUSBEndpointNotFound,      "Endpoint not found"                           },
+        {kIOUSBConfigNotFound,        "Configuration not found"                      },
+        {kIOUSBTransactionTimeout,    "Transaction timed out"                        },
+        {kIOUSBTransactionReturned,   "Transaction has been returned to the caller"  },
+        {kIOUSBPipeStalled,           "Pipe has stalled, error needs to be cleared"  },
+        {kIOUSBInterfaceNotFound,     "Interface reference not recognized"           },
+        {kIOUSBLowLatencyBufferNotPreviouslyAllocated,
+         "Attempted to user land low latency isoc calls w/out calling PrepareBuffer" },
+        {kIOUSBLowLatencyFrameListNotPreviouslyAllocated,
+         "Attempted to user land low latency isoc calls w/out calling PrepareBuffer" },
+        {kIOUSBHighSpeedSplitError,   "Error on hi-speed bus doing split transaction"},
+        {kIOUSBSyncRequestOnWLThread, "Synchronous USB request on workloop thread."  },
+        {kIOUSBDeviceNotHighSpeed,    "The device is not a high speed device."       },
+        {kIOUSBClearPipeStallNotRecursive,
+         "IOUSBPipe::ClearPipeStall should not be called rescursively"               },
+        {kIOUSBLinkErr,               "USB link error"                               },
+        {kIOUSBNotSent2Err,           "Transaction not sent"                         },
+        {kIOUSBNotSent1Err,           "Transaction not sent"                         },
+        {kIOUSBNotEnoughPipesErr,     "Not enough pipes in interface"                },
+        {kIOUSBBufferUnderrunErr,     "Buffer Underrun (Host hardware failure)"      },
+        {kIOUSBBufferOverrunErr,      "Buffer Overrun (Host hardware failure"        },
+        {kIOUSBReserved2Err,          "Reserved"                                     },
+        {kIOUSBReserved1Err,          "Reserved"                                     },
+        {kIOUSBWrongPIDErr,           "Pipe stall, Bad or wrong PID"                 },
+        {kIOUSBPIDCheckErr,           "Pipe stall, PID CRC error"                    },
+        {kIOUSBDataToggleErr,         "Pipe stall, Bad data toggle"                  },
+        {kIOUSBBitstufErr,            "Pipe stall, bitstuffing"                      },
+        {kIOUSBCRCErr,                "Pipe stall, bad CRC"                          },
+        {0,                           NULL                                           }
+    };
+    
+    const char* result = IOFindNameForValue(rtn, IOReturn_values);
+    
+    if (result)
+        return result;
+    
+    return super::stringFromReturn(rtn);
 }
+

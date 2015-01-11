@@ -63,7 +63,6 @@ class BrcmPatchRAM : public IOService
         unsigned int getDelayValue(const char* key);
 
         static const char* getState(DeviceState deviceState);
-        static const char* getReturn(IOReturn result);
 
         BrcmFirmwareStore* getFirmwareStore();
     
@@ -89,6 +88,7 @@ class BrcmPatchRAM : public IOService
         bool performUpgrade();
     public:
         virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+        virtual const char* stringFromReturn(IOReturn rtn);
 };
 
 #endif //__BrcmPatchRAM__
