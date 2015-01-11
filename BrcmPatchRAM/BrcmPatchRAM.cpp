@@ -31,151 +31,129 @@
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 
 /******************************************************************************
- * BrcmPatchRAM::init - parse kernel extension Info.plist
- ******************************************************************************/
-bool BrcmPatchRAM::init(OSDictionary *dictionary)
-{    
-    DEBUG_LOG("BrcmPatchRAM::init\n"); // getName() is not available yet
-    return super::init(dictionary);
-}
-
-/******************************************************************************
  * BrcmPatchRAM::probe - parse kernel extension Info.plist
  ******************************************************************************/
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
     DEBUG_LOG("%s::probe\n", getName());
     
+    IOLog("%s [%04x:%04x]: Version 0.8 starting.\n", getName(), mVendorId, mProductId);
+    
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
     if (mDevice != NULL)
     {
-        mVendorId = mDevice->GetVendorID();
-        mProductId = mDevice->GetProductID();
-   
-        return super::probe(provider, probeScore);
-    }
-    
-    IOLog("%s: Provider is not a USB device.\n", getName());
-    
-    return NULL;
-}
-
-
-/******************************************************************************
- * BrcmPatchRAM::start - start kernel extension
- ******************************************************************************/
-bool BrcmPatchRAM::start(IOService *provider)
-{
-    BrcmFirmwareStore* firmwareStore;
-    
-    IOLog("%s [%04x:%04x]: Version 0.7 starting.\n", getName(), mVendorId, mProductId);
-
-    if (!super::start(provider))
-        return false;
-    
-    // Print out additional device information
-    printDeviceInfo();
-    
-    // Set device configuration to composite configuration index 0
-    if (!setConfiguration(0))
-        return false;
-
-    // Obtain first interface
-    mInterface = findInterface();
-    
-    if (mInterface != NULL)
-    {
-        mInterface->retain();
-        mInterface->open(this);
+        BrcmFirmwareStore* firmwareStore;
         
-        mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
-        mBulkPipe = findPipe(kUSBBulk, kUSBOut);
+        mDevice->retain();
         
-        if (mInterruptPipe != NULL && mBulkPipe != NULL)
+        if (mDevice->open(this))
         {
-            // getFirmwareVersion additionally re-synchronizes outstanding responses
-            UInt16 firmwareVersion = getFirmwareVersion();
+            mVendorId = mDevice->GetVendorID();
+            mProductId = mDevice->GetProductID();
             
-            //IOLog("BrcmPatchRAM: Current firmware version v%d.\n", firmwareVersion);
+            // Print out additional device information
+            printDeviceInfo();
             
-            if (firmwareVersion == 0 && (firmwareStore = getFirmwareStore()) != NULL)
+            // Set device configuration to composite configuration index 0
+            if (!setConfiguration(0))
+                return false;
+            
+            // Obtain first interface
+            mInterface = findInterface();
+            
+            if (mInterface != NULL)
             {
-                OSArray* instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+                mInterface->retain();
+                mInterface->open(this);
                 
-                if (instructions != NULL)
+                mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
+                mBulkPipe = findPipe(kUSBBulk, kUSBOut);
+                
+                if (mInterruptPipe != NULL && mBulkPipe != NULL)
                 {
-                    // Initiate firmware upgrade
-                    hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
-                    queueRead();
-            
-                    // Wait for mini driver download
-                    IOSleep(5);
-            
-                    // Write firmware data to bulk pipe
-                    OSCollectionIterator* iterator = OSCollectionIterator::withCollection(instructions);
-            
-                    OSData* data;
-                    while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                    // getFirmwareVersion additionally re-synchronizes outstanding responses
+                    UInt16 firmwareVersion = getFirmwareVersion();
+                    
+                    if (firmwareVersion > 0)
+                        IOLog("BrcmPatchRAM: Current firmware version v%d, no upgrade required.\n", firmwareVersion);
+                    
+                    if (firmwareVersion == 0 && (firmwareStore = getFirmwareStore()) != NULL)
                     {
-                        bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
-                        queueRead();
+                        OSArray* instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+                        
+                        if (instructions != NULL)
+                        {
+                            // Initiate firmware upgrade
+                            hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
+                            queueRead();
+                            
+                            // Wait for mini driver download
+                            IOSleep(5);
+                            
+                            // Write firmware data to bulk pipe
+                            OSCollectionIterator* iterator = OSCollectionIterator::withCollection(instructions);
+                            
+                            OSData* data;
+                            while ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                            {
+                                bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                                queueRead();
+                            }
+                            
+                            OSSafeRelease(iterator);
+                            
+                            hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
+                            queueRead();
+                            queueRead();
+                            
+                            IOSleep(100);
+                            
+                            //hciCommand(&HCI_VSC_WAKEUP, sizeof(HCI_VSC_WAKEUP));
+                            //queueRead();
+                            
+                            hciCommandSync(&HCI_RESET, sizeof(HCI_RESET));
+                            //queueRead();
+                            
+                            IOSleep(50);
+                            
+                            resetDevice();
+                            
+                            getDeviceStatus();
+                            
+                            IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
+                        }
                     }
-                    
-                    OSSafeRelease(iterator);
-            
-                    hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));
-                    queueRead();
-                    queueRead();
-                
-                    IOSleep(100);
-            
-                    //hciCommand(&HCI_VSC_WAKEUP, sizeof(HCI_VSC_WAKEUP));
-                    //queueRead();
-            
-                    hciCommandSync(&HCI_RESET, sizeof(HCI_RESET));
-                    //queueRead();
-            
-                    IOSleep(50);
-            
-                    resetDevice();
-                
-                    getDeviceStatus();
-                    
-                    IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
                 }
             }
+            
+            if (mInterruptPipe != NULL)
+            {
+                mInterruptPipe->Abort();
+                mInterruptPipe->release();
+            }
+            
+            if (mBulkPipe != NULL)
+            {
+                mBulkPipe->Abort();
+                mBulkPipe->release();
+            }
+            
+            if (mInterface != NULL)
+            {
+                mInterface->close(this);
+                mInterface->release();
+            }
+       
+            mDevice->close(this);
         }
+        
+        mDevice->release();
     }
+    else
+        IOLog("%s: Provider is not a USB device.\n", getName());
     
-    if (mInterruptPipe != NULL)
-    {
-        mInterruptPipe->Abort();
-        mInterruptPipe->release();
-    }
-    
-    if (mBulkPipe != NULL)
-    {
-        mBulkPipe->Abort();
-        mBulkPipe->release();
-    }
-    
-    if (mInterface != NULL)
-    {
-        mInterface->close(this);
-        mInterface->release();
-    }
-
-    return false;
-}
-
-/******************************************************************************
- * BrcmPatchRAM::stop & free - stop and free kernel extension
- ******************************************************************************/
-void BrcmPatchRAM::stop(IOService *provider)
-{
-    DEBUG_LOG("%s [%04x:%04x]: Stopping...\n", getName(), mVendorId, mProductId);
-    super::stop(provider);
+    return NULL;
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
@@ -281,12 +259,6 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
         return true;
     }
     
-    if (!mDevice->open(this))
-    {
-        IOLog("%s [%04x:%04x]: Unable to open device for (re-)configuration.\n", getName(), mVendorId, mProductId);
-        return false;
-    }
-    
     // Set the configuration to the first configuration
     if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
@@ -297,8 +269,6 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     
     DEBUG_LOG("%s [%04x:%04x]: Set device configuration to configuration index %d successfully.\n", getName(),
               mVendorId, mProductId, configurationIndex);
-    
-    mDevice->close(this);
     
     return true;
 }

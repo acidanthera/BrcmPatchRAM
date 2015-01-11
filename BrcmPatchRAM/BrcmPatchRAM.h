@@ -68,10 +68,6 @@ class BrcmPatchRAM : public IOService
         uint16_t getFirmwareVersion();
     public:
         virtual IOService* probe(IOService *provider, SInt32 *probeScore);
-        virtual bool init(OSDictionary *dictionary = NULL);
-        virtual bool start(IOService *provider);
-        virtual void stop(IOService *provider);
-    
         virtual const char* stringFromReturn(IOReturn rtn);
 };
 
