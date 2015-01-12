@@ -25,6 +25,7 @@
 #include <IOKit/IOCatalogue.h>
 
 #include <kern/clock.h>
+#include <libkern/version.h>
 #include <libkern/zlib.h>
 
 #include "Common.h"
@@ -39,7 +40,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     DEBUG_LOG("%s::probe\n", getName());
     
-    IOLog("%s [%04x:%04x]: Version 0.8 starting.\n", getName(), mVendorId, mProductId);
+    IOLog("%s: Version 0.8 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
     
     clock_get_uptime(&start_time);
     
@@ -125,19 +126,68 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
 void BrcmPatchRAM::publishPersonality()
 {
+    SInt32 generationCount;
+    OSOrderedSet* set = NULL;
     OSDictionary* dict = OSDictionary::withCapacity(5);
     
-    dict->setObject("CFBundleIdentifier", OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
-    dict->setObject(kIOClassKey,          OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
-    dict->setObject(kIOProviderClassKey,  OSString::withCString("IOUSBDevice"));
-    dict->setObject(kUSBProductID,        OSNumber::withNumber(mProductId, 16));
-    dict->setObject(kUSBVendorID,         OSNumber::withNumber(mVendorId, 16));
+    // Matching dictionary for the current device
+    dict->setObject(kIOProviderClassKey, OSString::withCString(kIOUSBDeviceClassName));
+    dict->setObject(kUSBProductID, OSNumber::withNumber(mProductId, 16));
+    dict->setObject(kUSBVendorID, OSNumber::withNumber(mVendorId, 16));
     
+    set = gIOCatalogue->findDrivers(dict, &generationCount);
+    
+    // Retrieve currently matching IOKit driver personalities
+    if (set != NULL && set->getCount() > 0)
+    {
+        DEBUG_LOG("%s [%04x:%04x]: %d matching driver personalities.\n", getName(), mVendorId, mProductId, set->getCount());
+        
+        OSCollectionIterator* iterator = OSCollectionIterator::withCollection(set);
+        
+        OSDictionary* personality;
+        
+        while ((personality = OSDynamicCast(OSDictionary, iterator->getNextObject())) != NULL)
+        {
+            OSString* bundleId = OSDynamicCast(OSString, personality->getObject(kBundleIdentifier));
+            
+            if (bundleId != NULL)
+                if (strncmp(bundleId->getCStringNoCopy(), kAppleBundlePrefix, strlen(kAppleBundlePrefix)) == 0)
+                {
+                    IOLog("%s [%04x:%04x]: Found existing IOKit personality \"%s\".\n", getName(), mVendorId, mProductId, bundleId->getCStringNoCopy());
+                    return;
+                }
+        }
+        
+        OSSafeRelease(iterator);
+    }
+    
+    // OS X does not have a driver personality for this device yet, publish one
+    switch (version_major)
+    {
+        case 10: // OS X - Snow Leopard
+        case 11: // OS X - Lion
+            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.driver.BroadcomUSBBluetoothHCIController"));
+            dict->setObject(kIOClassKey, OSString::withCString("BroadcomUSBBluetoothHCIController"));
+        case 12: // OS X - Mountain Lion
+            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport"));
+            dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHCIControllerUSBTransport"));
+            break;
+        case 13: // OS X - Mavericks
+        case 14: // OS X - Yosemite
+            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
+            dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
+            break;
+    }
+   
     OSArray* array = OSArray::withCapacity(1);
     array->setObject(dict);
-    
+   
     // Add new personality into the kernel
     gIOCatalogue->addDrivers(array);
+    
+    OSSafeRelease(array);
+    
+    IOLog("%s [%04x:%04x]: Published new IOKit personality.\n", getName(), mVendorId, mProductId);
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()

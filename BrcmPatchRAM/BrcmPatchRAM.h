@@ -26,6 +26,9 @@
 #include "BrcmFirmwareStore.h"
 
 #define kDisplayName "DisplayName"
+#define kBundleIdentifier "CFBundleIdentifier"
+#define kIOUSBDeviceClassName "IOUSBDevice"
+#define kAppleBundlePrefix "com.apple."
 
 enum DeviceState
 {
