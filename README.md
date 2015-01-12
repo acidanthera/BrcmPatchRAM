@@ -64,11 +64,6 @@ BrcmPatchRAM consists of 3 parts:
 
 	Firmwares can be stored using zlib compression in order to keep the configuration size manageable.
 	
- * BrcmNonApple is a code-less Plug-In kext which ensures that the default Apple Broadcom Bluetooth USB drivers are matched against the 3rd party devices supported by BrcmPatchRAM.
-
-   Through the plist configuration 3rd party devices are handled using com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport.
-	Additionally a device description is merged which is used in the System profiler to identify the device.
-
 After the device firmware is uploaded, the device control is handed over to Apple's BroadcomBluetoothHostControllerUSBTransport.
 This means that for all intents and purposes your device will be native on OS X and support all functionalities fully.
 
@@ -176,8 +171,5 @@ xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.
 	
  * After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
  
+ Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
- 
- * Open the BrcmNonApple.kext Info.plist and configured your device for both `AppleUSBMergeNub` as well as `BroadcomBluetoothHostControllerUSBTransport`.
- 
- To do this make a copy of an existing device and modify the device vendor id, product id and USB description as required.
