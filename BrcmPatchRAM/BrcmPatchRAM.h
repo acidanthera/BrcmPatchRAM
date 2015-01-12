@@ -63,8 +63,6 @@ class BrcmPatchRAM : public IOService
         volatile DeviceState mDeviceState = kInitialize;
         volatile uint16_t mFirmareVersion = 0xFFFF;
     
-        unsigned int getDelayValue(const char* key);
-
         static const char* getState(DeviceState deviceState);
 
         void publishPersonality();
