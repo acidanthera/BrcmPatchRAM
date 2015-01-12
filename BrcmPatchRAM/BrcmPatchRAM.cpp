@@ -171,6 +171,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     IOLog("%s: Processing time %llu.%llu seconds.\n", getName(), milli_secs / 10000, milli_secs % 1000);
     
+    publishPersonality();
+    
     return NULL;
 }
 
