@@ -44,11 +44,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     DEBUG_LOG("%s::probe\n", getName());
     
-    IOLog("%s: Version 0.8 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
+    IOLog("%s: Version 1.0 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
     
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
-    if (mDevice != NULL)
+    if (mDevice)
     {
         OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
         
@@ -74,7 +74,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
             // Obtain first interface
             mInterface = findInterface();
             
-            if (mInterface != NULL)
+            if (mInterface)
             {
                 mInterface->retain();
                 mInterface->open(this);
@@ -82,7 +82,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
                 mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
                 mBulkPipe = findPipe(kUSBBulk, kUSBOut);
                 
-                if (mInterruptPipe != NULL && mBulkPipe != NULL)
+                if (mInterruptPipe && mBulkPipe)
                 {
                     // getFirmwareVersion additionally re-synchronizes outstanding responses
                     UInt16 firmwareVersion = getFirmwareVersion();
@@ -94,7 +94,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
                     {
                         OSArray* instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
                         
-                        if (instructions != NULL)
+                        if (instructions)
                         {
                             // Initiate firmware upgrade
                             hciCommand(&HCI_VSC_DOWNLOAD_MINIDRIVER, sizeof(HCI_VSC_DOWNLOAD_MINIDRIVER));
@@ -139,19 +139,19 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
                 }
             }
             
-            if (mInterruptPipe != NULL)
+            if (mInterruptPipe)
             {
                 mInterruptPipe->Abort();
                 mInterruptPipe->release();
             }
             
-            if (mBulkPipe != NULL)
+            if (mBulkPipe)
             {
                 mBulkPipe->Abort();
                 mBulkPipe->release();
             }
             
-            if (mInterface != NULL)
+            if (mInterface)
             {
                 mInterface->close(this);
                 mInterface->release();
@@ -190,7 +190,7 @@ void BrcmPatchRAM::publishPersonality()
     set = gIOCatalogue->findDrivers(dict, &generationCount);
     
     // Retrieve currently matching IOKit driver personalities
-    if (set != NULL && set->getCount() > 0)
+    if (set && set->getCount() > 0)
     {
         DEBUG_LOG("%s [%04x:%04x]: %d matching driver personalities.\n", getName(), mVendorId, mProductId, set->getCount());
         
@@ -198,11 +198,11 @@ void BrcmPatchRAM::publishPersonality()
         
         OSDictionary* personality;
         
-        while ((personality = OSDynamicCast(OSDictionary, iterator->getNextObject())) != NULL)
+        while ((personality = OSDynamicCast(OSDictionary, iterator->getNextObject())))
         {
             OSString* bundleId = OSDynamicCast(OSString, personality->getObject(kBundleIdentifier));
             
-            if (bundleId != NULL)
+            if (bundleId)
                 if (strncmp(bundleId->getCStringNoCopy(), kAppleBundlePrefix, strlen(kAppleBundlePrefix)) == 0)
                 {
                     IOLog("%s [%04x:%04x]: Found existing IOKit personality \"%s\".\n", getName(), mVendorId, mProductId, bundleId->getCStringNoCopy());
@@ -247,7 +247,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
     BrcmFirmwareStore* firmwareStore = OSDynamicCast(BrcmFirmwareStore, getResourceService()->getProperty(kBrcmFirmwareStoreService));
     
-    if (firmwareStore == NULL)
+    if (!firmwareStore)
         IOLog("%s [%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", getName(), mVendorId, mProductId);
     
     return firmwareStore;
@@ -416,7 +416,7 @@ IOReturn BrcmPatchRAM::queueRead()
     
     IOBufferMemoryDescriptor* buffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
     
-    if (buffer != NULL)
+    if (buffer)
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
@@ -460,7 +460,7 @@ IOReturn BrcmPatchRAM::queueRead()
 
 void BrcmPatchRAM::interruptReadEntry(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining)
 {
-    if (target != NULL)
+    if (target)
         ((BrcmPatchRAM*)target)->interruptReadHandler(parameter, status, bufferSizeRemaining);
 }
 
@@ -468,7 +468,7 @@ void BrcmPatchRAM::interruptReadHandler(void* parameter, IOReturn status, UInt32
 {
     IOBufferMemoryDescriptor* buffer = (IOBufferMemoryDescriptor*)parameter;
     
-    if (buffer == NULL)
+    if (!buffer)
     {
         IOLog("%s [%04x:%04x]: Queued read, buffer is NULL.\n", getName(), mVendorId, mProductId);
         return;
@@ -572,7 +572,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     break;                    
             }
             
-            if (output != NULL && outputLength != NULL)
+            if (output && outputLength)
             {
                 bzero(output, *outputLength);
                 
@@ -628,7 +628,7 @@ IOReturn BrcmPatchRAM::interruptRead(void* output, UInt8* length)
     
     IOSleep(10);
     
-    if (buffer != NULL)
+    if (buffer)
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
@@ -665,7 +665,7 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
     IOReturn result;
     IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress(data, length, kIODirectionIn);
     
-    if (buffer != NULL)
+    if (buffer)
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
