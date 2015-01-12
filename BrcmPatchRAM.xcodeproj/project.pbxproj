@@ -231,7 +231,7 @@
 		D4F91B0B1A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
