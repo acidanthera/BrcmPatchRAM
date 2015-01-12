@@ -46,7 +46,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
-    if (mDevice != NULL)
+    if (mDevice)
     {
         OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
         
@@ -54,59 +54,62 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
             provider->setProperty(kUSBProductString, displayName);
         
         mDevice->retain();
-        mDevice->open(this);
         
-        mVendorId = mDevice->GetVendorID();
-        mProductId = mDevice->GetProductID();
-        
-        // Print out additional device information
-        printDeviceInfo();
-        
-        // Set device configuration to composite configuration index 0
-        if (!setConfiguration(0))
-            return false;
-        
-        // Obtain first interface
-        mInterface = findInterface();
-        
-        if (mInterface)
+        if (mDevice->open(this))
         {
-            mInterface->retain();
-            mInterface->open(this);
+            mVendorId = mDevice->GetVendorID();
+            mProductId = mDevice->GetProductID();
             
-            mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
-            mBulkPipe = findPipe(kUSBBulk, kUSBOut);
-           
-            if (mInterruptPipe && mBulkPipe)
+            // Print out additional device information
+            printDeviceInfo();
+            
+            // Set device configuration to composite configuration index 0
+            if (!setConfiguration(0))
+                return false;
+            
+            // Obtain first interface
+            mInterface = findInterface();
+            
+            if (mInterface)
             {
-                if (performUpgrade())
-                    IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
-                else
-                    IOLog("%s [%04x:%04x]: Firmware upgrade failed.\n", getName(), mVendorId, mProductId);
+                mInterface->retain();
+                mInterface->open(this);
+                
+                mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
+                mBulkPipe = findPipe(kUSBBulk, kUSBOut);
+               
+                if (mInterruptPipe && mBulkPipe)
+                {
+                    if (performUpgrade())
+                        IOLog("%s [%04x:%04x]: Firmware upgrade completed successfully.\n", getName(), mVendorId, mProductId);
+                    else
+                        IOLog("%s [%04x:%04x]: Firmware upgrade failed.\n", getName(), mVendorId, mProductId);
+                }
             }
+            
+            OSSafeRelease(mReadBuffer);
+            
+            if (mInterruptPipe)
+            {
+                mInterruptPipe->Abort();
+                mInterruptPipe->release();
+            }
+            
+            if (mBulkPipe)
+            {
+                mBulkPipe->Abort();
+                mBulkPipe->release();
+            }
+            
+            if (mInterface)
+            {
+                mInterface->close(this);
+                mInterface->release();
+            }
+            
+            mDevice->close(this);
         }
-        
-        OSSafeRelease(mReadBuffer);
-        
-        if (mInterruptPipe)
-        {
-            mInterruptPipe->Abort();
-            mInterruptPipe->release();
-        }
-        
-        if (mBulkPipe)
-        {
-            mBulkPipe->Abort();
-            mBulkPipe->release();
-        }
-        
-        if (mInterface)
-        {
-            mInterface->close(this);
-            mInterface->release();
-        }
-        
-        mDevice->close(this);
+            
         mDevice->release();
     }
     else
@@ -137,7 +140,7 @@ void BrcmPatchRAM::publishPersonality()
     set = gIOCatalogue->findDrivers(dict, &generationCount);
     
     // Retrieve currently matching IOKit driver personalities
-    if (set != NULL && set->getCount() > 0)
+    if (set && set->getCount() > 0)
     {
         DEBUG_LOG("%s [%04x:%04x]: %d matching driver personalities.\n", getName(), mVendorId, mProductId, set->getCount());
         
@@ -145,11 +148,11 @@ void BrcmPatchRAM::publishPersonality()
         
         OSDictionary* personality;
         
-        while ((personality = OSDynamicCast(OSDictionary, iterator->getNextObject())) != NULL)
+        while ((personality = OSDynamicCast(OSDictionary, iterator->getNextObject())))
         {
             OSString* bundleId = OSDynamicCast(OSString, personality->getObject(kBundleIdentifier));
             
-            if (bundleId != NULL)
+            if (bundleId)
                 if (strncmp(bundleId->getCStringNoCopy(), kAppleBundlePrefix, strlen(kAppleBundlePrefix)) == 0)
                 {
                     IOLog("%s [%04x:%04x]: Found existing IOKit personality \"%s\".\n", getName(), mVendorId, mProductId, bundleId->getCStringNoCopy());
