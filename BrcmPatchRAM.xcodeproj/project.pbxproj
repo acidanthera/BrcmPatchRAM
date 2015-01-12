@@ -28,8 +28,6 @@
 /* Begin PBXFileReference section */
 		D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmFirmwareStore.cpp; sourceTree = "<group>"; };
 		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
-		D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmNonApple.kext; sourceTree = BUILT_PRODUCTS_DIR; };
-		D438E7AA1A59297800F42407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,13 +38,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D438E7A31A59297700F42407 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D4F91AFA1A2998CE0030D10D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -65,18 +56,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D438E7A81A59297800F42407 /* BrcmNonApple */ = {
-			isa = PBXGroup;
-			children = (
-				D438E7AA1A59297800F42407 /* Info.plist */,
-			);
-			path = BrcmNonApple;
-			sourceTree = "<group>";
-		};
 		D4F91AF41A2998CE0030D10D = {
 			isa = PBXGroup;
 			children = (
-				D438E7A81A59297800F42407 /* BrcmNonApple */,
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
@@ -87,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */,
-				D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,13 +98,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		D438E7A41A59297700F42407 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D4F91AFB1A2998CE0030D10D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -136,25 +110,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		D438E7A61A59297700F42407 /* BrcmNonApple */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D438E7AF1A59297800F42407 /* Build configuration list for PBXNativeTarget "BrcmNonApple" */;
-			buildPhases = (
-				D438E7A21A59297700F42407 /* Sources */,
-				D438E7A31A59297700F42407 /* Frameworks */,
-				D438E7A41A59297700F42407 /* Headers */,
-				D438E7A51A59297700F42407 /* Resources */,
-				D42D3C001A594935006C4C8C /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BrcmNonApple;
-			productName = BrcmNonApple;
-			productReference = D42D3BFF1A5947CD006C4C8C /* BrcmNonApple.kext */;
-			productType = "com.apple.product-type.kernel-extension";
-		};
 		D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4F91B091A2998CE0030D10D /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */;
@@ -164,6 +119,7 @@
 				D4F91AFB1A2998CE0030D10D /* Headers */,
 				D4F91AFC1A2998CE0030D10D /* Resources */,
 				D406C2F11A43C69100AEFA2D /* CopyFiles */,
+				D42C3CF71A64053D0073C2A1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -182,9 +138,6 @@
 			attributes = {
 				LastUpgradeCheck = 0610;
 				TargetAttributes = {
-					D438E7A61A59297700F42407 = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
 					D4F91AFD1A2998CE0030D10D = {
 						CreatedOnToolsVersion = 6.1;
 					};
@@ -203,19 +156,11 @@
 			projectRoot = "";
 			targets = (
 				D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */,
-				D438E7A61A59297700F42407 /* BrcmNonApple */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D438E7A51A59297700F42407 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D4F91AFC1A2998CE0030D10D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -226,7 +171,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D42D3C001A594935006C4C8C /* ShellScript */ = {
+		D42C3CF71A64053D0073C2A1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -242,13 +187,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D438E7A21A59297700F42407 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D4F91AF91A2998CE0030D10D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -261,34 +199,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		D438E7AD1A59297800F42407 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BrcmPatchRAM.kext/Contents/PlugIns";
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				INFOPLIST_FILE = BrcmNonApple/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				MODULE_NAME = "com.no-one.BrcmNonApple";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.6;
-				WRAPPER_EXTENSION = kext;
-			};
-			name = Debug;
-		};
-		D438E7AE1A59297800F42407 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BrcmPatchRAM.kext/Contents/PlugIns";
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				INFOPLIST_FILE = BrcmNonApple/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				MODULE_NAME = "com.no-one.BrcmNonApple";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.6;
-				WRAPPER_EXTENSION = kext;
-			};
-			name = Release;
-		};
 		D4F91B071A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -334,15 +244,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D438E7AF1A59297800F42407 /* Build configuration list for PBXNativeTarget "BrcmNonApple" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D438E7AD1A59297800F42407 /* Debug */,
-				D438E7AE1A59297800F42407 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		D4F91AF81A2998CE0030D10D /* Build configuration list for PBXProject "BrcmPatchRAM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
