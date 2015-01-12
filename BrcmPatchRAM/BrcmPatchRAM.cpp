@@ -40,7 +40,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     DEBUG_LOG("%s::probe\n", getName());
     
-    IOLog("%s: Version 0.8 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
+    IOLog("%s: Version 1.0 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
     
     clock_get_uptime(&start_time);
     
@@ -86,8 +86,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
             }
         }
         
-        if (mReadBuffer)
-            mReadBuffer->release();
+        OSSafeRelease(mReadBuffer);
         
         if (mInterruptPipe)
         {
