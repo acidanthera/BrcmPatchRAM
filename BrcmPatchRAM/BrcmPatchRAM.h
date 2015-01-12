@@ -26,6 +26,9 @@
 #include "BrcmFirmwareStore.h"
 
 #define kDisplayName "DisplayName"
+#define kBundleIdentifier "CFBundleIdentifier"
+#define kIOUSBDeviceClassName "IOUSBDevice"
+#define kAppleBundlePrefix "com.apple."
 
 class BrcmPatchRAM : public IOService
 {
@@ -43,6 +46,7 @@ class BrcmPatchRAM : public IOService
     
         bool volatile mReadQueued = false;
    
+        void publishPersonality();
         BrcmFirmwareStore* getFirmwareStore();
     
         void printDeviceInfo();
