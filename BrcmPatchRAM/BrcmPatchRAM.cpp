@@ -44,7 +44,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     DEBUG_LOG("%s::probe\n", getName());
     
-    IOLog("%s: Version 1.0 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
+    IOLog("%s: Version 1.1 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
     
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
