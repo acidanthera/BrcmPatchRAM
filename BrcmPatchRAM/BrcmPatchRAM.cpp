@@ -221,9 +221,18 @@ void BrcmPatchRAM::publishPersonality()
             dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.driver.BroadcomUSBBluetoothHCIController"));
             dict->setObject(kIOClassKey, OSString::withCString("BroadcomUSBBluetoothHCIController"));
             break;
-        case 12: // OS X - Mountain Lion
-            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport"));
-            dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHCIControllerUSBTransport"));
+        case 12: // OS X - Mountain Lion (12.4.0)
+            if (version_minor < 5)
+            {
+                dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport"));
+                dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHCIControllerUSBTransport"));
+            }
+            // OS X - Mountain Lion (12.5.0)
+            else
+            {
+                dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
+                dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
+            }
             break;
         case 13: // OS X - Mavericks
         case 14: // OS X - Yosemite
