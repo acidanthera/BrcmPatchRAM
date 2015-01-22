@@ -38,13 +38,14 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
  ******************************************************************************/
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
+    extern kmod_info_t kmod_info;
     uint64_t start_time, end_time, nano_secs;
     
     clock_get_uptime(&start_time);
     
     DEBUG_LOG("%s::probe\n", getName());
     
-    IOLog("%s: Version 1.1 starting on OS X Darwin %d.%d.\n", getName(), version_major, version_minor);
+    IOLog("%s: Version %s starting on OS X Darwin %d.%d.\n", getName(), kmod_info.version, version_major, version_minor);
     
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     
