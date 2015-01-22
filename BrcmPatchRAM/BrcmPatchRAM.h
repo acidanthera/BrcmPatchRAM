@@ -30,19 +30,6 @@
 #define kIOUSBDeviceClassName "IOUSBDevice"
 #define kAppleBundlePrefix "com.apple."
 
-enum DeviceState
-{
-    kUnknown,
-    kInitialize,
-    kFirmwareVersion,
-    kMiniDriverComplete,
-    kInstructionWrite,
-    kInstructionWritten,
-    kFirmwareWritten,
-    kResetComplete,
-    kUpdateComplete
-};
-
 class BrcmPatchRAM : public IOService
 {
     private:
@@ -57,14 +44,8 @@ class BrcmPatchRAM : public IOService
         IOUSBPipe* mInterruptPipe = NULL;
         IOUSBPipe* mBulkPipe = NULL;
     
-        IOUSBCompletion mInterruptCompletion;
-        IOBufferMemoryDescriptor* mReadBuffer;
-    
-        volatile DeviceState mDeviceState = kInitialize;
-        volatile uint16_t mFirmareVersion = 0xFFFF;
-    
-        static const char* getState(DeviceState deviceState);
-
+        bool volatile mReadQueued = false;
+   
         void publishPersonality();
         BrcmFirmwareStore* getFirmwareStore();
     
@@ -73,21 +54,24 @@ class BrcmPatchRAM : public IOService
     
         bool resetDevice();
         bool setConfiguration(int configurationIndex);
-    
         IOUSBInterface* findInterface();
-        IOUSBPipe* findPipe(uint8_t type, uint8_t direction);
+        IOUSBPipe* findPipe(UInt8 type, UInt8 direction);
     
-        void continousRead();
-        static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
+        IOReturn queueRead();
+        static void interruptReadEntry(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
+        void interruptReadHandler(void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
     
         IOReturn hciCommand(void * command, uint16_t length);
+        IOReturn hciCommandSync(void* command, uint16_t length);
+        IOReturn hciCommandSync(void* command, uint16_t length, void* output, uint8_t* outputLength);
         IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
+    
+        IOReturn interruptRead();
+        IOReturn interruptRead(void* output, uint8_t* length);
     
         IOReturn bulkWrite(void* data, uint16_t length);
     
         uint16_t getFirmwareVersion();
-    
-        bool performUpgrade();
     public:
         virtual IOService* probe(IOService *provider, SInt32 *probeScore);
         virtual const char* stringFromReturn(IOReturn rtn);
