@@ -162,35 +162,45 @@ void BrcmPatchRAM::publishPersonality()
         
         OSSafeRelease(iterator);
     }
-    
+
     // OS X does not have a driver personality for this device yet, publish one
-    switch (version_major)
+    // OS X - Snow Leopard
+    // OS X - Lion
+    if (version_major == 10 || version_major == 11)
     {
-        case 10: // OS X - Snow Leopard
-        case 11: // OS X - Lion
-            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.driver.BroadcomUSBBluetoothHCIController"));
-            dict->setObject(kIOClassKey, OSString::withCString("BroadcomUSBBluetoothHCIController"));
-            break;
-        case 12: // OS X - Mountain Lion (12.4.0)
-            if (version_minor < 5)
-            {
-                dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport"));
-                dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHCIControllerUSBTransport"));
-            }
-            // OS X - Mountain Lion (12.5.0)
-            else
-            {
-                dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
-                dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
-            }
-            break;
-        case 13: // OS X - Mavericks
-        case 14: // OS X - Yosemite
-            dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
-            dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
-            break;
+        dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.driver.BroadcomUSBBluetoothHCIController"));
+        dict->setObject(kIOClassKey, OSString::withCString("BroadcomUSBBluetoothHCIController"));
     }
-    
+    // OS X - Mountain Lion (12.0 until 12.4)
+    else if (version_major == 12 && version_minor <= 4)
+    {
+        dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHCIControllerUSBTransport"));
+        dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHCIControllerUSBTransport"));
+    }
+    // OS X - Mountain Lion (12.5.0)
+    // OS X - Mavericks
+    // OS X - Yosemite
+    else if (version_major == 12 || version_major == 13 || version_major == 14)
+    {
+        dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
+        dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
+    }
+    // OS X - Future releases....
+    else if (version_major > 14)
+    {
+        IOLog("%s [%04x:%04x]: Unknown new Darwin version %d.%d, publishing possible compatible personality.\n",
+              getName(), mVendorId, mProductId, version_major, version_minor);
+        
+        dict->setObject(kBundleIdentifier, OSString::withCString("com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport"));
+        dict->setObject(kIOClassKey, OSString::withCString("BroadcomBluetoothHostControllerUSBTransport"));
+    }
+    else
+    {
+        IOLog("%s [%04x:%04x]: Unknown Darwin version %d.%d, no compatible personality known.\n",
+              getName(), mVendorId, mProductId, version_major, version_minor);
+        return;
+    }
+   
     OSArray* array = OSArray::withCapacity(1);
     array->setObject(dict);
     
