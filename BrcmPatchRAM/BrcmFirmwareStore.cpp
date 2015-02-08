@@ -262,10 +262,10 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
                 // Start Linear Address
             case REC_TYPE_SLA:
                 // Set EIP of 80386 and higher
-                DebugLog("%s::parseFirmware - Invalid firmware, unsupported start linear address instruction.\n");
+                DebugLog("parseFirmware - Invalid firmware, unsupported start linear address instruction.\n");
                 goto exit_error;
             default:
-                DebugLog("%s::parseFirmware - Invalid firmware, unknown record type encountered: 0x%02x.\n", record_type);
+                DebugLog("parseFirmware - Invalid firmware, unknown record type encountered: 0x%02x.\n", record_type);
                 goto exit_error;
         }
         
@@ -299,7 +299,7 @@ bool BrcmFirmwareStore::start(IOService *provider)
 
 void BrcmFirmwareStore::stop(IOService *provider)
 {
-    DebugLog("Firmware store  stop\n");
+    DebugLog("Firmware store stop\n");
     
     OSSafeRelease(mFirmwares);
     
