@@ -283,18 +283,6 @@ exit_error:
 
 OSDefineMetaClassAndStructors(BrcmFirmwareStore, IOService)
 
-IOService* BrcmFirmwareStore::probe(IOService *provider, SInt32 *probeScore)
-{
-    DebugLog("Firmware store probe\n");
-    return super::probe(provider, probeScore);
-}
-
-bool BrcmFirmwareStore::init(OSDictionary *dictionary)
-{
-    DebugLog("Firmware store init\n"); // this->getName() is not available yet
-    return super::init(dictionary);
-}
-
 bool BrcmFirmwareStore::start(IOService *provider)
 {
     DebugLog("Firmware store start\n");
