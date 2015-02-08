@@ -186,7 +186,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
     
     if (*data != HEX_LINE_PREFIX)
     {
-        DEBUG_LOG("%s::parseFirmware - Invalid firmware data.\n", this->getName());
+        DebugLog("parseFirmware - Invalid firmware data.\n");
         goto exit_error;
     }
     
@@ -214,7 +214,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
         
         if (checksum != calc_checksum)
         {
-            DEBUG_LOG("%s::parseFirmware - Invalid firmware, checksum mismatch.\n", this->getName());
+            DebugLog("parseFirmware - Invalid firmware, checksum mismatch.\n");
             goto exit_error;
         }
         
@@ -252,7 +252,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
                 // Start Segment Address
             case REC_TYPE_SSA:
                 // Set CS:IP register for 80x86
-                DEBUG_LOG("%s::parseFirmware - Invalid firmware, unsupported start segment address instruction.\n", this->getName());
+                DebugLog("parseFirmware - Invalid firmware, unsupported start segment address instruction.\n");
                 goto exit_error;
                 // Extended Linear Address
             case REC_TYPE_ELA:
@@ -262,10 +262,10 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
                 // Start Linear Address
             case REC_TYPE_SLA:
                 // Set EIP of 80386 and higher
-                DEBUG_LOG("%s::parseFirmware - Invalid firmware, unsupported start linear address instruction.\n", this->getName());
+                DebugLog("parseFirmware - Invalid firmware, unsupported start linear address instruction.\n");
                 goto exit_error;
             default:
-                DEBUG_LOG("%s::parseFirmware - Invalid firmware, unknown record type encountered: 0x%02x.\n", this->getName(), record_type);
+                DebugLog("parseFirmware - Invalid firmware, unknown record type encountered: 0x%02x.\n", record_type);
                 goto exit_error;
         }
         
@@ -274,7 +274,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
             data++;
     }
     
-    DEBUG_LOG("%s::parseFirmware - Invalid firmware.\n", this->getName());
+    DebugLog("parseFirmware - Invalid firmware.\n");
     
 exit_error:
     OSSafeRelease(instructions);
@@ -283,21 +283,9 @@ exit_error:
 
 OSDefineMetaClassAndStructors(BrcmFirmwareStore, IOService)
 
-IOService* BrcmFirmwareStore::probe(IOService *provider, SInt32 *probeScore)
-{
-    DEBUG_LOG("%s::probe\n", this->getName());
-    return super::probe(provider, probeScore);
-}
-
-bool BrcmFirmwareStore::init(OSDictionary *dictionary)
-{
-    DEBUG_LOG("BrcmFirmwareStore::init\n"); // this->getName() is not available yet
-    return super::init(dictionary);
-}
-
 bool BrcmFirmwareStore::start(IOService *provider)
 {
-    DEBUG_LOG("%s::start\n", this->getName());
+    DebugLog("Firmware store start\n");
     
     if (!super::start(provider))
         return false;
@@ -311,7 +299,7 @@ bool BrcmFirmwareStore::start(IOService *provider)
 
 void BrcmFirmwareStore::stop(IOService *provider)
 {
-    DEBUG_LOG("%s::stop\n", this->getName());
+    DebugLog("Firmware store stop\n");
     
     OSSafeRelease(mFirmwares);
     
@@ -320,13 +308,13 @@ void BrcmFirmwareStore::stop(IOService *provider)
 
 OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
 {
-    DEBUG_LOG("%s::loadFirmware\n", this->getName());
+    DebugLog("loadFirmware\n");
     
     OSDictionary* firmwares = OSDynamicCast(OSDictionary, this->getProperty("Firmwares"));
     
     if (!firmwares)
     {
-        IOLog("%s: Unable to locate BrcmFirmwareStore configured firmwares.\n", this->getName());
+        AlwaysLog("Unable to locate BrcmFirmwareStore configured firmwares.\n");
         return NULL;
     }
     
@@ -334,46 +322,46 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     
     if (!configuredData)
     {
-        IOLog("%s: No firmware for firmware key \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
+        AlwaysLog("No firmware for firmware key \"%s\".\n", firmwareKey->getCStringNoCopy());
         return NULL;
     }
     
-    IOLog("%s: Retrieved firmware for firmware key \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
+    AlwaysLog("Retrieved firmware for firmware key \"%s\".\n", firmwareKey->getCStringNoCopy());
     
     OSData* firmwareData = decompressFirmware(configuredData);
     
     if (!firmwareData)
     {
-        IOLog("%s: Failed to decompress firmware.\n", this->getName());
+        AlwaysLog("Failed to decompress firmware.\n");
         return NULL;
     }
     
     if (configuredData->getLength() < firmwareData->getLength())
-        IOLog("%s: Decompressed firmware (%d bytes --> %d bytes).\n", this->getName(), configuredData->getLength(), firmwareData->getLength());
+        AlwaysLog("Decompressed firmware (%d bytes --> %d bytes).\n", configuredData->getLength(), firmwareData->getLength());
     else
-        IOLog("%s: Non-compressed firmware.\n", this->getName());
+        AlwaysLog("Non-compressed firmware.\n");
     
     OSArray* instructions = parseFirmware(firmwareData);
     OSSafeRelease(firmwareData);
     
     if (!instructions)
     {
-        IOLog("%s: Firmware is not valid IntelHex firmware.\n", this->getName());
+        AlwaysLog("Firmware is not valid IntelHex firmware.\n");
         return NULL;
     }
     
-    DEBUG_LOG("%s: Firmware is valid IntelHex firmware.\n", this->getName());
+    AlwaysLog("Firmware is valid IntelHex firmware.\n");
     
     return instructions;
 }
 
 OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
 {
-    DEBUG_LOG("%s::getFirmware\n", this->getName());
+    DebugLog("getFirmware\n");
     
     if (!firmwareKey || firmwareKey->getLength() == 0)
     {
-        IOLog("%s: Current device has no FirmwareKey configured.\n", this->getName());
+        AlwaysLog("Current device has no FirmwareKey configured.\n");
         return NULL;
     }
     
@@ -390,7 +378,7 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
             mFirmwares->setObject(firmwareKey, instructions);
     }
     else
-     IOLog("%s: Retrieved cached firmware for \"%s\".\n", this->getName(), firmwareKey->getCStringNoCopy());
+     AlwaysLog("Retrieved cached firmware for \"%s\".\n", firmwareKey->getCStringNoCopy());
     
     return instructions;
 }

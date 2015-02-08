@@ -36,8 +36,6 @@ class BrcmFirmwareStore : public IOService
         OSArray* parseFirmware(OSData* firmwareData);
         OSArray* loadFirmware(OSString* firmwareIdentifier);
     public:
-        virtual IOService* probe(IOService *provider, SInt32 *probeScore);
-        virtual bool init(OSDictionary *dictionary = NULL);
         virtual bool start(IOService *provider);
         virtual void stop(IOService *provider);
     

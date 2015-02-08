@@ -32,49 +32,49 @@
 
 class BrcmPatchRAM : public IOService
 {
-    private:
-        typedef IOService super;
-        OSDeclareDefaultStructors(BrcmPatchRAM);
+private:
+    typedef IOService super;
+    OSDeclareDefaultStructors(BrcmPatchRAM);
     
-        UInt16 mVendorId;
-        UInt16 mProductId;
+    UInt16 mVendorId;
+    UInt16 mProductId;
     
-        IOUSBDevice* mDevice = NULL;
-        IOUSBInterface* mInterface = NULL;
-        IOUSBPipe* mInterruptPipe = NULL;
-        IOUSBPipe* mBulkPipe = NULL;
+    IOUSBDevice* mDevice = NULL;
+    IOUSBInterface* mInterface = NULL;
+    IOUSBPipe* mInterruptPipe = NULL;
+    IOUSBPipe* mBulkPipe = NULL;
     
-        bool volatile mReadQueued = false;
-   
-        void publishPersonality();
-        BrcmFirmwareStore* getFirmwareStore();
+    bool volatile mReadQueued = false;
     
-        void printDeviceInfo();
-        int getDeviceStatus();
+    void publishPersonality();
+    BrcmFirmwareStore* getFirmwareStore();
     
-        bool resetDevice();
-        bool setConfiguration(int configurationIndex);
-        IOUSBInterface* findInterface();
-        IOUSBPipe* findPipe(UInt8 type, UInt8 direction);
+    void printDeviceInfo();
+    int getDeviceStatus();
     
-        IOReturn queueRead();
-        static void interruptReadEntry(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
-        void interruptReadHandler(void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
+    bool resetDevice();
+    bool setConfiguration(int configurationIndex);
+    IOUSBInterface* findInterface();
+    IOUSBPipe* findPipe(UInt8 type, UInt8 direction);
     
-        IOReturn hciCommand(void * command, uint16_t length);
-        IOReturn hciCommandSync(void* command, uint16_t length);
-        IOReturn hciCommandSync(void* command, uint16_t length, void* output, uint8_t* outputLength);
-        IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
+    IOReturn queueRead();
+    static void interruptReadEntry(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
+    void interruptReadHandler(void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
     
-        IOReturn interruptRead();
-        IOReturn interruptRead(void* output, uint8_t* length);
+    IOReturn hciCommand(void * command, uint16_t length);
+    IOReturn hciCommandSync(void* command, uint16_t length);
+    IOReturn hciCommandSync(void* command, uint16_t length, void* output, uint8_t* outputLength);
+    IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
     
-        IOReturn bulkWrite(void* data, uint16_t length);
+    IOReturn interruptRead();
+    IOReturn interruptRead(void* output, uint8_t* length);
     
-        uint16_t getFirmwareVersion();
-    public:
-        virtual IOService* probe(IOService *provider, SInt32 *probeScore);
-        virtual const char* stringFromReturn(IOReturn rtn);
+    IOReturn bulkWrite(void* data, uint16_t length);
+    
+    uint16_t getFirmwareVersion();
+public:
+    virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+    virtual const char* stringFromReturn(IOReturn rtn);
 };
 
 #endif //__BrcmPatchRAM__
