@@ -44,7 +44,7 @@ The following devices are supported at the moment:
   * ``[0a5c:21ec]`` Inateck Bluetooth (20702A1)
   * ``[0a5c:21fb]`` HP Supra 4352 (20702A1 Combo)
   * ``[0a5c:21fd]`` Broadcom 4352Z
-  * ``[0a5c_22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
+  * ``[0a5c:22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
   * ``[0b05:180a]`` Azurewave (4360/20702 combo)
