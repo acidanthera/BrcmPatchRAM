@@ -28,6 +28,7 @@ The following devices are supported at the moment:
   * ``[0489:e042]`` 20702A1 Lenovo China *
   * ``[0489:e079]`` Lenovo China 43162 NGFF
   * ``[0489:e07a]`` Lenovo NGFF (4352 / 20702)
+  * ``[04ca:2003]`` 20702A1 Lenovo China
   * ``[04ca:200a]`` LiteOn (4352 Combo)
   * ``[04ca:200b]`` LiteOn (4352 Combo) *
   * ``[04ca:200c]`` LiteOn (4352 Combo)
