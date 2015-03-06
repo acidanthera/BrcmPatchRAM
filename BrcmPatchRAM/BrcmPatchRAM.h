@@ -43,11 +43,20 @@ private:
     IOUSBInterface* mInterface = NULL;
     IOUSBPipe* mInterruptPipe = NULL;
     IOUSBPipe* mBulkPipe = NULL;
+    BrcmFirmwareStore* mFirmwareStore = NULL;
     
     bool volatile mReadQueued = false;
     
+    static OSString* brcmBundleIdentifier;
+    static OSString* brcmIOClass;
+    static bool initBrcmStrings();
+#ifdef DEBUG
+    void printPersonalities();
+#endif
     void publishPersonality();
+    void removePersonality();
     BrcmFirmwareStore* getFirmwareStore();
+    void uploadFirmware();
     
     void printDeviceInfo();
     int getDeviceStatus();
@@ -72,8 +81,13 @@ private:
     IOReturn bulkWrite(void* data, uint16_t length);
     
     uint16_t getFirmwareVersion();
+
 public:
     virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+    virtual bool start(IOService* provider);
+    virtual void stop(IOService* provider);
+    virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+
     virtual const char* stringFromReturn(IOReturn rtn);
 };
 

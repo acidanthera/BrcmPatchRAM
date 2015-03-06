@@ -13,11 +13,11 @@
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3</string>
+	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.3</string>
+	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>0489_e032</key>
@@ -30,10 +30,10 @@
 			<string>BCM20702A1_001.002.014.1443.1485_v5581</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>57394</integer>
 			<key>idVendor</key>
@@ -49,10 +49,10 @@
 			<string>BCM20702A1_001.002.014.1483.1651_v5747</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>57466</integer>
 			<key>idVendor</key>
@@ -68,10 +68,10 @@
 			<string>BCM20702A1_001.002.014.1443.1492_v5588</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8202</integer>
 			<key>idVendor</key>
@@ -87,10 +87,10 @@
 			<string>BCM20702A1_001.002.014.1443.1612_v5708</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8203</integer>
 			<key>idVendor</key>
@@ -106,10 +106,10 @@
 			<string>BCM20702A1_001.002.014.1443.1494_v5590</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8204</integer>
 			<key>idVendor</key>
@@ -125,10 +125,10 @@
 			<string>BCM20702A1_001.002.014.1443.1521_v5617</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8207</integer>
 			<key>idVendor</key>
@@ -144,10 +144,10 @@
 			<string>BCM20702A1_001.002.014.1443.1482_v5578</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>1626</integer>
 			<key>idVendor</key>
@@ -163,10 +163,10 @@
 			<string>BCM20702A1_001.002.014.1483.1673_v5769</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>545</integer>
 			<key>idVendor</key>
@@ -182,10 +182,10 @@
 			<string>BCM20702A1_001.002.014.1483.1709_v5805</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>547</integer>
 			<key>idVendor</key>
@@ -201,10 +201,10 @@
 			<string>BCM20702A1_001.002.014.1483.1646_v5742</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8555</integer>
 			<key>idVendor</key>
@@ -220,10 +220,10 @@
 			<string>BCM20702A1_001.002.014.1443.1572_v5668</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8559</integer>
 			<key>idVendor</key>
@@ -239,10 +239,10 @@
 			<string>BCM20702A1_001.002.014.1443.1461_v5557</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8670</integer>
 			<key>idVendor</key>
@@ -258,10 +258,10 @@
 			<string>BCM20702A1_001.002.014.1483.1647_v5743</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8673</integer>
 			<key>idVendor</key>
@@ -277,10 +277,10 @@
 			<string>BCM20702A1_001.002.014.1483.1669_v5765</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8678</integer>
 			<key>idVendor</key>
@@ -296,10 +296,10 @@
 			<string>BCM20702A1_001.002.014.1443.1459_v5555</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8680</integer>
 			<key>idVendor</key>
@@ -315,10 +315,10 @@
 			<string>BCM20702A1_001.002.014.1443.1460_v5556</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8684</integer>
 			<key>idVendor</key>
@@ -329,15 +329,15 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>HP Supra 4352 (20702A1 Combo)</string>
+			<string>Broadcom 4352 (20702A1 Combo v5744)</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1483.1648_v5744</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8699</integer>
 			<key>idVendor</key>
@@ -353,10 +353,10 @@
 			<string>BCM20702A1_001.002.014.1443.1463_v5559</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8701</integer>
 			<key>idVendor</key>
@@ -372,10 +372,10 @@
 			<string>BCM20702A1_001.002.014.1443.1467_v5563</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>6091</integer>
 			<key>idVendor</key>
@@ -391,10 +391,10 @@
 			<string>BCM20702A1_001.002.014.1443.1469_v5565</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>6095</integer>
 			<key>idVendor</key>
@@ -410,10 +410,10 @@
 			<string>BCM20702A1_001.002.014.1443.1714_v5810</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>6154</integer>
 			<key>idVendor</key>
@@ -429,10 +429,10 @@
 			<string>BCM20702A1_001.002.014.1443.1479_v5575</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13316</integer>
 			<key>idVendor</key>
@@ -448,10 +448,10 @@
 			<string>BCM20702A1_001.002.014.1443.1450_v5546</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13329</integer>
 			<key>idVendor</key>
@@ -467,10 +467,10 @@
 			<string>BCM20702A1_001.002.014.1443.1481_v5577</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13331</integer>
 			<key>idVendor</key>
@@ -486,10 +486,10 @@
 			<string>BCM20702A1_001.002.014.1443.1480_v5576</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13336</integer>
 			<key>idVendor</key>
@@ -505,10 +505,10 @@
 			<string>BCM20702A1_001.002.014.1443.1501_v5597</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13365</integer>
 			<key>idVendor</key>
@@ -524,10 +524,10 @@
 			<string>BCM20702A1_001.002.014.1443.1502_v5598</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>13398</integer>
 			<key>idVendor</key>
@@ -543,10 +543,10 @@
 			<string>BCM20702A1_001.002.014.1443.1449_v5545</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>33091</integer>
 			<key>idVendor</key>
@@ -25904,8 +25904,6 @@
 			<string>IOResources</string>
 		</dict>
 	</dict>
-	<key>OSBundleCompatibleVersion</key>
-	<string>1.0</string>
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.iokit.IOUSBFamily</key>

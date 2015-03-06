@@ -76,8 +76,8 @@
 		D4F91B001A2998CE0030D10D /* BrcmPatchRAM */ = {
 			isa = PBXGroup;
 			children = (
-				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
 				D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */,
+				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
 				D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */,
 				D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */,
 				D4F91B011A2998CE0030D10D /* Supporting Files */,

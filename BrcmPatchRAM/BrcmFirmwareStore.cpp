@@ -291,9 +291,11 @@ bool BrcmFirmwareStore::start(IOService *provider)
         return false;
     
     mFirmwares = OSDictionary::withCapacity(1);
-    
-    IOService::publishResource(kBrcmFirmwareStoreService, this);
-  
+    if (!mFirmwares)
+        return false;
+
+    registerService();
+
     return true;
 }
 
