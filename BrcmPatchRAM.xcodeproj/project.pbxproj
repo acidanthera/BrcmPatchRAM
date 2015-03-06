@@ -182,7 +182,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "tar -czf $BUILD_DIR/BrcmPatchRAM.tar.gz $BUILD_DIR/Debug $BUILD_DIR/Release";
+			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -202,6 +203,7 @@
 		D4F91B071A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.4;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 			};
@@ -210,6 +212,7 @@
 		D4F91B081A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.4;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 			};
@@ -220,10 +223,8 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
-				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -233,10 +234,8 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
-				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
