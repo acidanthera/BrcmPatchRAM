@@ -49,8 +49,8 @@ install_inject:
 distribute:
 	if [ -e ./Distribute ]; then rm -r ./Distribute; fi
 	mkdir ./Distribute
-	cp -R ./Build/Debug ./Distribute
-	#cp -R ./Build/Release ./Distribute
+	#cp -R ./Build/Debug ./Distribute
+	cp -R ./Build/Release ./Distribute
 	find ./Distribute -path *.DS_Store -delete
 	find ./Distribute -path *.dSYM -exec echo rm -r {} \; >/tmp/org.voodoo.rm.dsym.sh
 	chmod +x /tmp/org.voodoo.rm.dsym.sh
