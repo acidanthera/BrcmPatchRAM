@@ -407,7 +407,7 @@ void BrcmPatchRAM::publishPersonality()
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
     if (!mFirmwareStore)
-        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService)));
+        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
     
     if (!mFirmwareStore)
         AlwaysLog("[%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", mVendorId, mProductId);
