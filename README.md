@@ -25,7 +25,10 @@ The following devices are supported at the moment:
 *Devices marked with * are tested successfully*
 
   * ``[0489:e032]`` 20702 Combo USB
+  * ``[0489:e042]`` 20702A1 Lenovo China *
+  * ``[0489:e079]`` Lenovo China 43162 NGFF
   * ``[0489:e07a]`` Lenovo NGFF (4352 / 20702)
+  * ``[04ca:2003]`` 20702A1 Lenovo China
   * ``[04ca:200a]`` LiteOn (4352 Combo)
   * ``[04ca:200b]`` LiteOn (4352 Combo) *
   * ``[04ca:200c]`` LiteOn (4352 Combo)
@@ -34,6 +37,7 @@ The following devices are supported at the moment:
   * ``[0930:0221]`` Toshiba (4352 / 20702)
   * ``[0930:0223]`` Toshiba NGFF (4352 / 20702) *
   * ``[0a5c:216b]`` HP Rapture 4352Z NGFF Combo
+  * ``[0a5c:216e]`` HP Blackbird 43162 NGFF
   * ``[0a5c:216f]`` Dell DW1560 (4352/20702)
   * ``[0a5c:21de]`` 4352/20702A1 combo
   * ``[0a5c:21e1]`` HP Softsailing (20702A1)
@@ -42,6 +46,7 @@ The following devices are supported at the moment:
   * ``[0a5c:21ec]`` Inateck Bluetooth (20702A1)
   * ``[0a5c:21fb]`` HP Supra 4352 (20702A1 Combo)
   * ``[0a5c:21fd]`` Broadcom 4352Z
+  * ``[0a5c:22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
   * ``[0b05:180a]`` Azurewave (4360/20702 combo)
@@ -50,6 +55,7 @@ The following devices are supported at the moment:
   * ``[13d3:3413]`` Azurewave (4360/20702 combo)
   * ``[13d3:3418]`` Azurewave (4352/20702 combo)
   * ``[13d3:3435]`` Azurewave (4352/20702 combo)
+  * ``[13d3:3456]`` Azurewave (4352/20702 combo)
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
   
 ####Installation
