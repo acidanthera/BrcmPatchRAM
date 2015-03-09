@@ -76,8 +76,8 @@
 		D4F91B001A2998CE0030D10D /* BrcmPatchRAM */ = {
 			isa = PBXGroup;
 			children = (
-				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
 				D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */,
+				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
 				D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */,
 				D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */,
 				D4F91B011A2998CE0030D10D /* Supporting Files */,
@@ -182,7 +182,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "tar -czf $BUILD_DIR/BrcmPatchRAM.tar.gz $BUILD_DIR/Debug $BUILD_DIR/Release";
+			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -202,6 +203,7 @@
 		D4F91B071A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.4.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 			};
@@ -210,6 +212,7 @@
 		D4F91B081A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.4.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 			};
@@ -218,12 +221,11 @@
 		D4F91B0A1A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.5;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
-				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -231,12 +233,11 @@
 		D4F91B0B1A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.5;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
-				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
