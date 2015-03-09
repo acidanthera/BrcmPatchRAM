@@ -140,11 +140,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 
 void BrcmPatchRAM::stop(IOService* provider)
 {
-    if (mFirmwareStore)
-    {
-        mFirmwareStore->release();
-        mFirmwareStore = NULL;
-    }
+    OSSafeReleaseNULL(mFirmwareStore);
     
     PMstop();
     
@@ -155,24 +151,25 @@ void BrcmPatchRAM::uploadFirmware()
 {
     if (mDevice->open(this))
     {
-        mVendorId = mDevice->GetVendorID();
-        mProductId = mDevice->GetProductID();
-        
         // Print out additional device information
         printDeviceInfo();
         
+        // get firmware here to pre-cache for eventual use on wakeup or now
+        BrcmFirmwareStore* firmwareStore = getFirmwareStore();
+        if (firmwareStore)
+            firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+
         // Set device configuration to composite configuration index 0
         if (!setConfiguration(0))
-            return false;
+        {
+            mDevice->close(this);
+            return;
+        }
         
         // Obtain first interface
         mInterface = findInterface();
-        
-        if (mInterface)
+        if (mInterface && mInterface->open(this))
         {
-            mInterface->retain();
-            mInterface->open(this);
-            
             mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
             mBulkPipe = findPipe(kUSBBulk, kUSBOut);
             
@@ -182,30 +179,25 @@ void BrcmPatchRAM::uploadFirmware()
                     AlwaysLog("[%04x:%04x]: Firmware upgrade completed successfully.\n", mVendorId, mProductId);
                 else
                     AlwaysLog("[%04x:%04x]: Firmware upgrade failed.\n", mVendorId, mProductId);
+                OSSafeReleaseNULL(mReadBuffer); // mReadBuffer is allocated by performUpgrade but not released
             }
+            mInterface->close(this);
         }
-        
-        OSSafeRelease(mReadBuffer);
         
         // cleanup
         if (mInterruptPipe)
         {
             mInterruptPipe->Abort();
             mInterruptPipe->release(); // retained in findPipe
+            mInterruptPipe = NULL;
         }
-        
         if (mBulkPipe)
         {
             mBulkPipe->Abort();
             mBulkPipe->release(); // retained in findPipe
+            mBulkPipe = NULL;
         }
-        
-        if (mInterface)
-        {
-            mInterface->close(this); // retained in findInterface
-            mInterface->release();
-        }
-        
+        OSSafeReleaseNULL(mInterface);// retained in findInterface
         mDevice->close(this);
     }
 }
@@ -482,16 +474,14 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 
 IOUSBInterface* BrcmPatchRAM::findInterface()
 {
-    IOUSBFindInterfaceRequest request;
-    IOUSBInterface* interface = NULL;
-    
     // Find the interface for bulk endpoint transfers
+    IOUSBFindInterfaceRequest request;
     request.bAlternateSetting  = kIOUSBFindInterfaceDontCare;
     request.bInterfaceClass    = kIOUSBFindInterfaceDontCare;
     request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
     request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
     
-    if ((interface = mDevice->FindNextInterface(NULL, &request)))
+    if (IOUSBInterface* interface = mDevice->FindNextInterface(NULL, &request))
     {
         interface->retain();
         DebugLog("[%04x:%04x]: Interface %d (class %02x, subclass %02x, protocol %02x) located.\n",
@@ -513,13 +503,10 @@ IOUSBInterface* BrcmPatchRAM::findInterface()
 IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
 {
     IOUSBFindEndpointRequest findEndpointRequest;
-    
     findEndpointRequest.type = type;
     findEndpointRequest.direction = direction;
     
-    IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest);
-    
-    if (pipe)
+    if (IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest))
     {
         pipe->retain();
 #ifdef DEBUG
@@ -537,7 +524,7 @@ IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
     return NULL;
 }
 
-void BrcmPatchRAM::continousRead()
+void BrcmPatchRAM::continuousRead()
 {
     mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
     mReadBuffer->prepare();
@@ -563,7 +550,7 @@ void BrcmPatchRAM::continousRead()
                     AlwaysLog("[%04x:%04x]: continuousRead - Failed, read dead (0x%08x)\n", mVendorId, mProductId, result);
             }
         }
-    };
+    }
 }
 
 void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining)
@@ -742,9 +729,8 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
 IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
 {
     IOReturn result;
-    IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress(data, length, kIODirectionIn);
     
-    if (buffer)
+    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress(data, length, kIODirectionIn))
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
@@ -775,8 +761,8 @@ IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
 bool BrcmPatchRAM::performUpgrade()
 {
     BrcmFirmwareStore* firmwareStore;
-    OSArray* instructions;
-    OSCollectionIterator* iterator;
+    OSArray* instructions = NULL;
+    OSCollectionIterator* iterator = NULL;
     OSData* data;
     DeviceState previousState = kUnknown;
     
@@ -796,12 +782,10 @@ bool BrcmPatchRAM::performUpgrade()
             switch (mDeviceState)
             {
                 case kInitialize:
-                {
                     hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG));
                     
-                    continousRead();
+                    continuousRead();
                     continue;
-                }
                 case kFirmwareVersion:
                     // Unable to retrieve firmware store
                     if (!(firmwareStore = getFirmwareStore()))
@@ -833,6 +817,10 @@ bool BrcmPatchRAM::performUpgrade()
                     
                     continue;
                 case kInstructionWrite:
+                    // should never happen, but would cause a crash
+                    if (!iterator)
+                        return false;
+
                     if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
                         bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
                     else
@@ -864,6 +852,7 @@ bool BrcmPatchRAM::performUpgrade()
     }
 }
 
+#ifdef DEBUG
 const char* BrcmPatchRAM::getState(DeviceState deviceState)
 {
     static const IONamedValue state_values[] = {
@@ -881,6 +870,12 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
     
     return IOFindNameForValue(deviceState, state_values);
 }
+#endif //DEBUG
+
+#ifndef kIOUSBClearPipeStallNotRecursive
+// from 10.7 SDK
+#define kIOUSBClearPipeStallNotRecursive iokit_usb_err(0x48)
+#endif
 
 const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
 {

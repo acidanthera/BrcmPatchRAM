@@ -64,7 +64,9 @@ private:
     volatile DeviceState mDeviceState = kInitialize;
     volatile uint16_t mFirmareVersion = 0xFFFF;
     
+#ifdef DEBUG
     static const char* getState(DeviceState deviceState);
+#endif
     static OSString* brcmBundleIdentifier;
     static OSString* brcmIOClass;
     static bool initBrcmStrings();
@@ -86,7 +88,7 @@ private:
     IOUSBInterface* findInterface();
     IOUSBPipe* findPipe(uint8_t type, uint8_t direction);
     
-    void continousRead();
+    void continuousRead();
     static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
     
     IOReturn hciCommand(void * command, uint16_t length);
