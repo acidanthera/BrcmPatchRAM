@@ -604,7 +604,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
     
     if (result != kIOReturnSuccess)
     {
-        AlwaysLog("g[%04x:%04x]: readCompletion - Failed to queue next read (0x%08x)\n", me->mVendorId, me->mProductId, result);
+        AlwaysLog("[%04x:%04x]: readCompletion - Failed to queue next read (0x%08x)\n", me->mVendorId, me->mProductId, result);
         
         if (result == kIOUSBPipeStalled)
         {
