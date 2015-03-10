@@ -96,9 +96,9 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     DebugLog("probe\n");
     
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
-    
+
     clock_get_uptime(&start_time);
-    
+
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     if (!mDevice)
     {
@@ -532,23 +532,20 @@ void BrcmPatchRAM::continuousRead()
     mInterruptCompletion.target = this;
     mInterruptCompletion.action = readCompletion;
     mInterruptCompletion.parameter = NULL;
-    
+
     IOReturn result;
-    
+
     if ((result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess)
     {
-        if (result != kIOReturnSuccess)
+        AlwaysLog("[%04x:%04x]: continuousRead - Failed to queue read (0x%08x)\n", mVendorId, mProductId, result);
+
+        if (result == kIOUSBPipeStalled)
         {
-            AlwaysLog("[%04x:%04x]: continuousRead - Failed to queue read (0x%08x)\n", mVendorId, mProductId, result);
+            mInterruptPipe->Reset();
+            result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
             
-            if (result == kIOUSBPipeStalled)
-            {
-                mInterruptPipe->Reset();
-                result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
-                
-                if (result != kIOReturnSuccess)
-                    AlwaysLog("[%04x:%04x]: continuousRead - Failed, read dead (0x%08x)\n", mVendorId, mProductId, result);
-            }
+            if (result != kIOReturnSuccess)
+                AlwaysLog("[%04x:%04x]: continuousRead - Failed, read dead (0x%08x)\n", mVendorId, mProductId, result);
         }
     }
 }
@@ -556,7 +553,7 @@ void BrcmPatchRAM::continuousRead()
 void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining)
 {
     BrcmPatchRAM *me = (BrcmPatchRAM*)target;
-    
+
     switch (status)
     {
         case kIOReturnSuccess:
@@ -579,7 +576,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
         default:
             break;
     }
-    
+
     // Exit if device update has completed
     if (me->mDeviceState == kUpdateComplete)
         return;
@@ -628,7 +625,7 @@ IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
 IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* output, UInt8* outputLength)
 {
     HCI_RESPONSE* header = (HCI_RESPONSE*)response;
-    
+
     switch (header->eventCode)
     {
         case HCI_EVENT_COMMAND_COMPLETE:
@@ -767,7 +764,7 @@ bool BrcmPatchRAM::performUpgrade()
     DeviceState previousState = kUnknown;
     
     mDeviceState = kInitialize;
-    
+
     while (true)
     {
         // Trigger on device state change
@@ -844,10 +841,11 @@ bool BrcmPatchRAM::performUpgrade()
                     // Un-used during processing
                     continue;
                 case kUpdateComplete:
+                    OSSafeRelease(iterator);
                     return true;
             }
         }
-        
+
         IOSleep(10);
     }
 }
