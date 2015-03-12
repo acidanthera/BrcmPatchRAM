@@ -344,7 +344,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
         AlwaysLog("Non-compressed firmware.\n");
     
     OSArray* instructions = parseFirmware(firmwareData);
-    OSSafeRelease(firmwareData);
+    firmwareData->release();
     
     if (!instructions)
     {
@@ -377,7 +377,10 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
         
         // Add instructions to the firmwares cache
         if (instructions)
+        {
             mFirmwares->setObject(firmwareKey, instructions);
+            instructions->release();
+        }
     }
     else
      AlwaysLog("Retrieved cached firmware for \"%s\".\n", firmwareKey->getCStringNoCopy());
