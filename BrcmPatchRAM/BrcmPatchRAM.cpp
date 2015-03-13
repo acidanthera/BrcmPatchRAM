@@ -227,9 +227,9 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
             // unpublish native bluetooth personality
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
             if (result != kIOReturnSuccess)
-                AlwaysLog("failure terminating native Broadcom bluetooth (%08x)", result);
+                AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)", mVendorId, mProductId, result);
             else
-                DebugLog("success terminating native Broadcom bluetooth\n");
+                DebugLog("[%04x:%04x]: success terminating native Broadcom bluetooth\n", mVendorId, mProductId);
             removePersonality();
             break;
         }
@@ -745,11 +745,11 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
     return result;
 }
 
-IOReturn BrcmPatchRAM::bulkWrite(void* data, UInt16 length)
+IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
 {
     IOReturn result;
     
-    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress(data, length, kIODirectionIn))
+    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress((void*)data, length, kIODirectionIn))
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
@@ -843,11 +843,13 @@ bool BrcmPatchRAM::performUpgrade()
                 // If this IOSleep is not issued, the device is not ready to receive
                 // the firmware instructions and we will deadlock due to lack of
                 // responses.
-                IOSleep(5);
+                IOSleep(10);
 
                 // Write first 2 instructions to trigger response
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                    bulkWrite(data->getBytesNoCopy(), data->getLength());
+                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
+                    bulkWrite(data->getBytesNoCopy(), data->getLength());
                 break;
 
             case kInstructionWrite:
@@ -859,7 +861,7 @@ bool BrcmPatchRAM::performUpgrade()
                 }
 
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite((void *)data->getBytesNoCopy(), data->getLength());
+                    bulkWrite(data->getBytesNoCopy(), data->getLength());
                 else
                     // Firmware data fully written
                     hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD));

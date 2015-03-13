@@ -96,7 +96,7 @@ private:
     IOReturn hciCommand(void * command, uint16_t length);
     IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
     
-    IOReturn bulkWrite(void* data, uint16_t length);
+    IOReturn bulkWrite(const void* data, uint16_t length);
     
     uint16_t getFirmwareVersion();
     
