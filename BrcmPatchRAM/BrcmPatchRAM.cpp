@@ -363,9 +363,9 @@ void BrcmPatchRAM::publishPersonality()
                 AlwaysLog("[%04x:%04x]: ERROR in addDrivers for new IOKit personality.\n", mVendorId, mProductId);
             array->release();
         }
-        dict->release();
     }
-    
+    dict->release();
+
 #ifdef DEBUG
     printPersonalities();
 #endif
