@@ -159,16 +159,17 @@ void BrcmPatchRAM::stop(IOService* provider)
 
 void BrcmPatchRAM::uploadFirmware()
 {
+    // get firmware here to pre-cache for eventual use on wakeup or now
+    BrcmFirmwareStore* firmwareStore = getFirmwareStore();
+    OSArray* instructions = NULL;
+    if (!firmwareStore || !firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey"))))
+        return;
+
     if (mDevice->open(this))
     {
         // Print out additional device information
         printDeviceInfo();
         
-        // get firmware here to pre-cache for eventual use on wakeup or now
-        BrcmFirmwareStore* firmwareStore = getFirmwareStore();
-        if (firmwareStore)
-            firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
-
         // Set device configuration to composite configuration index 0
         if (!setConfiguration(0))
         {

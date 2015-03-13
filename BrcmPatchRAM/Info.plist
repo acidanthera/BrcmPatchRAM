@@ -20,6 +20,25 @@
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
+        <key>13d3_3295</key>
+        <dict>
+            <key>CFBundleIdentifier</key>
+            <string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+            <key>DisplayName</key>
+            <string>Azurewave BCM943225 (20702A built-in firmwaer)</string>
+            <key>#FirmwareKey</key>
+            <string>only load and unload native bluetooth</string>
+            <key>IOClass</key>
+            <string>BrcmPatchRAM</string>
+            <key>IOMatchCategory</key>
+            <string>BrcmPatchRAM</string>
+            <key>IOProviderClass</key>
+            <string>IOUSBDevice</string>
+            <key>idProduct</key>
+            <integer>12949</integer>
+            <key>idVendor</key>
+            <integer>5075</integer>
+        </dict>
 		<key>0489_e032</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
