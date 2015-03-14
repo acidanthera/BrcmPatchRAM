@@ -29,6 +29,7 @@
 #define kBundleIdentifier "CFBundleIdentifier"
 #define kIOUSBDeviceClassName "IOUSBDevice"
 #define kAppleBundlePrefix "com.apple."
+#define kFirmwareKey "FirmwareKey"
 
 enum DeviceState
 {

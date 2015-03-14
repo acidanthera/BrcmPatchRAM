@@ -120,7 +120,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mProductId = mDevice->GetProductID();
     
     uploadFirmware();
-    IOSleep(20);
+    if (getProperty(kFirmwareKey))
+        IOSleep(20);
     publishPersonality();
     
     clock_get_uptime(&end_time);
@@ -163,7 +164,7 @@ void BrcmPatchRAM::uploadFirmware()
     // get firmware here to pre-cache for eventual use on wakeup or now
     BrcmFirmwareStore* firmwareStore = getFirmwareStore();
     OSArray* instructions = NULL;
-    if (!firmwareStore || !firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey"))))
+    if (!firmwareStore || !firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey))))
         return;
 
     if (mDevice->open(this))
@@ -306,6 +307,14 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
+    gIOCatalogue->removeDrivers(dict, true);
+    //REVIEW: is IOBluetoothHostControllerUSBTransport universal?
+    dict->removeObject(kUSBProductID);
+    dict->removeObject(kUSBVendorID);
+    setStringInDict(dict, kBundleIdentifier, "com.apple.iokit.IOBluetoothHostControllerUSBTransport");
+    setNumberInDict(dict, "bDeviceClass", 224);
+    setNumberInDict(dict, "bDeviceProtocol", 1);
+    setNumberInDict(dict, "bDeviceSubClass", 1);
     gIOCatalogue->removeDrivers(dict, true);
     dict->release();
     
@@ -821,7 +830,7 @@ bool BrcmPatchRAM::performUpgrade()
                     mDeviceState = kUpdateAborted;
                     continue;
                 }
-                instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty("FirmwareKey")));
+                instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey)));
                 // Unable to retrieve firmware instructions
                 if (!instructions)
                 {
