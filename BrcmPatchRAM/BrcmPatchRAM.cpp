@@ -873,10 +873,12 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kFirmwareWritten:
+                IOSleep(10);
                 hciCommand(&HCI_RESET, sizeof(HCI_RESET));
                 break;
 
             case kResetComplete:
+                IOSleep(10);
                 resetDevice();
                 getDeviceStatus();
                 mDeviceState = kUpdateComplete;
