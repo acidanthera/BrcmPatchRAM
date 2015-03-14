@@ -120,6 +120,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mProductId = mDevice->GetProductID();
     
     uploadFirmware();
+    IOSleep(20);
     publishPersonality();
     
     clock_get_uptime(&end_time);
