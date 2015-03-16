@@ -120,10 +120,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mProductId = mDevice->GetProductID();
     
     uploadFirmware();
-    if (getProperty(kFirmwareKey))
-        IOSleep(20);
     publishPersonality();
-    
+
     clock_get_uptime(&end_time);
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
     uint64_t milli_secs = nano_secs / 1000000;
@@ -134,6 +132,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
 bool BrcmPatchRAM::start(IOService *provider)
 {
+    DebugLog("start\n");
+
     if (!super::start(provider))
         return false;
     
@@ -146,6 +146,8 @@ bool BrcmPatchRAM::start(IOService *provider)
 
 void BrcmPatchRAM::stop(IOService* provider)
 {
+    DebugLog("stop\n");
+
     OSSafeReleaseNULL(mFirmwareStore);
 
     PMstop();
@@ -173,19 +175,11 @@ void BrcmPatchRAM::uploadFirmware()
         printDeviceInfo();
         
         // Set device configuration to composite configuration index 0
-        if (!setConfiguration(0))
-        {
-            mDevice->close(this);
-            return;
-        }
-        
         // Obtain first interface
-        mInterface = findInterface();
-        if (mInterface && mInterface->open(this))
+        if (setConfiguration(0) && (mInterface = findInterface()) && mInterface->open(this))
         {
             mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
             mBulkPipe = findPipe(kUSBBulk, kUSBOut);
-            
             if (mInterruptPipe && mBulkPipe)
             {
                 if (performUpgrade())
@@ -219,27 +213,26 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 {
     DebugLog("setPowerState: which = 0x%lx\n", which);
     
-    switch (which)
+    if (which == kMyOffPowerState)
     {
-        case kMyOffPowerState:
+        // in the case the instance is shutting down, don't do anything
+        if (mFirmwareStore)
         {
-            // in the case the instance is shutting down, don't do anything
-            if (!mFirmwareStore)
-                break;
-
-            // unpublish native bluetooth personality
+            // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
             if (result != kIOReturnSuccess)
                 AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)", mVendorId, mProductId, result);
             else
                 DebugLog("[%04x:%04x]: success terminating native Broadcom bluetooth\n", mVendorId, mProductId);
+
+            // unpublish native bluetooth personality
             removePersonality();
-            break;
+
+            // terminate this instance of BrcmPatchRAM (on wake, system will re-probe/start)
+            terminate();
         }
-        case kMyOnPowerState:
-            break;
     }
-    
+
     return IOPMAckImplied;
 }
 
@@ -300,7 +293,7 @@ void BrcmPatchRAM::removePersonality()
     printPersonalities();
 #endif
     
-    // Matching dictionary for the current device
+    // remove Broadcom matching personality
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
     setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
@@ -308,7 +301,8 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
     gIOCatalogue->removeDrivers(dict, true);
-    //REVIEW: is IOBluetoothHostControllerUSBTransport universal?
+
+    // remove generic matching personality
     dict->removeObject(kUSBProductID);
     dict->removeObject(kUSBVendorID);
     setStringInDict(dict, kBundleIdentifier, "com.apple.iokit.IOBluetoothHostControllerUSBTransport");
@@ -883,12 +877,10 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kFirmwareWritten:
-                IOSleep(10);
                 hciCommand(&HCI_RESET, sizeof(HCI_RESET));
                 break;
 
             case kResetComplete:
-                IOSleep(10);
                 resetDevice();
                 getDeviceStatus();
                 mDeviceState = kUpdateComplete;
