@@ -25,7 +25,7 @@
             <key>CFBundleIdentifier</key>
             <string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
             <key>DisplayName</key>
-            <string>Azurewave BCM943225 (20702A built-in firmwaer)</string>
+            <string>Azurewave BCM943225 (20702A built-in firmware)</string>
             <key>#FirmwareKey</key>
             <string>only load and unload native bluetooth</string>
             <key>IOClass</key>
