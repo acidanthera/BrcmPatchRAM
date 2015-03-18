@@ -158,6 +158,8 @@ void BrcmPatchRAM::stop(IOService* provider)
         mCompletionLock = NULL;
     }
 
+    OSSafeReleaseNULL(mDevice);
+
     super::stop(provider);
 }
 
