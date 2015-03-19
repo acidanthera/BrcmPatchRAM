@@ -229,9 +229,6 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 
             // unpublish native bluetooth personality
             removePersonality();
-
-            // terminate this instance of BrcmPatchRAM (on wake, system will re-probe/start)
-            terminate();
         }
     }
 
