@@ -101,7 +101,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
     mCompletionLock = IOLockAlloc();
     if (!mCompletionLock)
-        return false;
+        return NULL;
 
     mDevice = OSDynamicCast(IOUSBDevice, provider);
     if (!mDevice)
