@@ -29,6 +29,7 @@
 #define kBundleIdentifier "CFBundleIdentifier"
 #define kIOUSBDeviceClassName "IOUSBDevice"
 #define kAppleBundlePrefix "com.apple."
+#define kFirmwareKey "FirmwareKey"
 
 enum DeviceState
 {
@@ -40,7 +41,8 @@ enum DeviceState
     kInstructionWritten,
     kFirmwareWritten,
     kResetComplete,
-    kUpdateComplete
+    kUpdateComplete,
+    kUpdateAborted,
 };
 
 class BrcmPatchRAM : public IOService
@@ -63,8 +65,11 @@ private:
     
     volatile DeviceState mDeviceState = kInitialize;
     volatile uint16_t mFirmareVersion = 0xFFFF;
+    IOLock* mCompletionLock = NULL;
     
+#ifdef DEBUG
     static const char* getState(DeviceState deviceState);
+#endif
     static OSString* brcmBundleIdentifier;
     static OSString* brcmIOClass;
     static bool initBrcmStrings();
@@ -86,13 +91,13 @@ private:
     IOUSBInterface* findInterface();
     IOUSBPipe* findPipe(uint8_t type, uint8_t direction);
     
-    void continousRead();
+    bool continuousRead();
     static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
     
     IOReturn hciCommand(void * command, uint16_t length);
     IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
     
-    IOReturn bulkWrite(void* data, uint16_t length);
+    IOReturn bulkWrite(const void* data, uint16_t length);
     
     uint16_t getFirmwareVersion();
     

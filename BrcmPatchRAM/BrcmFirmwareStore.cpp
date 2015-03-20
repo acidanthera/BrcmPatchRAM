@@ -180,6 +180,9 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
     UInt8 HCI_VSC_LAUNCH_RAM[] = { 0x4c, 0xfc };
     
     OSArray* instructions = OSArray::withCapacity(1);
+    if (!instructions)
+        return NULL;
+
     UInt8* data = (UInt8*)firmwareData->getBytesNoCopy();
     UInt32 address = 0;
     UInt8 binary[0x110];
@@ -231,6 +234,8 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
                 
                 // Allocate instruction (Opcode - 2 bytes, length - 1 byte)
                 OSData* instruction = OSData::withCapacity(3 + length);
+                if (!instruction)
+                    goto exit_error;
                 
                 instruction->appendBytes(HCI_VSC_LAUNCH_RAM, sizeof(HCI_VSC_LAUNCH_RAM));
                 instruction->appendBytes(&length, sizeof(length));
@@ -238,6 +243,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
                 instruction->appendBytes(&binary[4], length - 4);
                 
                 instructions->setObject(instruction);
+                instruction->release();
                 break;
             }
             // End of File
@@ -344,7 +350,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
         AlwaysLog("Non-compressed firmware.\n");
     
     OSArray* instructions = parseFirmware(firmwareData);
-    OSSafeRelease(firmwareData);
+    firmwareData->release();
     
     if (!instructions)
     {
@@ -377,7 +383,10 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
         
         // Add instructions to the firmwares cache
         if (instructions)
+        {
             mFirmwares->setObject(firmwareKey, instructions);
+            instructions->release();
+        }
     }
     else
      AlwaysLog("Retrieved cached firmware for \"%s\".\n", firmwareKey->getCStringNoCopy());

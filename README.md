@@ -1,3 +1,18 @@
+###BrcmPatchRAM -- RehabMan fork
+
+This version of BrcmPatchRAM contains several fixes as compared with the current release from the-darkvoid:
+
+* firmware loading is more than 3x faster than the-darkvoid version (~0.5s vs. ~1.77s)
+* bluetooth is ready instantly after wake from sleep (by unregistering/unloading pre-sleep)
+* pre-cache uncompressed firmware in probe even when firmware is already resident (helps for faster wakeup)
+* fixed various memory leaks and unhandled out-of-memory conditions
+* this version can be used with non-RAMUSB Broadcom devices (results in quicker bluetooth activating after wake from sleep)
+
+It is assumed that eventually the-darkvoid will merge my changes into his version.
+
+Downloads are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads
+
+
 ###BrcmPatchRAM
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
