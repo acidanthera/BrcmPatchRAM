@@ -99,6 +99,10 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
     clock_get_uptime(&start_time);
 
+    mWorkLock = IOLockAlloc();
+    if (!mWorkLock)
+        return NULL;
+
     mCompletionLock = IOLockAlloc();
     if (!mCompletionLock)
         return NULL;
@@ -137,6 +141,28 @@ bool BrcmPatchRAM::start(IOService *provider)
     if (!super::start(provider))
         return false;
     
+    // add interrupt source for delayed actions...
+    IOWorkLoop* workLoop = getWorkLoop();
+    if (!workLoop)
+        return false;
+    mWorkSource = IOInterruptEventSource::interruptEventSource(this, OSMemberFunctionCast(IOInterruptEventAction, this, &BrcmPatchRAM::processWorkQueue));
+    if (!mWorkSource)
+        return false;
+    workLoop->addEventSource(mWorkSource);
+    mWorkPending = 0;
+
+    // add timer for firmware load in the case no re-probe after wake
+    mTimer = IOTimerEventSource::timerEventSource(this, OSMemberFunctionCast(IOTimerEventSource::Action, this, &BrcmPatchRAM::onTimerEvent));
+    if (!mTimer)
+    {
+        workLoop->removeEventSource(mWorkSource);
+        mWorkSource->release();
+        mWorkSource = NULL;
+        return false;
+    }
+    workLoop->addEventSource(mTimer);
+
+    // register for power state notifications
     PMinit();
     registerPowerDriver(this, myTwoStates, 2);
     provider->joinPMtree(this);
@@ -150,6 +176,25 @@ void BrcmPatchRAM::stop(IOService* provider)
 
     OSSafeReleaseNULL(mFirmwareStore);
 
+    IOWorkLoop* workLoop = getWorkLoop();
+    if (workLoop)
+    {
+        if (mTimer)
+        {
+            mTimer->cancelTimeout();
+            workLoop->removeEventSource(mTimer);
+            mTimer->release();
+            mTimer = NULL;
+        }
+        if (mWorkSource)
+        {
+            workLoop->removeEventSource(mWorkSource);
+            mWorkSource->release();
+            mWorkSource = NULL;
+            mWorkPending = 0;
+        }
+    }
+
     PMstop();
 
     if (mCompletionLock)
@@ -157,14 +202,90 @@ void BrcmPatchRAM::stop(IOService* provider)
         IOLockFree(mCompletionLock);
         mCompletionLock = NULL;
     }
+    if (mWorkLock)
+    {
+        IOLockFree(mWorkLock);
+        mWorkLock = NULL;
+    }
 
     OSSafeReleaseNULL(mDevice);
 
     super::stop(provider);
 }
 
+IOReturn BrcmPatchRAM::onTimerEvent()
+{
+    AlwaysLog("onTimerEvent\n");
+
+    if (!mDevice->getProperty(kFirmwareLoaded))
+    {
+        AlwaysLog("BLURP!! no firmware loaded and timer expiried (no re-probe)\n");
+        scheduleWork(kWorkLoadFirmware);
+    }
+
+    return kIOReturnSuccess;
+}
+
+void BrcmPatchRAM::scheduleWork(unsigned int newWork)
+{
+    IOLockLock(mWorkLock);
+    mWorkPending |= newWork;
+    mWorkSource->interruptOccurred(0, 0, 0);
+    IOLockUnlock(mWorkLock);
+}
+
+void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
+{
+    IOLockLock(mWorkLock);
+
+    // start firmware loading process in a non-workloop thread
+    if (mWorkPending & kWorkLoadFirmware)
+    {
+        AlwaysLog("_workPending kWorkLoadFirmare\n");
+        mWorkPending &= ~kWorkLoadFirmware;
+        retain();
+        kern_return_t result = kernel_thread_start(&BrcmPatchRAM::uploadFirmwareThread, this, &mWorker);
+        if (KERN_SUCCESS == result)
+            AlwaysLog("Success creating firmware uploader thread\n");
+        else
+        {
+            AlwaysLog("ERROR creating firmware uploader thread.\n");
+            release();
+        }
+    }
+
+    // firmware loading thread is finished
+    if (mWorkPending & kWorkFinished)
+    {
+        AlwaysLog("_workPending kWorkFinished\n");
+        mWorkPending &= ~kWorkFinished;
+        thread_deallocate(mWorker);
+        mWorker = 0;
+        release();  // matching retain when thread created successfully
+    }
+
+    IOLockUnlock(mWorkLock);
+}
+
+void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
+{
+    AlwaysLog("sendFirmwareThread enter\n");
+
+    BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
+    me->uploadFirmware();
+    me->publishPersonality();
+    me->scheduleWork(kWorkFinished);
+
+    AlwaysLog("sendFirmwareThread termination\n");
+    thread_terminate(current_thread());
+    AlwaysLog("!!! sendFirmwareThread post-terminate !!! should not be here\n");
+}
+
 void BrcmPatchRAM::uploadFirmware()
 {
+    // signal to timer that firmware already loaded
+    mDevice->setProperty(kFirmwareLoaded, true);
+
     // get firmware here to pre-cache for eventual use on wakeup or now
     BrcmFirmwareStore* firmwareStore = getFirmwareStore();
     OSArray* instructions = NULL;
@@ -217,19 +338,28 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     
     if (which == kMyOffPowerState)
     {
+        // consider firmware no longer loaded
+        mDevice->removeProperty(kFirmwareLoaded);
+
         // in the case the instance is shutting down, don't do anything
         if (mFirmwareStore)
         {
             // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
             if (result != kIOReturnSuccess)
-                AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)", mVendorId, mProductId, result);
+                AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)\n", mVendorId, mProductId, result);
             else
                 DebugLog("[%04x:%04x]: success terminating native Broadcom bluetooth\n", mVendorId, mProductId);
 
             // unpublish native bluetooth personality
             removePersonality();
         }
+    }
+    else if (which == kMyOnPowerState)
+    {
+        // start loading firmware for case probe is never called after wake
+        if (!mDevice->getProperty(kFirmwareLoaded))
+            mTimer->setTimeoutMS(1000); //REVIEW: good value for timeout?
     }
 
     return IOPMAckImplied;
