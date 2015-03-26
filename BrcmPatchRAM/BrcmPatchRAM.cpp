@@ -170,8 +170,17 @@ bool BrcmPatchRAM::start(IOService *provider)
     return true;
 }
 
+static uint64_t wake_time;
+
 void BrcmPatchRAM::stop(IOService* provider)
 {
+    uint64_t stop_time, nano_secs;
+    clock_get_uptime(&stop_time);
+    absolutetime_to_nanoseconds(stop_time - wake_time, &nano_secs);
+    uint64_t milli_secs = nano_secs / 1000000;
+    AlwaysLog("Time since wake %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
+
+
     DebugLog("stop\n");
 
     OSSafeReleaseNULL(mFirmwareStore);
@@ -272,6 +281,8 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
     AlwaysLog("sendFirmwareThread enter\n");
 
     BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
+    me->resetDevice();
+    IOSleep(20);
     me->uploadFirmware();
     me->publishPersonality();
     me->scheduleWork(kWorkFinished);
@@ -357,6 +368,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     }
     else if (which == kMyOnPowerState)
     {
+        clock_get_uptime(&wake_time);
         // start loading firmware for case probe is never called after wake
         if (!mDevice->getProperty(kFirmwareLoaded))
             mTimer->setTimeoutMS(1000); //REVIEW: good value for timeout?
