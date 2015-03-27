@@ -224,7 +224,7 @@ void BrcmPatchRAM::stop(IOService* provider)
 
 IOReturn BrcmPatchRAM::onTimerEvent()
 {
-    AlwaysLog("onTimerEvent\n");
+    DebugLog("onTimerEvent\n");
 
     if (!mDevice->getProperty(kFirmwareLoaded))
     {
@@ -250,12 +250,12 @@ void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
     // start firmware loading process in a non-workloop thread
     if (mWorkPending & kWorkLoadFirmware)
     {
-        AlwaysLog("_workPending kWorkLoadFirmare\n");
+        DebugLog("_workPending kWorkLoadFirmare\n");
         mWorkPending &= ~kWorkLoadFirmware;
         retain();
         kern_return_t result = kernel_thread_start(&BrcmPatchRAM::uploadFirmwareThread, this, &mWorker);
         if (KERN_SUCCESS == result)
-            AlwaysLog("Success creating firmware uploader thread\n");
+            DebugLog("Success creating firmware uploader thread\n");
         else
         {
             AlwaysLog("ERROR creating firmware uploader thread.\n");
@@ -266,7 +266,7 @@ void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
     // firmware loading thread is finished
     if (mWorkPending & kWorkFinished)
     {
-        AlwaysLog("_workPending kWorkFinished\n");
+        DebugLog("_workPending kWorkFinished\n");
         mWorkPending &= ~kWorkFinished;
         thread_deallocate(mWorker);
         mWorker = 0;
@@ -278,7 +278,7 @@ void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
 
 void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
 {
-    AlwaysLog("sendFirmwareThread enter\n");
+    DebugLog("sendFirmwareThread enter\n");
 
     BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
     me->resetDevice();
@@ -287,9 +287,9 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
     me->publishPersonality();
     me->scheduleWork(kWorkFinished);
 
-    AlwaysLog("sendFirmwareThread termination\n");
+    DebugLog("sendFirmwareThread termination\n");
     thread_terminate(current_thread());
-    AlwaysLog("!!! sendFirmwareThread post-terminate !!! should not be here\n");
+    DebugLog("!!! sendFirmwareThread post-terminate !!! should not be here\n");
 }
 
 void BrcmPatchRAM::uploadFirmware()
@@ -371,7 +371,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         clock_get_uptime(&wake_time);
         // start loading firmware for case probe is never called after wake
         if (!mDevice->getProperty(kFirmwareLoaded))
-            mTimer->setTimeoutMS(1000); //REVIEW: good value for timeout?
+            mTimer->setTimeoutMS(400); // longest time seen in normal re-probe was ~200ms
     }
 
     return IOPMAckImplied;
