@@ -122,7 +122,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     
     mVendorId = mDevice->GetVendorID();
     mProductId = mDevice->GetProductID();
-    
+
+    // get firmware here to pre-cache for eventual use on wakeup or now
+    if (BrcmFirmwareStore* firmwareStore = getFirmwareStore())
+        firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey)));
+
     uploadFirmware();
     publishPersonality();
 
@@ -296,12 +300,6 @@ void BrcmPatchRAM::uploadFirmware()
 {
     // signal to timer that firmware already loaded
     mDevice->setProperty(kFirmwareLoaded, true);
-
-    // get firmware here to pre-cache for eventual use on wakeup or now
-    BrcmFirmwareStore* firmwareStore = getFirmwareStore();
-    OSArray* instructions = NULL;
-    if (!firmwareStore || !firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey))))
-        return;
 
     if (mDevice->open(this))
     {
