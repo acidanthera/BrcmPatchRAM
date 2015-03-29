@@ -389,7 +389,7 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
         }
     }
     else
-     AlwaysLog("Retrieved cached firmware for \"%s\".\n", firmwareKey->getCStringNoCopy());
+     DebugLog("Retrieved cached firmware for \"%s\".\n", firmwareKey->getCStringNoCopy());
     
     return instructions;
 }
