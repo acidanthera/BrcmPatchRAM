@@ -759,6 +759,6 @@
 	<key>OSBundleRequired</key>
 	<string>Root</string>
 	<key>Source Code</key>
-	<string>https://github.com/robvanoostenrijk/BrcmPatchRAM.git</string>
+	<string>https://github.com/the-darkvoid/BrcmPatchRAM.git</string>
 </dict>
 </plist>
