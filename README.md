@@ -1,3 +1,18 @@
+###BrcmPatchRAM -- RehabMan fork
+
+This version (v1.7) of BrcmPatchRAM has a fix for a problem I noticed on my Lenovo u430.
+
+Description of the problem: Intermittently, bluetooth would not be available after a sleep/wake cycle.  The problem turns out that sometimes Yosemite doesn't "tear down" and "reconstruct" the USB (either EHC or XHC) ioreg tree after wake.  This results in the instance of BrcmPatchRAM that was resident prior to sleep to remain resident and attached to the bluetooth device.  This means no call to ::probe will be made and thus no firmware loaded into the device.  The problem was observed intermittently, approx. 1 of 25 wakes.
+
+The fix: Since the device has no firmware and no reprobe will be happening in that case, we need to load firmware after the wake notification is received but not before we know that a re-probe is not going to occur.  By intrumenting ::stop, it was determined that, in normal cases, the device is reconstructed (thus old instance gets ::stop, new instance gets ::probe) within approx 100-200ms.  The solution, then, is to create a timer on wake and should the timer expire (before ::stop is called), spin up a thread to load firmware.  The timer used currently is 400ms.  The longest time between wake and reprobe (non failure case) was 214ms.
+
+I mention the specific timing as I don't believe the code will deal gracefully if a USB teardown happens in the middle of firmware uploading.  I will look at improving the robustness in the (near) future.  This version has been tested on my u430 over many sleep/wake cycles without issue.  No instances of failed bluetooth after sleep, and no crashes caused by the firmware uploader thread.
+
+### RehabMan Fork Downloads
+
+Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads
+
+
 ###BrcmPatchRAM
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__

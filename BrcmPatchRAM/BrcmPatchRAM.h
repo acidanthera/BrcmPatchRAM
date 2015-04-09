@@ -22,6 +22,8 @@
 #include <IOKit/IOService.h>
 #include <IOKit/IOLib.h>
 #include <IOKit/usb/IOUSBDevice.h>
+#include <IOKit/IOInterruptEventSource.h>
+#include <IOKit/IOTimerEventSource.h>
 
 #include "BrcmFirmwareStore.h"
 
@@ -30,6 +32,7 @@
 #define kIOUSBDeviceClassName "IOUSBDevice"
 #define kAppleBundlePrefix "com.apple."
 #define kFirmwareKey "FirmwareKey"
+#define kFirmwareLoaded "RM,FirmwareLoaded"
 
 enum DeviceState
 {
@@ -76,6 +79,23 @@ private:
 #ifdef DEBUG
     void printPersonalities();
 #endif
+
+    IOTimerEventSource* mTimer = NULL;
+    IOReturn onTimerEvent(void);
+
+    static void uploadFirmwareThread(void* arg, wait_result_t wait);
+    thread_t mWorker = 0;
+
+    IOInterruptEventSource* mWorkSource = NULL;
+    IOLock* mWorkLock = NULL;
+    enum WorkPending
+    {
+        kWorkLoadFirmware = 0x01,
+        kWorkFinished = 0x02,
+    };
+    unsigned mWorkPending = 0;
+    void scheduleWork(unsigned newWork);
+    void processWorkQueue(IOInterruptEventSource*, int);
 
     void publishPersonality();
     void removePersonality();
