@@ -17,13 +17,13 @@ OPTIONS:=$(OPTIONS)
 
 .PHONY: all
 all:
-	xcodebuild build $(OPTIONS) -configuration Debug
-	xcodebuild build $(OPTIONS) -configuration Release
+	xcodebuild build $(OPTIONS) -scheme "BrcmPatchRAM" -configuration Debug
+	xcodebuild build $(OPTIONS) -scheme "BrcmPatchRAM" -configuration Release
 
 .PHONY: clean
 clean:
-	xcodebuild clean $(OPTIONS) -configuration Debug
-	xcodebuild clean $(OPTIONS) -configuration Release
+	xcodebuild clean $(OPTIONS) -scheme "BrcmPatchRAM" -configuration Debug
+	xcodebuild clean $(OPTIONS) -scheme "BrcmPatchRAM" -configuration Release
 
 .PHONY: update_kernelcache
 update_kernelcache:
