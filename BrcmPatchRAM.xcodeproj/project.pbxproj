@@ -45,7 +45,7 @@
 		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; };
 		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED2A7DD61B37DE6E00DC200F /* BrcmBluetoothInjector.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmBluetoothInjector.kext; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED2A7DD71B37DE6F00DC200F /* BrcmBluetoothInjector-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BrcmBluetoothInjector-Info.plist"; path = "/Users/RehabMan/Projects/brcmpatch.git/BrcmBluetoothInjector-Info.plist"; sourceTree = "<absolute>"; };
+		ED2A7DD71B37DE6F00DC200F /* BrcmBluetoothInjector-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmBluetoothInjector-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
