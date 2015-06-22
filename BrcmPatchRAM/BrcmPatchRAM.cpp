@@ -764,7 +764,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
     IOLockUnlock(me->mCompletionLock);
 
     // wake waiting task in performUpgrade (in IOLockSleep)...
-    IOLockWakeup(me->mCompletionLock, NULL, true);
+    IOLockWakeup(me->mCompletionLock, me, true);
 }
 
 IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
@@ -1039,7 +1039,7 @@ bool BrcmPatchRAM::performUpgrade()
             continue;
         }
         // wait for completion of the async read
-        IOLockSleep(mCompletionLock, NULL, 0);
+        IOLockSleep(mCompletionLock, this, 0);
     }
 
     IOLockUnlock(mCompletionLock);
