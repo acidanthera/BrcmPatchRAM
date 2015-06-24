@@ -291,6 +291,7 @@
 				CURRENT_PROJECT_VERSION = 1.7.2;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
+				SYMROOT = build/Products;
 			};
 			name = Debug;
 		};
@@ -300,6 +301,7 @@
 				CURRENT_PROJECT_VERSION = 1.7.2;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
+				SYMROOT = build/Products;
 			};
 			name = Release;
 		};
