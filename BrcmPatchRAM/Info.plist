@@ -666,6 +666,7 @@
 			<key>idVendor</key>
 			<integer>5075</integer>
 		</dict>
+        <key>19ff_0239</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
