@@ -13,7 +13,9 @@ I mention the specific timing as I don't believe the code will deal gracefully i
 Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads
 
 
-###BrcmPatchRAM
+###BrcmPatchRAM.kext
+
+For Yosemite and earlier.
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
 
@@ -31,6 +33,14 @@ The firmware applied is extracted from the Windows drivers and the functionality
 
 Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
 
+
+###BrcmBluetoothInjector.kext
+
+To be used for OS X newer than Yosemite.
+
+Install only one kext, BrcmBluetoothInjector.kext or BrcmPatchRAM.kext (depending on OS X version), to /S/L/E or Clover/kexts.
+
+
 ####Supported Devices
 
 BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
@@ -39,6 +49,8 @@ The following devices are supported at the moment:
 
 *Devices marked with * are tested successfully*
 
+  * ``[03f0:231d]`` HP 231d (ProBook BT built-in firmware)
+  * ``[13d3:3295]`` Azurewave BCM943225 (20702A bult-in firmware)
   * ``[0489:e032]`` 20702 Combo USB
   * ``[0489:e042]`` 20702A1 Lenovo China *
   * ``[0489:e079]`` Lenovo China 43162 NGFF
@@ -71,11 +83,17 @@ The following devices are supported at the moment:
   * ``[13d3:3418]`` Azurewave (4352/20702 combo)
   * ``[13d3:3435]`` Azurewave (4352/20702 combo)
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
+  * ``[19ff:0239]`` Insignia NS-PCY5BMA Bluetooth Dongle
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
   
 ####Installation
 
-BrcmPatchRAM can be installed either through Clover kext injection or placed in /System/Library/Extensions for legacy installations.
+BrcmPatchRAM.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions.
+
+Same goes for BrcmBluetoothInjector.kext.
+
+Install only one, not both, depending on system version.
+
 
 ####Details
 
