@@ -1,6 +1,7 @@
 # really just some handy scripts...
 
 KEXT=BrcmPatchRAM.kext
+INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
 #INSTDIR=/TestExtensions
 INSTDIR=/System/Library/Extensions
@@ -43,7 +44,7 @@ install:
 
 .PHONY: install_inject
 install_inject:
-	sudo cp -R $(BUILDDIR)/$(KEXT) $(INSTDIR)
+	sudo cp -R $(BUILDDIR)/Release/$(INJECT) $(INSTDIR)
 	make update_kernelcache
 
 .PHONY: distribute
