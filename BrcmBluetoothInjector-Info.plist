@@ -323,8 +323,8 @@
 			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
 			<key>IOClass</key>
 			<string>BroadcomBluetoothHostControllerUSBTransport</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8894</integer>
 			<key>idVendor</key>
