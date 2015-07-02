@@ -124,8 +124,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mProductId = mDevice->GetProductID();
 
     // get firmware here to pre-cache for eventual use on wakeup or now
-    if (BrcmFirmwareStore* firmwareStore = getFirmwareStore())
-        firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey)));
+    if (OSString* firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey)))
+    {
+        if (BrcmFirmwareStore* firmwareStore = getFirmwareStore())
+            firmwareStore->getFirmware(firmwareKey);
+    }
 
     uploadFirmware();
     publishPersonality();
@@ -300,6 +303,10 @@ void BrcmPatchRAM::uploadFirmware()
 {
     // signal to timer that firmware already loaded
     mDevice->setProperty(kFirmwareLoaded, true);
+
+    // don't bother with devices that have no firmware
+    if (!getProperty(kFirmwareKey))
+        return;
 
     if (mDevice->open(this))
     {
@@ -515,10 +522,78 @@ void BrcmPatchRAM::publishPersonality()
 #endif
 }
 
+bool BrcmPatchRAM::publishFirmwareStorePersonality()
+{
+    // matching dictionary for disabled BrcmFirmwareStore
+    OSDictionary* dict = OSDictionary::withCapacity(3);
+    if (!dict) return;
+    setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
+    setStringInDict(dict, kIOClassKey, "BrcmFirmwareStore");
+    setStringInDict(dict, kIOMatchCategoryKey, "BrcmFirmwareStore");
+
+    // retrieve currently matching IOKit driver personalities
+    OSDictionary* personality = NULL;
+    SInt32 generationCount;
+    if (OSOrderedSet* set = gIOCatalogue->findDrivers(dict, &generationCount))
+    {
+        if (set->getCount())
+            DebugLog("%d matching driver personalities for BrcmFirmwareStore.\n", set->getCount());
+
+        // should be only one, so we can grab just the first
+        if (OSCollectionIterator* iterator = OSCollectionIterator::withCollection(set))
+        {
+            personality = OSDynamicCast(OSDictionary, iterator->getNextObject());
+            iterator->release();
+        }
+        set->release();
+    }
+    // if we don't find it, then something is really wrong...
+    if (!personality)
+    {
+        AlwaysLog("unable to find disabled BrcmFirmwareStore personality.\n");
+        dict->release();
+        return;
+    }
+
+    // unpublish disabled personality
+    gIOCatalogue->removeDrivers(dict);
+    dict->release();
+    dict = OSDynamicCast(OSDictionary, personality->copyCollection());
+    if (!dict)
+    {
+        AlwaysLog("copyCollection failed.");
+        return;
+    }
+
+    // Add new personality into the kernel
+    if (OSArray* array = OSArray::withCapacity(1))
+    {
+        // change from disabled_IOResources to IOResources
+        setStringInDict(dict, kIOProviderClassKey, "IOResources");
+        array->setObject(dict);
+        if (gIOCatalogue->addDrivers(array, true))
+            AlwaysLog("Published new IOKit personality for BrcmFirmwareStore.\n");
+        else
+            AlwaysLog("ERROR in addDrivers for new BrcmFirmwareStore personality.\n");
+        array->release();
+    }
+    dict->release();
+}
+
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
     if (!mFirmwareStore)
-        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
+    {
+        // check to see if it already loaded
+        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 0));
+        if (!mFirmwareStore)
+        {
+            // not loaded, so publish personality...
+            publishFirmwareStorePersonality();
+            // and wait...
+            mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
+        }
+    }
     
     if (!mFirmwareStore)
         AlwaysLog("[%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", mVendorId, mProductId);

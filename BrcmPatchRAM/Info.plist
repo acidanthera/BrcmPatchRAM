@@ -666,7 +666,7 @@
 			<key>idVendor</key>
 			<integer>5075</integer>
 		</dict>
-        <key>19ff_0239</key>
+		<key>19ff_0239</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
@@ -782,7 +782,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmFirmwareStore</string>
 			<key>IOProviderClass</key>
-			<string>IOResources</string>
+			<string>disabled_IOResources</string>
 		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>
