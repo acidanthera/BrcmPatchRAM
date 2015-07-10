@@ -99,6 +99,7 @@ private:
 
     void publishPersonality();
     void removePersonality();
+    bool publishFirmwareStorePersonality();
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
     

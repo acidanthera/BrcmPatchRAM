@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0620"
-   version = "1.3">
+   version = "1.8">
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
@@ -17,6 +17,20 @@
                BlueprintIdentifier = "D4F91AFD1A2998CE0030D10D"
                BuildableName = "BrcmPatchRAM.kext"
                BlueprintName = "BrcmPatchRAM"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ED2A7DC81B37DE6E00DC200F"
+               BuildableName = "BrcmBluetoothInjector.kext"
+               BlueprintName = "BrcmBluetoothInjector"
                ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -38,6 +52,8 @@
             ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -47,6 +63,7 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
