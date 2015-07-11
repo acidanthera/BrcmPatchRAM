@@ -190,6 +190,7 @@ void BrcmPatchRAM::stop(IOService* provider)
 
     DebugLog("stop\n");
 
+    mStopping = true;
     OSSafeReleaseNULL(mFirmwareStore);
 
     IOWorkLoop* workLoop = getWorkLoop();
@@ -225,6 +226,8 @@ void BrcmPatchRAM::stop(IOService* provider)
     }
 
     OSSafeReleaseNULL(mDevice);
+
+    mStopping = false;
 
     super::stop(provider);
 }
@@ -358,7 +361,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         mDevice->removeProperty(kFirmwareLoaded);
 
         // in the case the instance is shutting down, don't do anything
-        if (mFirmwareStore)
+        if (!mStopping)
         {
             // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);

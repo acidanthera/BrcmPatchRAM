@@ -62,6 +62,7 @@ private:
     IOUSBPipe* mInterruptPipe = NULL;
     IOUSBPipe* mBulkPipe = NULL;
     BrcmFirmwareStore* mFirmwareStore = NULL;
+    bool mStopping = false;
     
     IOUSBCompletion mInterruptCompletion;
     IOBufferMemoryDescriptor* mReadBuffer;
