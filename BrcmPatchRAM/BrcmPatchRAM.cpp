@@ -529,7 +529,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
 {
     // matching dictionary for disabled BrcmFirmwareStore
     OSDictionary* dict = OSDictionary::withCapacity(3);
-    if (!dict) return;
+    if (!dict) return false;
     setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
     setStringInDict(dict, kIOClassKey, "BrcmFirmwareStore");
     setStringInDict(dict, kIOMatchCategoryKey, "BrcmFirmwareStore");
@@ -555,32 +555,35 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     {
         AlwaysLog("unable to find disabled BrcmFirmwareStore personality.\n");
         dict->release();
-        return;
+        return false;
+    }
+    // make copy of personality *before* removing from IOcatalog
+    personality = OSDynamicCast(OSDictionary, personality->copyCollection());
+    if (!personality)
+    {
+        AlwaysLog("copyCollection failed.");
+        return false;
     }
 
     // unpublish disabled personality
     gIOCatalogue->removeDrivers(dict);
     dict->release();
-    dict = OSDynamicCast(OSDictionary, personality->copyCollection());
-    if (!dict)
-    {
-        AlwaysLog("copyCollection failed.");
-        return;
-    }
 
     // Add new personality into the kernel
     if (OSArray* array = OSArray::withCapacity(1))
     {
         // change from disabled_IOResources to IOResources
-        setStringInDict(dict, kIOProviderClassKey, "IOResources");
-        array->setObject(dict);
+        setStringInDict(personality, kIOProviderClassKey, "IOResources");
+        array->setObject(personality);
         if (gIOCatalogue->addDrivers(array, true))
             AlwaysLog("Published new IOKit personality for BrcmFirmwareStore.\n");
         else
             AlwaysLog("ERROR in addDrivers for new BrcmFirmwareStore personality.\n");
         array->release();
     }
-    dict->release();
+    personality->release();
+
+    return true;
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
