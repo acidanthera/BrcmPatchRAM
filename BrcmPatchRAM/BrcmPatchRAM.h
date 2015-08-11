@@ -30,6 +30,9 @@
 #define kDisplayName "DisplayName"
 #define kBundleIdentifier "CFBundleIdentifier"
 #define kIOUSBDeviceClassName "IOUSBDevice"
+#ifndef kIOUSBHostDeviceClassName
+#define kIOUSBHostDeviceClassName "IOUSBHostDevice"
+#endif
 #define kAppleBundlePrefix "com.apple."
 #define kFirmwareKey "FirmwareKey"
 #define kFirmwareLoaded "RM,FirmwareLoaded"
@@ -76,6 +79,7 @@ private:
 #endif
     static OSString* brcmBundleIdentifier;
     static OSString* brcmIOClass;
+    static OSString* brcmProviderClass;
     static bool initBrcmStrings();
 #ifdef DEBUG
     void printPersonalities();

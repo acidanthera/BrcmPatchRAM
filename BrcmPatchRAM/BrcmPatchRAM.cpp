@@ -43,6 +43,7 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 
 OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
+OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
 bool BrcmPatchRAM::initBrcmStrings()
 {
@@ -50,6 +51,7 @@ bool BrcmPatchRAM::initBrcmStrings()
     {
         const char* bundle = NULL;
         const char* ioclass = NULL;
+        const char* providerclass = kIOUSBDeviceClassName;
         
         // OS X - Snow Leopard
         // OS X - Lion
@@ -72,12 +74,20 @@ bool BrcmPatchRAM::initBrcmStrings()
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
         }
+        // OS X - El Capitan
+        else if (version_major == 15)
+        {
+            bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
+            ioclass = "BroadcomBluetoothHostControllerUSBTransport";
+            providerclass = kIOUSBHostDeviceClassName;
+        }
         // OS X - Future releases....
-        else if (version_major > 14)
+        else if (version_major > 15)
         {
             AlwaysLog("Unknown new Darwin version %d.%d, using possible compatible personality.\n", version_major, version_minor);
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
+            providerclass = kIOUSBHostDeviceClassName;
         }
         else
         {
@@ -85,6 +95,7 @@ bool BrcmPatchRAM::initBrcmStrings()
         }
         brcmBundleIdentifier = OSString::withCStringNoCopy(bundle);
         brcmIOClass = OSString::withCStringNoCopy(ioclass);
+        brcmProviderClass = OSString::withCStringNoCopy(providerclass);
     }
 }
 
@@ -411,7 +422,7 @@ void BrcmPatchRAM::printPersonalities()
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     
@@ -445,7 +456,7 @@ void BrcmPatchRAM::removePersonality()
     // remove Broadcom matching personality
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
@@ -459,6 +470,7 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, "bDeviceProtocol", 1);
     setNumberInDict(dict, "bDeviceSubClass", 1);
     gIOCatalogue->removeDrivers(dict, true);
+
     dict->release();
     
 #ifdef DEBUG
@@ -471,7 +483,7 @@ void BrcmPatchRAM::publishPersonality()
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     
@@ -504,6 +516,7 @@ void BrcmPatchRAM::publishPersonality()
         // OS X does not have a driver personality for this device yet, publish one
         DebugLog("brcmBundIdentifier: \"%s\"\n", brcmBundleIdentifier->getCStringNoCopy());
         DebugLog("brcmIOClass: \"%s\"\n", brcmIOClass->getCStringNoCopy());
+        DebugLog("brcmProviderClass: \"%s\"\n", brcmProviderClass->getCStringNoCopy());
         dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
         dict->setObject(kIOClassKey, brcmIOClass);
         
