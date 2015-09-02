@@ -11,6 +11,10 @@
 		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
+		ED5817BD1B7A6AEF006C5522 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
+		ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
+		ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
+		ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,6 +28,15 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		ED2A7DD11B37DE6E00DC200F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED5817C41B7A6AEF006C5522 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -46,6 +59,9 @@
 		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED2A7DD61B37DE6E00DC200F /* BrcmBluetoothInjector.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmBluetoothInjector.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2A7DD71B37DE6F00DC200F /* BrcmBluetoothInjector-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmBluetoothInjector-Info.plist"; sourceTree = SOURCE_ROOT; };
+		ED4CA64B1B86437100EBED28 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; usesTabs = 1; };
+		ED5817C91B7A6AEF006C5522 /* BrcmPatchRAM2.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM2.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED5817CB1B7A6BDF006C5522 /* Info_IOUSBHostDevice.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_IOUSBHostDevice.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +73,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		ED2A7DCC1B37DE6E00DC200F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED5817BF1B7A6AEF006C5522 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -77,6 +100,7 @@
 		D4F91AF41A2998CE0030D10D = {
 			isa = PBXGroup;
 			children = (
+				ED4CA64B1B86437100EBED28 /* makefile */,
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
@@ -88,6 +112,7 @@
 			children = (
 				D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */,
 				ED2A7DD61B37DE6E00DC200F /* BrcmBluetoothInjector.kext */,
+				ED5817C91B7A6AEF006C5522 /* BrcmPatchRAM2.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +135,7 @@
 		D4F91B011A2998CE0030D10D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ED5817CB1B7A6BDF006C5522 /* Info_IOUSBHostDevice.plist */,
 				D4F91B021A2998CE0030D10D /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -140,6 +166,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED5817C01B7A6AEF006C5522 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */,
+				ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +221,26 @@
 			productReference = ED2A7DD61B37DE6E00DC200F /* BrcmBluetoothInjector.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
+		ED5817BB1B7A6AEF006C5522 /* BrcmPatchRAM2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED5817C61B7A6AEF006C5522 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM2" */;
+			buildPhases = (
+				ED5817BC1B7A6AEF006C5522 /* Sources */,
+				ED5817BF1B7A6AEF006C5522 /* Frameworks */,
+				ED5817C01B7A6AEF006C5522 /* Headers */,
+				ED5817C31B7A6AEF006C5522 /* Resources */,
+				ED5817C41B7A6AEF006C5522 /* CopyFiles */,
+				ED5817C51B7A6AEF006C5522 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrcmPatchRAM2;
+			productName = BrcmPatchRAM;
+			productReference = ED5817C91B7A6AEF006C5522 /* BrcmPatchRAM2.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -211,6 +266,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				ED5817BB1B7A6AEF006C5522 /* BrcmPatchRAM2 */,
 				D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */,
 				ED2A7DC81B37DE6E00DC200F /* BrcmBluetoothInjector */,
 			);
@@ -226,6 +282,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		ED2A7DD01B37DE6E00DC200F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED5817C31B7A6AEF006C5522 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -263,6 +326,20 @@
 			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
 			showEnvVarsInLog = 0;
 		};
+		ED5817C51B7A6AEF006C5522 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -282,13 +359,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ED5817BC1B7A6AEF006C5522 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED5817BD1B7A6AEF006C5522 /* BrcmFirmwareStore.cpp in Sources */,
+				ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		D4F91B071A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1.7.4;
+				CURRENT_PROJECT_VERSION = 1.8.0d1;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 				SYMROOT = build/Products;
@@ -298,7 +385,8 @@
 		D4F91B081A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1.7.4;
+				CURRENT_PROJECT_VERSION = 1.8.0d1;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx10.6;
 				SYMROOT = build/Products;
@@ -349,6 +437,37 @@
 			};
 			name = Release;
 		};
+		ED5817C71B7A6AEF006C5522 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 2.0.0d1;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_ELCAPITAN=1",
+					"DEBUG=1",
+				);
+				INFOPLIST_FILE = BrcmPatchRAM/Info_IOUSBHostDevice.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				PRODUCT_NAME = BrcmPatchRAM2;
+				SDKROOT = macosx10.11;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		ED5817C81B7A6AEF006C5522 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 2.0.0d1;
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_ELCAPITAN=1";
+				INFOPLIST_FILE = BrcmPatchRAM/Info_IOUSBHostDevice.plist;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				PRODUCT_NAME = BrcmPatchRAM2;
+				SDKROOT = macosx10.11;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -375,6 +494,15 @@
 			buildConfigurations = (
 				ED2A7DD41B37DE6E00DC200F /* Debug */,
 				ED2A7DD51B37DE6E00DC200F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ED5817C61B7A6AEF006C5522 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED5817C71B7A6AEF006C5522 /* Debug */,
+				ED5817C81B7A6AEF006C5522 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

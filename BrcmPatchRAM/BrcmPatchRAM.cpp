@@ -20,16 +20,588 @@
 #include <IOKit/IOLib.h>
 #include <IOKit/IOMessage.h>
 
+#ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
+#else
+#include <IOKit/usb/IOUSBHostFamily.h>
+#include <IOKit/usb/IOUSBHostInterface.h>
+#include <IOKit/usb/USBSpec.h>
+#include <IOKit/usb/USB.h>
+#include <sys/utfconv.h>
+#endif
 #include <IOKit/IOCatalogue.h>
 
 #include <kern/clock.h>
 #include <libkern/version.h>
 #include <libkern/zlib.h>
+#include <string.h>
 
 #include "Common.h"
 #include "hci.h"
 #include "BrcmPatchRAM.h"
+
+USBDeviceShim::USBDeviceShim()
+{
+    m_pDevice = NULL;
+}
+
+void USBDeviceShim::setDevice(IOService* provider)
+{
+    OSObject* prev = m_pDevice;
+#ifndef TARGET_ELCAPITAN
+    m_pDevice = OSDynamicCast(IOUSBDevice, provider);
+#else
+    m_pDevice = OSDynamicCast(IOUSBHostDevice, provider);
+#endif
+    if (m_pDevice)
+        m_pDevice->retain();
+    if (prev)
+        prev->release();
+}
+
+UInt16 USBDeviceShim::getVendorID()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetVendorID();
+#else
+    return USBToHost16(m_pDevice->getDeviceDescriptor()->idVendor);
+#endif
+}
+
+UInt16 USBDeviceShim::getProductID()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetProductID();
+#else
+    return USBToHost16(m_pDevice->getDeviceDescriptor()->idProduct);
+#endif
+}
+
+OSObject* USBDeviceShim::getProperty(const char* name)
+{
+    return m_pDevice->getProperty(name);
+}
+
+void USBDeviceShim::setProperty(const char* name, bool value)
+{
+    m_pDevice->setProperty(name, value);
+}
+
+void USBDeviceShim::removeProperty(const char* name)
+{
+    m_pDevice->removeProperty(name);
+}
+
+static void hack_strlcpy(char* dest, const char* src, size_t max)
+{
+    if (!max) return;
+    --max;
+    while (max && *src)
+    {
+        *dest++ = *src++;
+        --max;
+    }
+    *dest = 0;
+}
+
+IOReturn USBDeviceShim::getStringDescriptor(UInt8 index, char *buf, int maxLen, UInt16 lang)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetStringDescriptor(index, buf, maxLen, lang);
+#else
+    memset(buf, 0, maxLen);
+    const StandardUSB::StringDescriptor* desc = m_pDevice->getStringDescriptor(index);
+    if (!desc)
+        return kIOReturnBadArgument;
+    if (desc->bLength <= StandardUSB::kDescriptorSize)
+        return kIOReturnBadArgument;
+    //REVIEW: utf8_encodestr not found by kext linker (OSBundleLibraries issue)
+    // for now use strncpy
+    hack_strlcpy(buf, (const char*)desc->bString, maxLen-1);
+    ////size_t utf8len = 0;
+    ////utf8_encodestr(reinterpret_cast<const u_int16_t*>(desc->bString), desc->bLength - StandardUSB::kDescriptorSize, reinterpret_cast<u_int8_t*>(buf), &utf8len, maxLen, '/', UTF_LITTLE_ENDIAN);
+    return kIOReturnSuccess;
+#endif
+}
+
+UInt16 USBDeviceShim::getDeviceRelease()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetDeviceRelease();
+#else
+    return USBToHost16(m_pDevice->getDeviceDescriptor()->bcdDevice);
+#endif
+}
+
+IOReturn USBDeviceShim::getDeviceStatus(IOService* forClient, USBStatus *status)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetDeviceStatus(status);
+#else
+    uint16_t stat       = 0;
+    StandardUSB::DeviceRequest request;
+    request.bmRequestType = makeDeviceRequestbmRequestType(kRequestDirectionIn, kRequestTypeStandard, kRequestRecipientDevice);
+    request.bRequest      = kDeviceRequestGetStatus;
+    request.wValue        = 0;
+    request.wIndex        = 0;
+    request.wLength       = sizeof(stat);
+    uint32_t bytesTransferred = 0;
+    IOReturn result = m_pDevice->deviceRequest(forClient, request, &stat, bytesTransferred, kUSBHostStandardRequestCompletionTimeout);
+    *status = stat;
+    return result;
+#endif
+}
+
+IOReturn USBDeviceShim::resetDevice()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->ResetDevice();
+#else
+    //REVIEW: no equivalent in 10.11.
+    return kIOReturnSuccess;
+#endif
+}
+
+UInt8 USBDeviceShim::getNumConfigurations()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetNumConfigurations();
+#else
+    return m_pDevice->getDeviceDescriptor()->bNumConfigurations;
+#endif
+}
+
+const USBCONFIGURATIONDESCRIPTOR* USBDeviceShim::getFullConfigurationDescriptor(UInt8 configIndex)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetFullConfigurationDescriptor(configIndex);
+#else
+    return m_pDevice->getConfigurationDescriptor(configIndex);
+#endif
+}
+
+IOReturn USBDeviceShim::getConfiguration(IOService* forClient, UInt8 *configNumber)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetConfiguration(configNumber);
+#else
+    uint8_t config  = 0;
+    StandardUSB::DeviceRequest request;
+    request.bmRequestType = makeDeviceRequestbmRequestType(kRequestDirectionIn, kRequestTypeStandard, kRequestRecipientDevice);
+    request.bRequest      = kDeviceRequestGetConfiguration;
+    request.wValue        = 0;
+    request.wIndex        = 0;
+    request.wLength       = sizeof(config);
+    uint32_t bytesTransferred = 0;
+    IOReturn result = m_pDevice->deviceRequest(forClient, request, &config, bytesTransferred, kUSBHostStandardRequestCompletionTimeout);
+    *configNumber = config;
+    return result;
+#endif
+}
+
+IOReturn USBDeviceShim::setConfiguration(IOService *forClient, UInt8 configValue, bool startInterfaceMatching)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->SetConfiguration(forClient, configValue, startInterfaceMatching);
+#else
+    return m_pDevice->setConfiguration(configValue, startInterfaceMatching);
+#endif
+}
+
+bool USBDeviceShim::findFirstInterface(USBInterfaceShim* shim)
+{
+    DebugLog("USBDeviceShim::findFirstInterface\n");
+#ifndef TARGET_ELCAPITAN
+    IOUSBFindInterfaceRequest request;
+    request.bAlternateSetting  = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceClass    = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
+    IOUSBInterface* interface = m_pDevice->FindNextInterface(NULL, &request);
+    DebugLog("FindNextInterface returns %p\n", interface);
+    shim->setInterface(interface);
+#else
+    OSIterator* iterator = m_pDevice->getChildIterator(gIOServicePlane);
+    if (!iterator)
+        return false;
+    while (OSObject* candidate = iterator->getNextObject())
+    {
+        if (IOUSBHostInterface* interface = OSDynamicCast(IOUSBHostInterface, candidate))
+        {
+            //REVIEW: kUSBHubClass not found. docs wrong.
+            //if (interface->getInterfaceDescriptor()->bInterfaceClass == kUSBHubClass)
+            {
+                shim->setInterface(interface);
+                break;
+            }
+        }
+    }
+    iterator->release();
+#endif
+    DebugLog("getValidatedInterface returns %p\n", shim->getValidatedInterface());
+    return shim->getValidatedInterface() != NULL;
+}
+
+bool USBDeviceShim::open(IOService *forClient, IOOptionBits options, void *arg)
+{
+    return m_pDevice->open(forClient, options, arg);
+}
+
+void USBDeviceShim::close(IOService *forClient, IOOptionBits options)
+{
+    return m_pDevice->close(forClient, options);
+}
+
+UInt8 USBDeviceShim::getManufacturerStringIndex()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetManufacturerStringIndex();
+#else
+    return m_pDevice->getDeviceDescriptor()->iManufacturer;
+#endif
+}
+
+UInt8 USBDeviceShim::getProductStringIndex()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetProductStringIndex();
+#else
+    return m_pDevice->getDeviceDescriptor()->iProduct;
+#endif
+}
+UInt8 USBDeviceShim::getSerialNumberStringIndex()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pDevice->GetSerialNumberStringIndex();
+#else
+    return m_pDevice->getDeviceDescriptor()->iSerialNumber;
+#endif
+}
+
+USBInterfaceShim::USBInterfaceShim()
+{
+    m_pInterface = NULL;
+}
+
+void USBInterfaceShim::setInterface(IOService* interface)
+{
+    OSObject* prev = m_pInterface;
+#ifndef TARGET_ELCAPITAN
+    m_pInterface = OSDynamicCast(IOUSBInterface, interface);
+#else
+    m_pInterface = OSDynamicCast(IOUSBHostInterface, interface);
+#endif
+    if (m_pInterface)
+        m_pInterface->retain();
+    if (prev)
+        prev->release();
+}
+
+bool USBInterfaceShim::open(IOService *forClient, IOOptionBits options, void *arg)
+{
+    bool result = m_pInterface->open(forClient, options, arg);
+    if (!result)
+        AlwaysLog("USBInterfaceShim:open failed\n");
+    return result;
+}
+
+void USBInterfaceShim::close(IOService *forClient, IOOptionBits options)
+{
+    m_pInterface->close(forClient, options);
+}
+
+#ifdef DEBUG
+UInt8 USBInterfaceShim::getInterfaceNumber()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pInterface->GetInterfaceNumber();
+#else
+    return m_pInterface->getInterfaceDescriptor()->bInterfaceNumber;
+#endif
+}
+
+UInt8 USBInterfaceShim::getInterfaceClass()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pInterface->GetInterfaceClass();
+#else
+    return m_pInterface->getInterfaceDescriptor()->bInterfaceClass;
+#endif
+}
+
+UInt8 USBInterfaceShim::getInterfaceSubClass()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pInterface->GetInterfaceSubClass();
+#else
+    return m_pInterface->getInterfaceDescriptor()->bInterfaceSubClass;
+#endif
+}
+
+UInt8 USBInterfaceShim::getInterfaceProtocol()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pInterface->GetInterfaceProtocol();
+#else
+    return m_pInterface->getInterfaceDescriptor()->bInterfaceProtocol;
+#endif
+}
+
+#endif
+
+bool USBInterfaceShim::findPipe(USBPipeShim* shim, UInt8 type, UInt8 direction)
+{
+#ifndef TARGET_ELCAPITAN
+    IOUSBFindEndpointRequest findEndpointRequest;
+    findEndpointRequest.type = type;
+    findEndpointRequest.direction = direction;
+    if (IOUSBPipe* pipe = m_pInterface->FindNextPipe(NULL, &findEndpointRequest))
+    {
+        shim->setPipe(pipe);
+        return true;
+    }
+    return false;
+#else
+    // virtual IOUSBHostPipe* FindNextPipe(IOUSBHostPipe* current, IOUSBFindEndpointRequest* request) __attribute__((deprecated));
+    // virtual IOUSBHostPipe* FindNextPipe(IOUSBHostPipe* current, IOUSBFindEndpointRequest* request, bool withRetain) __attribute__((deprecated));
+    // Replacement: getInterfaceDescriptor and StandardUSB::getNextAssociatedDescriptorWithType to find an endpoint descriptor,
+    // then use copyPipe to retrieve the pipe object
+    //    virtual const StandardUSB::InterfaceDescriptor* getInterfaceDescriptor();
+    //    const Descriptor* getNextAssociatedDescriptorWithType(const ConfigurationDescriptor* configurationDescriptor, const Descriptor* parentDescriptor, const Descriptor* currentDescriptor, const uint8_t type);
+
+    //
+    /*!
+    * @brief Return the configuration descriptor in which this interface is defined
+    *
+    * @return Pointer to the configuration descriptor
+    */
+    //virtual const StandardUSB::ConfigurationDescriptor* getConfigurationDescriptor();
+
+    /*!
+     * @brief Return the pipe whose <code>bEndpointAddress</code> matches <code>address</code>
+     *
+     * @discussion This method will return the pipe whose <code>bEndpointAddress</code> matches <code>address</code>.  If
+     * the pipe doesn't exist yet, but is part of the interface, it will first be created.  This method returns a
+     * <code>retain()</code>ed object that must be <code>release()</code>ed by the caller.
+     *
+     * @param address Address of the pipe
+     *
+     * @return Pointer to a retain()ed IOUSBHostPipe object or NULL
+     */
+    //virtual IOUSBHostPipe* copyPipe(uint8_t address);
+
+    // USB 2.0 9.5: Descriptors
+    //struct Descriptor
+    //{
+    //    uint8_t bLength;
+    //    uint8_t bDescriptorType;
+    //} __attribute__((packed));
+    //
+    //typedef struct Descriptor Descriptor;
+
+    // USB 2.0 9.6.5: Interface
+    //struct InterfaceDescriptor : public Descriptor
+    //{
+    //    uint8_t     bInterfaceNumber;
+    //    uint8_t     bAlternateSetting;
+    //    uint8_t     bNumEndpoints;
+    //    uint8_t     bInterfaceClass;
+    //    uint8_t     bInterfaceSubClass;
+    //    uint8_t     bInterfaceProtocol;
+    //    uint8_t     iInterface;
+    //} __attribute__((packed));
+    //typedef struct InterfaceDescriptor InterfaceDescriptor;
+
+    // USB 2.0 9.6.6: Endpoint
+    //struct EndpointDescriptor : public Descriptor
+    //{
+    //    uint8_t     bEndpointAddress;
+    //    uint8_t     bmAttributes;
+    //    uint16_t    wMaxPacketSize;
+    //    uint8_t     bInterval;
+    //} __attribute__((packed));
+    //typedef struct EndpointDescriptor EndpointDescriptor;
+
+    //const EndpointDescriptor* getNextEndpointDescriptor(const ConfigurationDescriptor* configurationDescriptor, const InterfaceDescriptor* interfaceDescriptor, const Descriptor* currentDescriptor);
+
+    //TODO:
+
+    DebugLog("findPipe: direction = %d, type = %d\n", direction, type);
+    const StandardUSB::ConfigurationDescriptor* configDesc = m_pInterface->getConfigurationDescriptor();
+    const StandardUSB::InterfaceDescriptor* ifaceDesc = m_pInterface->getInterfaceDescriptor();
+    if (!configDesc || !ifaceDesc)
+    {
+        DebugLog("configDesc = %p, ifaceDesc = %p\n", configDesc, ifaceDesc);
+        return false;
+    }
+    const EndpointDescriptor* ep = NULL;
+    while ((ep = StandardUSB::getNextEndpointDescriptor(configDesc, ifaceDesc, ep)))
+    {
+        // check if endpoint matches type and direction
+        uint8_t epDirection = StandardUSB::getEndpointDirection(ep);
+        uint8_t epType = StandardUSB::getEndpointType(ep);
+        DebugLog("endpoint found: epDirection = %d, epType = %d\n", epDirection, epType);
+        if (direction == epDirection && type == epType)
+        {
+            DebugLog("found matching endpoint\n");
+
+            // matches... try to make a pipe from the endpoint address
+            IOUSBHostPipe* pipe = m_pInterface->copyPipe(StandardUSB::getEndpointAddress(ep));
+            if (pipe == NULL)
+            {
+                DebugLog("copyPipe failed\n");
+                return false;
+            }
+
+            // set it in the shim
+            shim->setPipe(pipe);
+            pipe->release();
+            return true;
+        }
+    }
+    DebugLog("findPipe: no matching endpoint found");
+    return false;
+#endif
+}
+
+IOReturn USBInterfaceShim::hciCommand(void* command, UInt16 length)
+{
+#ifndef TARGET_ELCAPITAN
+    IOUSBDevRequest request =
+    {
+        .bmRequestType = USBmakebmRequestType(kUSBOut, kUSBClass, kUSBDevice),
+        .bRequest = 0,
+        .wValue = 0,
+        .wIndex = 0,
+        .wLength = length,
+        .pData = command
+    };
+    return m_pInterface->DeviceRequest(&request);
+#else
+    StandardUSB::DeviceRequest request =
+    {
+        //.bmRequestType = USBmakebmRequestType(kUSBOut, kUSBClass, kUSBDevice),
+        .bmRequestType = makeDeviceRequestbmRequestType(kRequestDirectionOut, kRequestTypeStandard, kRequestRecipientInterface),
+        .bRequest = 0,
+        .wValue = 0,
+        .wIndex = 0,
+        .wLength = length
+    };
+    uint32_t bytesTransfered;
+    return m_pInterface->deviceRequest(request, command, bytesTransfered, 0);
+#endif
+}
+
+USBPipeShim::USBPipeShim()
+{
+    m_pPipe = NULL;
+}
+
+void USBPipeShim::setPipe(OSObject* pipe)
+{
+    OSObject* prev = m_pPipe;
+#ifndef TARGET_ELCAPITAN
+    m_pPipe = OSDynamicCast(IOUSBPipe, pipe);
+#else
+    m_pPipe = OSDynamicCast(IOUSBHostPipe, pipe);
+#endif
+    if (m_pPipe)
+        m_pPipe->retain();
+    if (prev)
+        prev->release();
+}
+
+IOReturn USBPipeShim::abort(void)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pPipe->Abort();
+#else
+    return m_pPipe->abort();
+#endif
+}
+
+
+/*!
+ * @brief Issue an asynchronous I/O request
+ *
+ * @discussion See IOUSBHostIOSource::io for documentation
+ *
+ * @param completionTimeoutMs Must be 0 for interrupt endpoints.
+ */
+//virtual IOReturn io(IOMemoryDescriptor* dataBuffer, uint32_t dataBufferLength, IOUSBHostCompletion* completion, uint32_t completionTimeoutMs = 0);
+
+/*!
+ * @brief Issue a synchronous I/O request
+ *
+ * @discussion See IOUSBHostIOSource::io for documentation
+ *
+ * @param completionTimeoutMs Must be 0 for interrupt endpoints.
+ */
+//virtual IOReturn io(IOMemoryDescriptor* dataBuffer, uint32_t dataBufferLength, uint32_t& bytesTransferred, uint32_t completionTimeoutMs = 0);
+
+IOReturn USBPipeShim::read(IOMemoryDescriptor *	buffer,
+                           UInt32		noDataTimeout,
+                           UInt32		completionTimeout,
+                           IOByteCount		reqCount,
+                           USBCOMPLETION *	completion,
+                           IOByteCount *		bytesRead)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pPipe->Read(buffer, noDataTimeout, completionTimeout, reqCount, completion, bytesRead);
+#else
+    IOReturn result;
+    if (completion)
+        result = m_pPipe->io(buffer, reqCount, completion, completionTimeout);
+    else
+    {
+        uint32_t bytesTransfered;
+        IOReturn result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
+        if (bytesRead) *bytesRead = bytesTransfered;
+    }
+    return result;
+#endif
+}
+
+IOReturn USBPipeShim::write(IOMemoryDescriptor *	buffer,
+                                         UInt32		noDataTimeout,
+                                         UInt32		completionTimeout,
+                                         IOByteCount		reqCount,
+                                         USBCOMPLETION *	completion)
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pPipe->Write(buffer, noDataTimeout, completionTimeout, reqCount, completion);
+#else
+    IOReturn result;
+    if (completion)
+        result = m_pPipe->io(buffer, reqCount, completion, completionTimeout);
+    else
+    {
+        uint32_t bytesTransfered;
+        result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
+    }
+    return result;
+#endif
+}
+
+const USBENDPOINTDESCRIPTOR* USBPipeShim::getEndpointDescriptor()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pPipe->GetEndpointDescriptor();
+#else
+    return m_pPipe->getEndpointDescriptor();
+#endif
+}
+
+IOReturn USBPipeShim::clearStall()
+{
+#ifndef TARGET_ELCAPITAN
+    return m_pPipe->Reset();
+#else
+    return m_pPipe->clearStall(false);
+#endif
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum { kMyOffPowerState = 0, kMyOnPowerState = 1 };
 
@@ -45,7 +617,7 @@ OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
 OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
-bool BrcmPatchRAM::initBrcmStrings()
+void BrcmPatchRAM::initBrcmStrings()
 {
     if (!brcmBundleIdentifier)
     {
@@ -118,14 +690,13 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     if (!mCompletionLock)
         return NULL;
 
-    mDevice = OSDynamicCast(IOUSBDevice, provider);
-    if (!mDevice)
+    mDevice.setDevice(provider);
+    if (!mDevice.getValidatedDevice())
     {
-        AlwaysLog("Provider is not a USB device.\n");
+        AlwaysLog("Provider type is incorrect (not IOUSBDevice or IOUSBHostDevice)\n");
         return NULL;
     }
-    mDevice->retain();
-    
+
     // personality strings depend on version
     initBrcmStrings();
 
@@ -139,8 +710,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     if (displayName)
         provider->setProperty(kUSBProductString, displayName);
     
-    mVendorId = mDevice->GetVendorID();
-    mProductId = mDevice->GetProductID();
+    mVendorId = mDevice.getVendorID();
+    mProductId = mDevice.getProductID();
 
     // get firmware here to pre-cache for eventual use on wakeup or now
     if (OSString* firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey)))
@@ -150,13 +721,25 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
 
     uploadFirmware();
+    //IOSleep(500); //REVIEW
     publishPersonality();
 
     clock_get_uptime(&end_time);
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Processing time %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
-    
+
+#if 0
+//#ifdef TARGET_ELCAPITAN
+// maybe residency is not required for 10.11?
+    if (15 == version_major)
+    {
+        mDevice.setDevice(NULL);
+        return NULL;
+    }
+//#endif
+#endif
+
     return this;
 }
 
@@ -192,6 +775,9 @@ bool BrcmPatchRAM::start(IOService *provider)
     PMinit();
     registerPowerDriver(this, myTwoStates, 2);
     provider->joinPMtree(this);
+    
+    //REVIEW: do firmware upload later
+    ///mTimer->setTimeoutMS(mBlurpWait);
     
     return true;
 }
@@ -254,7 +840,7 @@ void BrcmPatchRAM::stop(IOService* provider)
         mWorkLock = NULL;
     }
 
-    OSSafeReleaseNULL(mDevice);
+    mDevice.setDevice(NULL);
 
     mStopping = false;
 
@@ -265,7 +851,7 @@ IOReturn BrcmPatchRAM::onTimerEvent()
 {
     DebugLog("onTimerEvent\n");
 
-    if (!mDevice->getProperty(kFirmwareLoaded))
+    if (!mDevice.getProperty(kFirmwareLoaded))
     {
         AlwaysLog("BLURP!! no firmware loaded and timer expiried (no re-probe)\n");
         scheduleWork(kWorkLoadFirmware);
@@ -334,49 +920,52 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
 void BrcmPatchRAM::uploadFirmware()
 {
     // signal to timer that firmware already loaded
-    mDevice->setProperty(kFirmwareLoaded, true);
+    mDevice.setProperty(kFirmwareLoaded, true);
 
     // don't bother with devices that have no firmware
     if (!getProperty(kFirmwareKey))
         return;
 
-    if (mDevice->open(this))
+    if (mDevice.open(this))
     {
         // Print out additional device information
         printDeviceInfo();
         
         // Set device configuration to composite configuration index 0
         // Obtain first interface
-        if (setConfiguration(0) && (mInterface = findInterface()) && mInterface->open(this))
+        if (setConfiguration(0) && findInterface(&mInterface) && mInterface.open(this))
         {
-            mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
-            mBulkPipe = findPipe(kUSBBulk, kUSBOut);
-            if (mInterruptPipe && mBulkPipe)
+            DebugLog("set configuration and interface opened\n");
+            mInterface.findPipe(&mInterruptPipe, kUSBInterrupt, kUSBIn);
+            mInterface.findPipe(&mBulkPipe, kUSBBulk, kUSBOut);
+            if (mInterruptPipe.getValidatedPipe() && mBulkPipe.getValidatedPipe())
             {
+                DebugLog("got pipes\n");
                 if (performUpgrade())
-                    AlwaysLog("[%04x:%04x]: Firmware upgrade completed successfully.\n", mVendorId, mProductId);
+                    if (mDeviceState == kUpdateComplete)
+                        AlwaysLog("[%04x:%04x]: Firmware upgrade completed successfully.\n", mVendorId, mProductId);
+                    else
+                        AlwaysLog("[%04x:%04x]: Firmware upgrade not needed.\n", mVendorId, mProductId);
                 else
                     AlwaysLog("[%04x:%04x]: Firmware upgrade failed.\n", mVendorId, mProductId);
                 OSSafeReleaseNULL(mReadBuffer); // mReadBuffer is allocated by performUpgrade but not released
             }
-            mInterface->close(this);
+            mInterface.close(this);
         }
         
         // cleanup
-        if (mInterruptPipe)
+        if (mInterruptPipe.getValidatedPipe())
         {
-            mInterruptPipe->Abort();
-            mInterruptPipe->release(); // retained in findPipe
-            mInterruptPipe = NULL;
+            mInterruptPipe.abort();
+            mInterruptPipe.setPipe(NULL);
         }
-        if (mBulkPipe)
+        if (mBulkPipe.getValidatedPipe())
         {
-            mBulkPipe->Abort();
-            mBulkPipe->release(); // retained in findPipe
-            mBulkPipe = NULL;
+            mBulkPipe.abort();
+            mBulkPipe.setPipe(NULL);
         }
-        OSSafeReleaseNULL(mInterface);// retained in findInterface
-        mDevice->close(this);
+        mInterface.setInterface(NULL);
+        mDevice.close(this);
     }
 }
 
@@ -387,7 +976,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     if (which == kMyOffPowerState)
     {
         // consider firmware no longer loaded
-        mDevice->removeProperty(kFirmwareLoaded);
+        mDevice.removeProperty(kFirmwareLoaded);
 
         // in the case the instance is shutting down, don't do anything
         if (!mStopping)
@@ -407,7 +996,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     {
         clock_get_uptime(&wake_time);
         // start loading firmware for case probe is never called after wake
-        if (!mDevice->getProperty(kFirmwareLoaded))
+        if (!mDevice.getProperty(kFirmwareLoaded))
             mTimer->setTimeoutMS(mBlurpWait);
     }
 
@@ -465,6 +1054,8 @@ void BrcmPatchRAM::printPersonalities()
 
 void BrcmPatchRAM::removePersonality()
 {
+    return;  //TODO: remove this when ready...
+
     DebugLog("removePersonality\n");
     
 #ifdef DEBUG
@@ -472,14 +1063,14 @@ void BrcmPatchRAM::removePersonality()
 #endif
     
     // remove Broadcom matching personality
-    OSDictionary* dict = OSDictionary::withCapacity(5);
+    OSDictionary* dict = OSDictionary::withCapacity(4);
     if (!dict) return;
     dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
-    gIOCatalogue->removeDrivers(dict, true);
-
+    gIOCatalogue->removeDrivers(dict, false);  //REVIEW: not doing nub matching here
+#if 1
     // remove generic matching personality
     dict->removeObject(kUSBProductID);
     dict->removeObject(kUSBVendorID);
@@ -487,8 +1078,8 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, "bDeviceClass", 224);
     setNumberInDict(dict, "bDeviceProtocol", 1);
     setNumberInDict(dict, "bDeviceSubClass", 1);
-    gIOCatalogue->removeDrivers(dict, true);
-
+    gIOCatalogue->removeDrivers(dict, false);  //REVIEW: not doing nub matching here
+#endif
     dict->release();
     
 #ifdef DEBUG
@@ -498,6 +1089,8 @@ void BrcmPatchRAM::removePersonality()
 
 void BrcmPatchRAM::publishPersonality()
 {
+    return;  //TODO: remove me when ready...
+
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
@@ -542,8 +1135,21 @@ void BrcmPatchRAM::publishPersonality()
         if (OSArray* array = OSArray::withCapacity(1))
         {
             array->setObject(dict);
-            if (gIOCatalogue->addDrivers(array, true))
+            if (gIOCatalogue->addDrivers(array, false))
+            {
                 AlwaysLog("[%04x:%04x]: Published new IOKit personality.\n", mVendorId, mProductId);
+                if (OSDictionary* dict1 = OSDynamicCast(OSDictionary, dict->copyCollection()))
+                {
+                    //dict1->removeObject(kIOClassKey);
+                    //dict1->removeObject(kIOProviderClassKey);
+                    dict1->removeObject(kUSBProductID);
+                    dict1->removeObject(kUSBVendorID);
+                    dict1->removeObject(kBundleIdentifier);
+                    if (!gIOCatalogue->startMatching(dict1))
+                        AlwaysLog("[%04x:%04x]: startMatching failed.\n", mVendorId, mProductId);
+                    dict1->release();
+                }
+            }
             else
                 AlwaysLog("[%04x:%04x]: ERROR in addDrivers for new IOKit personality.\n", mVendorId, mProductId);
             array->release();
@@ -645,15 +1251,15 @@ void BrcmPatchRAM::printDeviceInfo()
     char serial[255];
     
     // Retrieve device information
-    mDevice->GetStringDescriptor(mDevice->GetProductStringIndex(), product, sizeof(product));
-    mDevice->GetStringDescriptor(mDevice->GetManufacturerStringIndex(), manufacturer, sizeof(manufacturer));
-    mDevice->GetStringDescriptor(mDevice->GetSerialNumberStringIndex(), serial, sizeof(serial));
+    mDevice.getStringDescriptor(mDevice.getProductStringIndex(), product, sizeof(product));
+    mDevice.getStringDescriptor(mDevice.getManufacturerStringIndex(), manufacturer, sizeof(manufacturer));
+    mDevice.getStringDescriptor(mDevice.getSerialNumberStringIndex(), serial, sizeof(serial));
     
     AlwaysLog("[%04x:%04x]: USB [%s v%d] \"%s\" by \"%s\"\n",
               mVendorId,
               mProductId,
               serial,
-              mDevice->GetDeviceRelease(),
+              mDevice.getDeviceRelease(),
               product,
               manufacturer);
 }
@@ -663,7 +1269,7 @@ int BrcmPatchRAM::getDeviceStatus()
     IOReturn result;
     USBStatus status;
     
-    if ((result = mDevice->GetDeviceStatus(&status)) != kIOReturnSuccess)
+    if ((result = mDevice.getDeviceStatus(this, &status)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to get device status (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return 0;
@@ -678,7 +1284,7 @@ bool BrcmPatchRAM::resetDevice()
 {
     IOReturn result;
     
-    if ((result = mDevice->ResetDevice()) != kIOReturnSuccess)
+    if ((result = mDevice.resetDevice()) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -692,13 +1298,13 @@ bool BrcmPatchRAM::resetDevice()
 bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
     IOReturn result;
-    const IOUSBConfigurationDescriptor* configurationDescriptor;
+    const USBCONFIGURATIONDESCRIPTOR* configurationDescriptor;
     UInt8 currentConfiguration = 0xFF;
     
     // Find the first config/interface
     UInt8 numconf = 0;
     
-    if ((numconf = mDevice->GetNumConfigurations()) < (configurationIndex + 1))
+    if ((numconf = mDevice.getNumConfigurations()) < (configurationIndex + 1))
     {
         AlwaysLog("[%04x:%04x]: Composite configuration index %d is not available, %d total composite configurations.\n",
                   mVendorId, mProductId, configurationIndex, numconf);
@@ -707,7 +1313,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     else
         DebugLog("[%04x:%04x]: Available composite configurations: %d.\n", mVendorId, mProductId, numconf);
     
-    configurationDescriptor = mDevice->GetFullConfigurationDescriptor(configurationIndex);
+    configurationDescriptor = mDevice.getFullConfigurationDescriptor(configurationIndex);
     
     // Set the configuration to the requested configuration index
     if (!configurationDescriptor)
@@ -716,7 +1322,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
         return false;
     }
     
-    if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
+    if ((result = mDevice.getConfiguration(this, &currentConfiguration)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to retrieve active configuration (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -731,7 +1337,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     }
     
     // Set the configuration to the first configuration
-    if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
+    if ((result = mDevice.setConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to (re-)configure device (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -743,56 +1349,44 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     return true;
 }
 
-IOUSBInterface* BrcmPatchRAM::findInterface()
+bool BrcmPatchRAM::findInterface(USBInterfaceShim* shim)
 {
-    // Find the interface for bulk endpoint transfers
-    IOUSBFindInterfaceRequest request;
-    request.bAlternateSetting  = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceClass    = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
-    
-    if (IOUSBInterface* interface = mDevice->FindNextInterface(NULL, &request))
+    mDevice.findFirstInterface(shim);
+    if (IOService* interface = shim->getValidatedInterface())
     {
-        interface->retain();
         DebugLog("[%04x:%04x]: Interface %d (class %02x, subclass %02x, protocol %02x) located.\n",
                  mVendorId,
                  mProductId,
-                 interface->GetInterfaceNumber(),
-                 interface->GetInterfaceClass(),
-                 interface->GetInterfaceSubClass(),
-                 interface->GetInterfaceProtocol());
+                 shim->getInterfaceNumber(),
+                 shim->getInterfaceClass(),
+                 shim->getInterfaceSubClass(),
+                 shim->getInterfaceProtocol());
         
-        return interface;
+        return true;
     }
     
     AlwaysLog("[%04x:%04x]: No interface could be located.\n", mVendorId, mProductId);
     
-    return NULL;
+    return false;
 }
 
-IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
+bool BrcmPatchRAM::findPipe(USBPipeShim* shim, UInt8 type, UInt8 direction)
 {
-    IOUSBFindEndpointRequest findEndpointRequest;
-    findEndpointRequest.type = type;
-    findEndpointRequest.direction = direction;
-    
-    if (IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest))
+    if (!mInterface.findPipe(shim, type, direction))
     {
-        pipe->retain();
-#ifdef DEBUG
-        const IOUSBEndpointDescriptor* desc = pipe->GetEndpointDescriptor();
-        if (!desc)
-            DebugLog("[%04x:%04x]: No endpoint descriptor for pipe.\n", mVendorId, mProductId);
-        else
-            DebugLog("[%04x:%04x]: Located pipe at 0x%02x.\n", mVendorId, mProductId, desc->bEndpointAddress);
-#endif
-        return pipe;
-    }
-    else
         AlwaysLog("[%04x:%04x]: Unable to locate pipe.\n", mVendorId, mProductId);
+        return false;
+    }
     
-    return NULL;
+#ifdef DEBUG
+    const USBENDPOINTDESCRIPTOR* desc = shim->getEndpointDescriptor();
+    if (!desc)
+        DebugLog("[%04x:%04x]: No endpoint descriptor for pipe.\n", mVendorId, mProductId);
+    else
+        DebugLog("[%04x:%04x]: Located pipe at 0x%02x.\n", mVendorId, mProductId, desc->bEndpointAddress);
+#endif
+
+    return true;
 }
 
 bool BrcmPatchRAM::continuousRead()
@@ -805,7 +1399,11 @@ bool BrcmPatchRAM::continuousRead()
             AlwaysLog("[%04x:%04x]: continuousRead - failed to allocate read buffer.\n", mVendorId, mProductId);
             return false;
         }
+#ifndef TARGET_ELCAPITAN
         mInterruptCompletion.target = this;
+#else
+        mInterruptCompletion.owner = this;
+#endif
         mInterruptCompletion.action = readCompletion;
         mInterruptCompletion.parameter = NULL;
     }
@@ -817,14 +1415,14 @@ bool BrcmPatchRAM::continuousRead()
         return false;
     }
 
-    if ((result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess)
+    if ((result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: continuousRead - Failed to queue read (0x%08x)\n", mVendorId, mProductId, result);
 
         if (result == kIOUSBPipeStalled)
         {
-            mInterruptPipe->Reset();
-            result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
+            mInterruptPipe.clearStall();
+            result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
             
             if (result != kIOReturnSuccess)
             {
@@ -837,7 +1435,11 @@ bool BrcmPatchRAM::continuousRead()
     return true;
 }
 
+#ifndef TARGET_ELCAPITAN
 void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining)
+#else
+void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, uint32_t bytesTransferred)
+#endif
 {
     BrcmPatchRAM *me = (BrcmPatchRAM*)target;
 
@@ -850,7 +1452,11 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
     switch (status)
     {
         case kIOReturnSuccess:
+#ifndef TARGET_ELCAPITAN
             me->hciParseResponse(me->mReadBuffer->getBytesNoCopy(), me->mReadBuffer->getLength() - bufferSizeRemaining, NULL, NULL);
+#else
+            me->hciParseResponse(me->mReadBuffer->getBytesNoCopy(), bytesTransferred, NULL, NULL);
+#endif
             break;
         case kIOReturnAborted:
             AlwaysLog("[%04x:%04x]: readCompletion - Return aborted (0x%08x)\n", me->mVendorId, me->mProductId, status);
@@ -865,7 +1471,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
             break;
         case kIOReturnNotResponding:
             AlwaysLog("[%04x:%04x]: Not responding - Delaying next read.\n", me->mVendorId, me->mProductId);
-            me->mInterruptPipe->ClearStall();
+            me->mInterruptPipe.clearStall();
             break;
         default:
             AlwaysLog("[%04x:%04x]: readCompletion - Unknown error (0x%08x)\n", me->mVendorId, me->mProductId, status);
@@ -882,18 +1488,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
 IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
 {
     IOReturn result;
-    
-    IOUSBDevRequest request =
-    {
-        .bmRequestType = USBmakebmRequestType(kUSBOut, kUSBClass, kUSBDevice),
-        .bRequest = 0,
-        .wValue = 0,
-        .wIndex = 0,
-        .wLength = length,
-        .pData = command
-    };
-    
-    if ((result = mInterface->DeviceRequest(&request)) != kIOReturnSuccess)
+    if ((result = mInterface.hciCommand(command, length)) != kIOReturnSuccess)
         AlwaysLog("[%04x:%04x]: device request failed (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
     
     return result;
@@ -923,7 +1518,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     
                     // Device does not require a firmware patch at this time
                     if (mFirmareVersion > 0)
-                        mDeviceState = kUpdateComplete;
+                        mDeviceState = kUpdateNotNeeded;
                     else
                         mDeviceState = kFirmwareVersion;
                     break;
@@ -1009,7 +1604,7 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
-            if ((result = mBulkPipe->Write(buffer, 0, 0, buffer->getLength(), (IOUSBCompletion*)NULL)) == kIOReturnSuccess)
+            if ((result = mBulkPipe.write(buffer, 0, 0, buffer->getLength(), NULL)) == kIOReturnSuccess)
             {
                 //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", getName(), length);
             }
@@ -1055,7 +1650,7 @@ bool BrcmPatchRAM::performUpgrade()
 #endif
 
         // Break out when done
-        if (mDeviceState == kUpdateAborted || mDeviceState == kUpdateComplete)
+        if (mDeviceState == kUpdateAborted || mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded)
             break;
 
         // Note on following switch/case:
@@ -1138,6 +1733,7 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kUnknown:
+            case kUpdateNotNeeded:
             case kUpdateComplete:
             case kUpdateAborted:
                 DebugLog("Error: kUnkown/kUpdateComplete/kUpdateAborted cases should be unreachable.\n");
@@ -1157,7 +1753,7 @@ bool BrcmPatchRAM::performUpgrade()
     IOLockUnlock(mCompletionLock);
     OSSafeRelease(iterator);
 
-    return mDeviceState == kUpdateComplete;
+    return mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded;
 }
 
 #ifdef DEBUG
@@ -1173,6 +1769,7 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
         {kFirmwareWritten,    "Firmware written"     },
         {kResetComplete,      "Reset complete"       },
         {kUpdateComplete,     "Update complete"      },
+        {kUpdateNotNeeded,    "Update not needed"    },
         {0,                   NULL                   }
     };
     
@@ -1191,6 +1788,8 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
         {kIOReturnIsoTooOld,          "Isochronous I/O request for distant past"     },
         {kIOReturnIsoTooNew,          "Isochronous I/O request for distant future"   },
         {kIOReturnNotFound,           "Data was not found"                           },
+//REIVEW: new error identifiers?
+#ifndef TARGET_ELCAPITAN
         {kIOUSBUnknownPipeErr,        "Pipe ref not recognized"                      },
         {kIOUSBTooManyPipesErr,       "Too many pipes"                               },
         {kIOUSBNoAsyncPortErr,        "No async port"                                },
@@ -1223,6 +1822,7 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
         {kIOUSBDataToggleErr,         "Pipe stall, Bad data toggle"                  },
         {kIOUSBBitstufErr,            "Pipe stall, bitstuffing"                      },
         {kIOUSBCRCErr,                "Pipe stall, bad CRC"                          },
+#endif
         {0,                           NULL                                           }
     };
     

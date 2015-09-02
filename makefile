@@ -1,10 +1,11 @@
 # really just some handy scripts...
 
 KEXT=BrcmPatchRAM.kext
+#KEXT=BrcmPatchRAM2.kext
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
-#INSTDIR=/kexts
-INSTDIR=/System/Library/Extensions
+INSTDIR=/kexts
+#INSTDIR=/System/Library/Extensions
 BUILDDIR=./Build/Products
 
 ifeq ($(findstring 32,$(BITS)),32)
@@ -34,12 +35,12 @@ update_kernelcache:
 .PHONY: install_debug
 install_debug:
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
-	make update_kernelcache
+	#make update_kernelcache
 
 .PHONY: install
 install:
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
-	make update_kernelcache
+	#make update_kernelcache
 
 .PHONY: install_inject
 install_inject:
