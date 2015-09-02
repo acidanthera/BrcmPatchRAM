@@ -3,7 +3,7 @@
 KEXT=BrcmPatchRAM.kext
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
-#INSTDIR=/TestExtensions
+#INSTDIR=/kexts
 INSTDIR=/System/Library/Extensions
 BUILDDIR=./Build/Products
 
@@ -29,8 +29,7 @@ clean:
 
 .PHONY: update_kernelcache
 update_kernelcache:
-	sudo touch /System/Library/Extensions
-	sudo kextcache -update-volume /
+	if [ "$(INSTDIR)" != "/kexts" ]; then sudo touch $(INSTDIR) && sudo kextcache -update-volume /; fi
 
 .PHONY: install_debug
 install_debug:

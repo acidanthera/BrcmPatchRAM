@@ -85,6 +85,7 @@ private:
     void printPersonalities();
 #endif
 
+    UInt32 mBlurpWait;
     IOTimerEventSource* mTimer = NULL;
     IOReturn onTimerEvent(void);
 

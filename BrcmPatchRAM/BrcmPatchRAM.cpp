@@ -126,7 +126,15 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
     mDevice->retain();
     
+    // personality strings depend on version
     initBrcmStrings();
+
+    // longest time seen in normal re-probe was ~200ms (400+ms on 10.11)
+    if (version_major >= 15)
+        mBlurpWait = 800;
+    else
+        mBlurpWait = 400;
+
     OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
     if (displayName)
         provider->setProperty(kUSBProductString, displayName);
@@ -198,8 +206,18 @@ void BrcmPatchRAM::stop(IOService* provider)
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Time since wake %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
 
-
     DebugLog("stop\n");
+
+//REVIEW: so kext can be unloaded with kextunload -p
+    // unload native bluetooth driver
+    IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
+    if (result != kIOReturnSuccess)
+        AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)\n", mVendorId, mProductId, result);
+    else
+        DebugLog("[%04x:%04x]: success terminating native Broadcom bluetooth\n", mVendorId, mProductId);
+
+    // unpublish native bluetooth personality
+    removePersonality();
 
     mStopping = true;
     OSSafeReleaseNULL(mFirmwareStore);
@@ -390,7 +408,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         clock_get_uptime(&wake_time);
         // start loading firmware for case probe is never called after wake
         if (!mDevice->getProperty(kFirmwareLoaded))
-            mTimer->setTimeoutMS(400); // longest time seen in normal re-probe was ~200ms
+            mTimer->setTimeoutMS(mBlurpWait);
     }
 
     return IOPMAckImplied;
