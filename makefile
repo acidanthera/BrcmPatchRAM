@@ -3,9 +3,9 @@
 KEXT=BrcmPatchRAM.kext
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
+BUILDDIR=./Build/Products
 #INSTDIR=/kexts
 INSTDIR=/System/Library/Extensions
-BUILDDIR=./Build/Products
 
 ifeq ($(findstring 32,$(BITS)),32)
 OPTIONS:=$(OPTIONS) -arch i386
@@ -34,16 +34,19 @@ update_kernelcache:
 .PHONY: install_debug
 install_debug:
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT); fi
 	make update_kernelcache
 
 .PHONY: install
 install:
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
 	make update_kernelcache
 
 .PHONY: install_inject
 install_inject:
 	sudo cp -R $(BUILDDIR)/Release/$(INJECT) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(INJECT); fi
 	make update_kernelcache
 
 .PHONY: load
