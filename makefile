@@ -46,6 +46,14 @@ install_inject:
 	sudo cp -R $(BUILDDIR)/Release/$(INJECT) $(INSTDIR)
 	make update_kernelcache
 
+.PHONY: load
+load:
+	sudo kextload $(INSTDIR)/$(KEXT)
+
+.PHONY: unload
+unload:
+	sudo kextunload -p $(INSTDIR)/$(KEXT)
+
 .PHONY: distribute
 distribute:
 	if [ -e ./Distribute ]; then rm -r ./Distribute; fi
