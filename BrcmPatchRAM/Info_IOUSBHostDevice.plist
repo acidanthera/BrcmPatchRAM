@@ -33,7 +33,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8989</integer>
 			<key>idVendor</key>
@@ -52,7 +52,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>12949</integer>
 			<key>idVendor</key>
@@ -71,7 +71,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>57394</integer>
 			<key>idVendor</key>
@@ -88,7 +88,7 @@
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>IOResourceMatch</key>
 			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
@@ -107,7 +107,7 @@
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>IOResourceMatch</key>
 			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
@@ -128,7 +128,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>57466</integer>
 			<key>idVendor</key>
@@ -145,7 +145,7 @@
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>IOResourceMatch</key>
 			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
@@ -166,7 +166,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8202</integer>
 			<key>idVendor</key>
@@ -185,7 +185,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8203</integer>
 			<key>idVendor</key>
@@ -204,7 +204,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8204</integer>
 			<key>idVendor</key>
@@ -223,7 +223,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8207</integer>
 			<key>idVendor</key>
@@ -242,7 +242,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>1626</integer>
 			<key>idVendor</key>
@@ -261,7 +261,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>545</integer>
 			<key>idVendor</key>
@@ -280,7 +280,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>547</integer>
 			<key>idVendor</key>
@@ -299,7 +299,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8555</integer>
 			<key>idVendor</key>
@@ -316,7 +316,7 @@
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>IOResourceMatch</key>
 			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
@@ -337,7 +337,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8559</integer>
 			<key>idVendor</key>
@@ -356,7 +356,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8670</integer>
 			<key>idVendor</key>
@@ -375,7 +375,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8673</integer>
 			<key>idVendor</key>
@@ -394,7 +394,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8678</integer>
 			<key>idVendor</key>
@@ -413,7 +413,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8680</integer>
 			<key>idVendor</key>
@@ -432,7 +432,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8684</integer>
 			<key>idVendor</key>
@@ -451,7 +451,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8699</integer>
 			<key>idVendor</key>
@@ -470,7 +470,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>8701</integer>
 			<key>idVendor</key>
@@ -487,7 +487,7 @@
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>IOResourceMatch</key>
 			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
@@ -508,7 +508,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>6091</integer>
 			<key>idVendor</key>
@@ -527,7 +527,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>6095</integer>
 			<key>idVendor</key>
@@ -546,7 +546,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>6154</integer>
 			<key>idVendor</key>
@@ -565,7 +565,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13316</integer>
 			<key>idVendor</key>
@@ -584,7 +584,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13329</integer>
 			<key>idVendor</key>
@@ -603,7 +603,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13331</integer>
 			<key>idVendor</key>
@@ -622,7 +622,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13336</integer>
 			<key>idVendor</key>
@@ -641,7 +641,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13365</integer>
 			<key>idVendor</key>
@@ -660,7 +660,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>13398</integer>
 			<key>idVendor</key>
@@ -679,7 +679,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>569</integer>
 			<key>idVendor</key>
@@ -698,7 +698,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>33091</integer>
 			<key>idVendor</key>
@@ -787,14 +787,14 @@
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
-		<key>com.apple.iokit.IOUSBFamily</key>
-		<string>1.8</string>
+		<key>com.apple.iokit.IOUSBHostFamily</key>
+		<string>1.0.1</string>
 		<key>com.apple.kpi.iokit</key>
-		<string>9.0</string>
+		<string>8.0</string>
 		<key>com.apple.kpi.libkern</key>
-		<string>9.0</string>
+		<string>8.0</string>
 		<key>com.apple.kpi.mach</key>
-		<string>9.0</string>
+		<string>8.0</string>
 	</dict>
 	<key>#OSBundleRequired</key>
 	<string>Root</string>

@@ -20,7 +20,8 @@
 #ifndef __BrcmPatchRAM__BrcmFirmwareStore__
 #define __BrcmPatchRAM__BrcmFirmwareStore__
 
-#include <IOKit/usb/IOUSBDevice.h>
+#include <IOKit/IOLib.h>
+#include <IOKit/IOService.h>
 
 #define kBrcmFirmwareStoreService   "BrcmFirmwareStore"
 
