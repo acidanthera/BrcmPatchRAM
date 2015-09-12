@@ -20,8 +20,6 @@
 #include "USBDeviceShim.h"
 #include "Common.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
-
 #include <IOKit/usb/IOUSBHostFamily.h>
 #include <IOKit/usb/IOUSBHostInterface.h>
 #include <IOKit/usb/USBSpec.h>
@@ -464,5 +462,3 @@ IOReturn USBPipeShim::clearStall()
 {
     return m_pPipe->clearStall(false);
 }
-
-#endif

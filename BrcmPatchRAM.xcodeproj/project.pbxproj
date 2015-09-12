@@ -10,7 +10,6 @@
 		D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; settings = {ASSET_TAGS = (); }; };
-		D4E0A25C1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; settings = {ASSET_TAGS = (); }; };
 		D4E0A25D1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; settings = {ASSET_TAGS = (); }; };
 		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ASSET_TAGS = (); }; };
 		D4E0A25F1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ASSET_TAGS = (); }; };
@@ -379,7 +378,6 @@
 			files = (
 				ED5817BD1B7A6AEF006C5522 /* BrcmFirmwareStore.cpp in Sources */,
 				ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */,
-				D4E0A25C1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */,
 				D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
