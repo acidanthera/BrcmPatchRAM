@@ -293,7 +293,8 @@ IOReturn BrcmPatchRAM::onTimerEvent()
     if (!mDevice.getProperty(kFirmwareLoaded))
     {
         AlwaysLog("BLURP!! no firmware loaded and timer expiried (no re-probe)\n");
-        scheduleWork(kWorkLoadFirmware);
+        // TODO: Check why this keeps firing in 10.11
+        //scheduleWork(kWorkLoadFirmware);
     }
 
     return kIOReturnSuccess;
@@ -528,8 +529,6 @@ void BrcmPatchRAM::removePersonality()
 
 void BrcmPatchRAM::publishPersonality()
 {
-    return;  //TODO: remove me when ready...
-
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;

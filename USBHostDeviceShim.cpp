@@ -121,7 +121,8 @@ IOReturn USBDeviceShim::getDeviceStatus(IOService* forClient, USBStatus *status)
 
 IOReturn USBDeviceShim::resetDevice()
 {
-    //REVIEW: no equivalent in 10.11.
+    // Setting configuration value 0 (unconfigured) releases all opened interfaces / pipes
+    m_pDevice->setConfiguration(0);
     return kIOReturnSuccess;
 }
 
@@ -158,7 +159,7 @@ IOReturn USBDeviceShim::setConfiguration(IOService *forClient, UInt8 configValue
 bool USBDeviceShim::findFirstInterface(USBInterfaceShim* shim)
 {
     DebugLog("USBDeviceShim::findFirstInterface\n");
-
+    
     OSIterator* iterator = m_pDevice->getChildIterator(gIOServicePlane);
     
     if (!iterator)
@@ -168,8 +169,7 @@ bool USBDeviceShim::findFirstInterface(USBInterfaceShim* shim)
     {
         if (IOUSBHostInterface* interface = OSDynamicCast(IOUSBHostInterface, candidate))
         {
-            //REVIEW: kUSBHubClass not found. docs wrong.
-            //if (interface->getInterfaceDescriptor()->bInterfaceClass == kUSBHubClass)
+            //if (interface->getInterfaceDescriptor()->bInterfaceClass != kUSBHubClass)
             {
                 shim->setInterface(interface);
                 break;
@@ -367,13 +367,13 @@ IOReturn USBInterfaceShim::hciCommand(void* command, UInt16 length)
 {
     StandardUSB::DeviceRequest request =
     {
-        //.bmRequestType = USBmakebmRequestType(kUSBOut, kUSBClass, kUSBDevice),
-        .bmRequestType = makeDeviceRequestbmRequestType(kRequestDirectionOut, kRequestTypeStandard, kRequestRecipientInterface),
+        .bmRequestType = makeDeviceRequestbmRequestType(kRequestDirectionOut, kRequestTypeClass, kRequestRecipientDevice),
         .bRequest = 0,
         .wValue = 0,
         .wIndex = 0,
         .wLength = length
     };
+    
     uint32_t bytesTransfered;
     return m_pInterface->deviceRequest(request, command, bytesTransfered, 0);
 }
