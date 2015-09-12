@@ -123,6 +123,7 @@ IOReturn USBDeviceShim::resetDevice()
 {
     // Setting configuration value 0 (unconfigured) releases all opened interfaces / pipes
     m_pDevice->setConfiguration(0);
+    //m_pDevice->reset();
     return kIOReturnSuccess;
 }
 

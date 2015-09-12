@@ -168,16 +168,12 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Processing time %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
 
-#if 0
-//#ifdef TARGET_ELCAPITAN
-// maybe residency is not required for 10.11?
+    // maybe residency is not required for 10.11?
     if (15 == version_major)
     {
         mDevice.setDevice(NULL);
         return NULL;
     }
-//#endif
-#endif
 
     return this;
 }
@@ -188,7 +184,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 
     if (!super::start(provider))
         return false;
-    
+   
     // add interrupt source for delayed actions...
     IOWorkLoop* workLoop = getWorkLoop();
     if (!workLoop)
@@ -293,8 +289,7 @@ IOReturn BrcmPatchRAM::onTimerEvent()
     if (!mDevice.getProperty(kFirmwareLoaded))
     {
         AlwaysLog("BLURP!! no firmware loaded and timer expiried (no re-probe)\n");
-        // TODO: Check why this keeps firing in 10.11
-        //scheduleWork(kWorkLoadFirmware);
+        scheduleWork(kWorkLoadFirmware);
     }
 
     return kIOReturnSuccess;
@@ -494,8 +489,6 @@ void BrcmPatchRAM::printPersonalities()
 
 void BrcmPatchRAM::removePersonality()
 {
-    return;  //TODO: remove this when ready...
-
     DebugLog("removePersonality\n");
     
 #ifdef DEBUG
