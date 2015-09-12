@@ -1,11 +1,18 @@
 # really just some handy scripts...
 
+# use BrcmPatchRAM.kext on 10.10 and prior
+# use BrcmPatchRAM2.kext on 10.11 and later
+OSXVER=$(shell if [[ "`sw_vers -productVersion`" == 10.11* ]]; then echo 10.11+; else echo 10.10-; fi)
+ifeq "$(OSXVER)" "10.10-" 
 KEXT=BrcmPatchRAM.kext
-#KEXT=BrcmPatchRAM2.kext
+else
+KEXT=BrcmPatchRAM2.kext
+endif
+
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
-INSTDIR=/kexts
-#INSTDIR=/System/Library/Extensions
+#INSTDIR=/kexts
+INSTDIR=/System/Library/Extensions
 BUILDDIR=./Build/Products
 
 ifeq ($(findstring 32,$(BITS)),32)
@@ -35,17 +42,28 @@ update_kernelcache:
 .PHONY: install_debug
 install_debug:
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
-	#make update_kernelcache
+	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT); fi
+	make update_kernelcache
 
 .PHONY: install
 install:
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
-	#make update_kernelcache
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
+	make update_kernelcache
 
 .PHONY: install_inject
 install_inject:
 	sudo cp -R $(BUILDDIR)/Release/$(INJECT) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(INJECT); fi
 	make update_kernelcache
+
+.PHONY: load
+load:
+	sudo kextload $(INSTDIR)/$(KEXT)
+
+.PHONY: unload
+unload:
+	sudo kextunload -p $(INSTDIR)/$(KEXT)
 
 .PHONY: distribute
 distribute:

@@ -9,16 +9,20 @@
 /* Begin PBXBuildFile section */
 		D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
-		D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; settings = {ASSET_TAGS = (); }; };
-		D4E0A25D1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; settings = {ASSET_TAGS = (); }; };
-		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ASSET_TAGS = (); }; };
-		D4E0A25F1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ASSET_TAGS = (); }; };
+		D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
+		D4E0A25D1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; };
+		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		D4E0A25F1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D4F91B061A2998CE0030D10D /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
 		ED5817BD1B7A6AEF006C5522 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
 		ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		EDA03B781BA47A0E005BDCA2 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
+		EDA03B791BA47A0F005BDCA2 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
+		EDA03B7A1BA47A12005BDCA2 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
+		EDA03B7B1BA47A12005BDCA2 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -169,7 +173,9 @@
 			files = (
 				D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */,
 				D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */,
+				EDA03B7B1BA47A12005BDCA2 /* Common.h in Headers */,
 				D4E0A25F1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */,
+				EDA03B791BA47A0F005BDCA2 /* hci.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,7 +192,9 @@
 			files = (
 				ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */,
 				ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */,
+				EDA03B7A1BA47A12005BDCA2 /* Common.h in Headers */,
 				D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */,
+				EDA03B781BA47A0E005BDCA2 /* hci.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +418,10 @@
 		D4F91B0A1A2998CE0030D10D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+				);
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
@@ -421,7 +432,7 @@
 		D4F91B0B1A2998CE0030D10D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "LOGNAME=\\\"${LOGNAME}\\\"";
 				INFOPLIST_FILE = BrcmPatchRAM/Info.plist;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = BrcmPatchRAM;
@@ -458,6 +469,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_ELCAPITAN=1",
 					"DEBUG=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
 				);
 				INFOPLIST_FILE = BrcmPatchRAM/Info_IOUSBHostDevice.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -472,7 +484,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 2.0.0d1;
-				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_ELCAPITAN=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_ELCAPITAN=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+				);
 				INFOPLIST_FILE = BrcmPatchRAM/Info_IOUSBHostDevice.plist;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";

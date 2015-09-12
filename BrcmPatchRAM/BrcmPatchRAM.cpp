@@ -114,10 +114,29 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
     extern kmod_info_t kmod_info;
     uint64_t start_time, end_time, nano_secs;
-    
+
     DebugLog("probe\n");
-    
+
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
+
+#ifndef TARGET_ELCAPITAN
+    // BrcmPatchRAM.kext, if installed on 10.11+... fails immediately
+    if (version_major >= 15)
+    {
+        AlwaysLog("Aborting -- BrcmPatchRAM.kext should not be installed on 10.11+.  Use BrcmPatchRAM2.kext instead.\n");
+        return NULL;
+    }
+#endif
+
+    // place version/build info in ioreg properties RM,Build and RM,Version
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    setProperty("RM,Version", buf);
+#ifdef DEBUG
+    setProperty("RM,Build", "Debug-" LOGNAME);
+#else
+    setProperty("RM,Build", "Release-" LOGNAME);
+#endif
 
     clock_get_uptime(&start_time);
 
@@ -160,7 +179,6 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
 
     uploadFirmware();
-    //IOSleep(500); //REVIEW
     publishPersonality();
 
     clock_get_uptime(&end_time);
@@ -168,12 +186,12 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Processing time %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
 
+//REVIEW: might need residency... more testing required...
+#ifdef TARGET_ELCAPITAN
     // maybe residency is not required for 10.11?
-    if (15 == version_major)
-    {
-        mDevice.setDevice(NULL);
-        return NULL;
-    }
+    mDevice.setDevice(NULL);
+    return NULL;
+#endif
 
     return this;
 }
@@ -210,9 +228,6 @@ bool BrcmPatchRAM::start(IOService *provider)
     PMinit();
     registerPowerDriver(this, myTwoStates, 2);
     provider->joinPMtree(this);
-    
-    //REVIEW: do firmware upload later
-    ///mTimer->setTimeoutMS(mBlurpWait);
     
     return true;
 }
@@ -502,8 +517,8 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
-    gIOCatalogue->removeDrivers(dict, false);  //REVIEW: not doing nub matching here
-#if 1
+    gIOCatalogue->removeDrivers(dict, false); // no nub matching on removal
+
     // remove generic matching personality
     dict->removeObject(kUSBProductID);
     dict->removeObject(kUSBVendorID);
@@ -511,8 +526,8 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, "bDeviceClass", 224);
     setNumberInDict(dict, "bDeviceProtocol", 1);
     setNumberInDict(dict, "bDeviceSubClass", 1);
-    gIOCatalogue->removeDrivers(dict, false);  //REVIEW: not doing nub matching here
-#endif
+    gIOCatalogue->removeDrivers(dict, false); // no nub matching on removal
+
     dict->release();
     
 #ifdef DEBUG
@@ -634,7 +649,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     }
 
     // unpublish disabled personality
-    gIOCatalogue->removeDrivers(dict);
+    gIOCatalogue->removeDrivers(dict, false);  // no nub matching on removal
     dict->release();
 
     // Add new personality into the kernel
@@ -1219,7 +1234,7 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
         {kIOReturnIsoTooOld,          "Isochronous I/O request for distant past"     },
         {kIOReturnIsoTooNew,          "Isochronous I/O request for distant future"   },
         {kIOReturnNotFound,           "Data was not found"                           },
-//REIVEW: new error identifiers?
+//REVIEW: new error identifiers?
 #ifndef TARGET_ELCAPITAN
         {kIOUSBUnknownPipeErr,        "Pipe ref not recognized"                      },
         {kIOUSBTooManyPipesErr,       "Too many pipes"                               },

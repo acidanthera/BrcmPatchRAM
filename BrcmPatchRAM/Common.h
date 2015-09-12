@@ -20,11 +20,17 @@
 #ifndef BRCMPatchRAM_Common_h
 #define BRCMPatchRAM_Common_h
 
+#ifndef TARGET_ELCAPITAN
+#define BRCMPATCHRAM_NAME "BrcmPatchRAM"
+#else
+#define BRCMPATCHRAM_NAME "BrcmPatchRAM2"
+#endif
+
 #ifdef DEBUG
-#define DebugLog(args...) do { IOLog("BrcmPatchRAM: " args); } while (0)
+#define DebugLog(args...) do { IOLog(BRCMPATCHRAM_NAME ": " args); } while (0)
 #else
 #define DebugLog(args...) do { } while (0)
 #endif
-#define AlwaysLog(args...) do { IOLog("BrcmPatchRAM: " args); } while (0)
+#define AlwaysLog(args...) do { IOLog(BRCMPATCHRAM_NAME ": " args); } while (0)
 
 #endif
