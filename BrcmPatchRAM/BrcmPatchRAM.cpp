@@ -43,6 +43,7 @@ OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
 
 OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
+OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
 bool BrcmPatchRAM::initBrcmStrings()
 {
@@ -50,6 +51,7 @@ bool BrcmPatchRAM::initBrcmStrings()
     {
         const char* bundle = NULL;
         const char* ioclass = NULL;
+        const char* providerclass = kIOUSBDeviceClassName;
         
         // OS X - Snow Leopard
         // OS X - Lion
@@ -72,12 +74,20 @@ bool BrcmPatchRAM::initBrcmStrings()
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
         }
+        // OS X - El Capitan
+        else if (version_major == 15)
+        {
+            bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
+            ioclass = "BroadcomBluetoothHostControllerUSBTransport";
+            providerclass = kIOUSBHostDeviceClassName;
+        }
         // OS X - Future releases....
-        else if (version_major > 14)
+        else if (version_major > 15)
         {
             AlwaysLog("Unknown new Darwin version %d.%d, using possible compatible personality.\n", version_major, version_minor);
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
+            providerclass = kIOUSBHostDeviceClassName;
         }
         else
         {
@@ -85,6 +95,7 @@ bool BrcmPatchRAM::initBrcmStrings()
         }
         brcmBundleIdentifier = OSString::withCStringNoCopy(bundle);
         brcmIOClass = OSString::withCStringNoCopy(ioclass);
+        brcmProviderClass = OSString::withCStringNoCopy(providerclass);
     }
 }
 
@@ -96,6 +107,16 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     DebugLog("probe\n");
     
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
+
+    // place version/build info in ioreg properties RM,Build and RM,Version
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    setProperty("RM,Version", buf);
+#ifdef DEBUG
+    setProperty("RM,Build", "Debug-" LOGNAME);
+#else
+    setProperty("RM,Build", "Release-" LOGNAME);
+#endif
 
     clock_get_uptime(&start_time);
 
@@ -115,7 +136,15 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
     mDevice->retain();
     
+    // personality strings depend on version
     initBrcmStrings();
+
+    // longest time seen in normal re-probe was ~200ms (400+ms on 10.11)
+    if (version_major >= 15)
+        mBlurpWait = 800;
+    else
+        mBlurpWait = 400;
+
     OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
     if (displayName)
         provider->setProperty(kUSBProductString, displayName);
@@ -187,9 +216,20 @@ void BrcmPatchRAM::stop(IOService* provider)
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Time since wake %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
 
-
     DebugLog("stop\n");
 
+//REVIEW: so kext can be unloaded with kextunload -p
+    // unload native bluetooth driver
+    IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
+    if (result != kIOReturnSuccess)
+        AlwaysLog("[%04x:%04x]: failure terminating native Broadcom bluetooth (%08x)\n", mVendorId, mProductId, result);
+    else
+        DebugLog("[%04x:%04x]: success terminating native Broadcom bluetooth\n", mVendorId, mProductId);
+
+    // unpublish native bluetooth personality
+    removePersonality();
+
+    mStopping = true;
     OSSafeReleaseNULL(mFirmwareStore);
 
     IOWorkLoop* workLoop = getWorkLoop();
@@ -225,6 +265,8 @@ void BrcmPatchRAM::stop(IOService* provider)
     }
 
     OSSafeReleaseNULL(mDevice);
+
+    mStopping = false;
 
     super::stop(provider);
 }
@@ -358,7 +400,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         mDevice->removeProperty(kFirmwareLoaded);
 
         // in the case the instance is shutting down, don't do anything
-        if (mFirmwareStore)
+        if (!mStopping)
         {
             // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
@@ -376,7 +418,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         clock_get_uptime(&wake_time);
         // start loading firmware for case probe is never called after wake
         if (!mDevice->getProperty(kFirmwareLoaded))
-            mTimer->setTimeoutMS(400); // longest time seen in normal re-probe was ~200ms
+            mTimer->setTimeoutMS(mBlurpWait);
     }
 
     return IOPMAckImplied;
@@ -408,7 +450,7 @@ void BrcmPatchRAM::printPersonalities()
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     
@@ -442,7 +484,7 @@ void BrcmPatchRAM::removePersonality()
     // remove Broadcom matching personality
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
@@ -456,6 +498,7 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, "bDeviceProtocol", 1);
     setNumberInDict(dict, "bDeviceSubClass", 1);
     gIOCatalogue->removeDrivers(dict, true);
+
     dict->release();
     
 #ifdef DEBUG
@@ -468,7 +511,7 @@ void BrcmPatchRAM::publishPersonality()
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
-    setStringInDict(dict, kIOProviderClassKey, kIOUSBDeviceClassName);
+    dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     
@@ -501,6 +544,7 @@ void BrcmPatchRAM::publishPersonality()
         // OS X does not have a driver personality for this device yet, publish one
         DebugLog("brcmBundIdentifier: \"%s\"\n", brcmBundleIdentifier->getCStringNoCopy());
         DebugLog("brcmIOClass: \"%s\"\n", brcmIOClass->getCStringNoCopy());
+        DebugLog("brcmProviderClass: \"%s\"\n", brcmProviderClass->getCStringNoCopy());
         dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
         dict->setObject(kIOClassKey, brcmIOClass);
         
@@ -526,7 +570,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
 {
     // matching dictionary for disabled BrcmFirmwareStore
     OSDictionary* dict = OSDictionary::withCapacity(3);
-    if (!dict) return;
+    if (!dict) return false;
     setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
     setStringInDict(dict, kIOClassKey, "BrcmFirmwareStore");
     setStringInDict(dict, kIOMatchCategoryKey, "BrcmFirmwareStore");
@@ -552,32 +596,35 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     {
         AlwaysLog("unable to find disabled BrcmFirmwareStore personality.\n");
         dict->release();
-        return;
+        return false;
+    }
+    // make copy of personality *before* removing from IOcatalog
+    personality = OSDynamicCast(OSDictionary, personality->copyCollection());
+    if (!personality)
+    {
+        AlwaysLog("copyCollection failed.");
+        return false;
     }
 
     // unpublish disabled personality
     gIOCatalogue->removeDrivers(dict);
     dict->release();
-    dict = OSDynamicCast(OSDictionary, personality->copyCollection());
-    if (!dict)
-    {
-        AlwaysLog("copyCollection failed.");
-        return;
-    }
 
     // Add new personality into the kernel
     if (OSArray* array = OSArray::withCapacity(1))
     {
         // change from disabled_IOResources to IOResources
-        setStringInDict(dict, kIOProviderClassKey, "IOResources");
-        array->setObject(dict);
+        setStringInDict(personality, kIOProviderClassKey, "IOResources");
+        array->setObject(personality);
         if (gIOCatalogue->addDrivers(array, true))
             AlwaysLog("Published new IOKit personality for BrcmFirmwareStore.\n");
         else
             AlwaysLog("ERROR in addDrivers for new BrcmFirmwareStore personality.\n");
         array->release();
     }
-    dict->release();
+    personality->release();
+
+    return true;
 }
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
