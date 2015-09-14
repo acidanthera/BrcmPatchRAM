@@ -34,11 +34,20 @@ The firmware applied is extracted from the Windows drivers and the functionality
 Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
 
 
+###BrcmPatchRAM2.kext
+
+To be used for OS X 10.11 or newer.
+
+This kext is re-written to use the new USB stack in 10.11 (IOUSBHostFamily vs. former IOUSBFamily).
+
+BrcmPatchRAM.kext will refuse to load on versions prior to 10.11.
+
+
 ###BrcmBluetoothInjector.kext
 
-To be used for OS X newer than Yosemite.
+To be used for OS X 10.11 or newer.
 
-Install only one kext, BrcmBluetoothInjector.kext or BrcmPatchRAM.kext (depending on OS X version), to /S/L/E or Clover/kexts.
+This kext is a simple injector... it does not contain a firmware uploader.  Try this kext if you wish to see if the built-in firmware uploader in 10.11+ will work for your device.
 
 
 ####Supported Devices
