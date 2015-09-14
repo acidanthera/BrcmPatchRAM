@@ -19,6 +19,11 @@
 #ifndef __BrcmPatchRAM__
 #define __BrcmPatchRAM__
 
+#ifdef TARGET_ELCAPITAN
+// 10.11 works better if probe simply exits after updating firmware
+#define NON_RESIDENT 1
+#endif
+
 #include <IOKit/IOService.h>
 #include <IOKit/IOLib.h>
 #include <IOKit/IOInterruptEventSource.h>
@@ -66,7 +71,9 @@ private:
     USBPipeShim mInterruptPipe;
     USBPipeShim mBulkPipe;
     BrcmFirmwareStore* mFirmwareStore = NULL;
+#ifndef NON_RESIDENT
     bool mStopping = false;
+#endif
     
     USBCOMPLETION mInterruptCompletion;
     IOBufferMemoryDescriptor* mReadBuffer;
@@ -82,10 +89,12 @@ private:
     static OSString* brcmIOClass;
     static OSString* brcmProviderClass;
     static void initBrcmStrings();
+
 #ifdef DEBUG
     void printPersonalities();
 #endif
 
+#ifndef NON_RESIDENT
     UInt32 mBlurpWait;
     IOTimerEventSource* mTimer = NULL;
     IOReturn onTimerEvent(void);
@@ -103,9 +112,13 @@ private:
     unsigned mWorkPending = 0;
     void scheduleWork(unsigned newWork);
     void processWorkQueue(IOInterruptEventSource*, int);
+#endif // #ifndef NON_RESIDENT
 
     void publishPersonality();
+
+#ifndef NON_RESIDENT
     void removePersonality();
+#endif
     bool publishFirmwareStorePersonality();
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
@@ -136,9 +149,11 @@ private:
     bool performUpgrade();
 public:
     virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+#ifndef NON_RESIDENT
     virtual bool start(IOService* provider);
     virtual void stop(IOService* provider);
     virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+#endif
     virtual const char* stringFromReturn(IOReturn rtn);
 };
 

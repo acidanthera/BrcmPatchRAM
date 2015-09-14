@@ -32,9 +32,11 @@
 #include <IOKit/IOCatalogue.h>
 
 #include <kern/clock.h>
-#include <libkern/version.h>
 #include <libkern/zlib.h>
 #include <string.h>
+
+#include <libkern/version.h>
+extern kmod_info_t kmod_info;
 
 #include "Common.h"
 #include "hci.h"
@@ -112,7 +114,6 @@ void BrcmPatchRAM::initBrcmStrings()
 
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
-    extern kmod_info_t kmod_info;
     uint64_t start_time, end_time, nano_secs;
 
     DebugLog("probe\n");
@@ -128,21 +129,13 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     }
 #endif
 
-    // place version/build info in ioreg properties RM,Build and RM,Version
-    char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
-    setProperty("RM,Version", buf);
-#ifdef DEBUG
-    setProperty("RM,Build", "Debug-" LOGNAME);
-#else
-    setProperty("RM,Build", "Release-" LOGNAME);
-#endif
-
     clock_get_uptime(&start_time);
 
+#ifndef NON_RESIDENT
     mWorkLock = IOLockAlloc();
     if (!mWorkLock)
         return NULL;
+#endif
 
     mCompletionLock = IOLockAlloc();
     if (!mCompletionLock)
@@ -158,11 +151,13 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     // personality strings depend on version
     initBrcmStrings();
 
+#ifndef NON_RESIDENT
     // longest time seen in normal re-probe was ~200ms (400+ms on 10.11)
     if (version_major >= 15)
         mBlurpWait = 800;
     else
         mBlurpWait = 400;
+#endif
 
     OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
     if (displayName)
@@ -186,8 +181,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Processing time %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
 
-//REVIEW: might need residency... more testing required...
-#ifdef TARGET_ELCAPITAN
+#ifdef NON_RESIDENT
     // maybe residency is not required for 10.11?
     mDevice.setDevice(NULL);
     return NULL;
@@ -196,14 +190,25 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     return this;
 }
 
+#ifndef NON_RESIDENT
 bool BrcmPatchRAM::start(IOService *provider)
 {
     DebugLog("start\n");
 
     if (!super::start(provider))
         return false;
-   
-    // add interrupt source for delayed actions...
+
+    // place version/build info in ioreg properties RM,Build and RM,Version
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    setProperty("RM,Version", buf);
+#ifdef DEBUG
+    setProperty("RM,Build", "Debug-" LOGNAME);
+#else
+    setProperty("RM,Build", "Release-" LOGNAME);
+#endif
+
+   // add interrupt source for delayed actions...
     IOWorkLoop* workLoop = getWorkLoop();
     if (!workLoop)
         return false;
@@ -232,18 +237,24 @@ bool BrcmPatchRAM::start(IOService *provider)
     return true;
 }
 
+#ifdef DEBUG
 static uint64_t wake_time;
+#endif
 
 void BrcmPatchRAM::stop(IOService* provider)
 {
+#ifdef DEBUG
     uint64_t stop_time, nano_secs;
     clock_get_uptime(&stop_time);
     absolutetime_to_nanoseconds(stop_time - wake_time, &nano_secs);
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Time since wake %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
+#endif
 
     DebugLog("stop\n");
 
+#if 0
+#ifndef TARGET_ELCAPITAN
 //REVIEW: so kext can be unloaded with kextunload -p
     // unload native bluetooth driver
     IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
@@ -254,6 +265,8 @@ void BrcmPatchRAM::stop(IOService* provider)
 
     // unpublish native bluetooth personality
     removePersonality();
+#endif
+#endif
 
     mStopping = true;
     OSSafeReleaseNULL(mFirmwareStore);
@@ -284,11 +297,13 @@ void BrcmPatchRAM::stop(IOService* provider)
         IOLockFree(mCompletionLock);
         mCompletionLock = NULL;
     }
+#ifndef NON_RESIDENT
     if (mWorkLock)
     {
         IOLockFree(mWorkLock);
         mWorkLock = NULL;
     }
+#endif
 
     mDevice.setDevice(NULL);
 
@@ -367,6 +382,8 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
     DebugLog("!!! sendFirmwareThread post-terminate !!! should not be here\n");
 }
 
+#endif // #ifndef NON_RESIDENT
+
 void BrcmPatchRAM::uploadFirmware()
 {
     // signal to timer that firmware already loaded
@@ -419,6 +436,7 @@ void BrcmPatchRAM::uploadFirmware()
     }
 }
 
+#ifndef NON_RESIDENT
 IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 {
     DebugLog("setPowerState: which = 0x%lx\n", which);
@@ -444,14 +462,17 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     }
     else if (which == kMyOnPowerState)
     {
+#ifdef DEBUG
         clock_get_uptime(&wake_time);
-        // start loading firmware for case probe is never called after wake
+#endif
+        // start a timer for loading firmware for case probe is never called after wake
         if (!mDevice.getProperty(kFirmwareLoaded))
             mTimer->setTimeoutMS(mBlurpWait);
     }
 
     return IOPMAckImplied;
 }
+#endif // #ifndef NON_RESIDENT
 
 static void setStringInDict(OSDictionary* dict, const char* key, const char* value)
 {
@@ -502,6 +523,7 @@ void BrcmPatchRAM::printPersonalities()
 }
 #endif //DEBUG
 
+#ifndef NON_RESIDENT
 void BrcmPatchRAM::removePersonality()
 {
     DebugLog("removePersonality\n");
@@ -534,6 +556,7 @@ void BrcmPatchRAM::removePersonality()
     printPersonalities();
 #endif
 }
+#endif // #ifndef NON_RESIDENT
 
 void BrcmPatchRAM::publishPersonality()
 {
