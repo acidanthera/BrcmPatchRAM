@@ -324,9 +324,7 @@ bool USBInterfaceShim::findPipe(USBPipeShim* shim, UInt8 type, UInt8 direction)
     //typedef struct EndpointDescriptor EndpointDescriptor;
     
     //const EndpointDescriptor* getNextEndpointDescriptor(const ConfigurationDescriptor* configurationDescriptor, const InterfaceDescriptor* interfaceDescriptor, const Descriptor* currentDescriptor);
-    
-    //TODO:
-    
+
     DebugLog("findPipe: direction = %d, type = %d\n", direction, type);
     const StandardUSB::ConfigurationDescriptor* configDesc = m_pInterface->getConfigurationDescriptor();
     const StandardUSB::InterfaceDescriptor* ifaceDesc = m_pInterface->getInterfaceDescriptor();

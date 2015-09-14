@@ -20,7 +20,7 @@
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<key>03f0_231d</key>
+		<key>03f0_231d no firmware</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
@@ -39,7 +39,7 @@
 			<key>idVendor</key>
 			<integer>1008</integer>
 		</dict>
-		<key>13d3_3295</key>
+		<key>13d3_3295 no firmware</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
@@ -797,7 +797,7 @@
 		<string>9.0</string>
 	</dict>
 	<key>#OSBundleRequired</key>
-	<string>Root</string>
+	<string>Safe Boot</string>
 	<key>Source Code</key>
 	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>

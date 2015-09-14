@@ -17,6 +17,8 @@
  *
  */
 
+//REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
+
 #include <IOKit/IOLib.h>
 #include <IOKit/IOMessage.h>
 
