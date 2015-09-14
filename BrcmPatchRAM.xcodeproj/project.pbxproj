@@ -60,7 +60,7 @@
 		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = USBHostDeviceShim.cpp; path = ../USBHostDeviceShim.cpp; sourceTree = "<group>"; };
+		D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = USBHostDeviceShim.cpp; sourceTree = "<group>"; };
 		D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = USBDeviceShim.cpp; sourceTree = "<group>"; };
 		D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBDeviceShim.h; sourceTree = "<group>"; };
 		D4F91AFE1A2998CE0030D10D /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,10 +138,10 @@
 				D4F91B011A2998CE0030D10D /* Supporting Files */,
 				D45427691A2A045E000B0964 /* hci.h */,
 				D454276C1A2A07A7000B0964 /* Common.h */,
-				ED2A7DD91B37DEAD00DC200F /* BrcmBluetoothInjector */,
+				D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */,
 				D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */,
 				D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */,
-				D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */,
+				ED2A7DD91B37DEAD00DC200F /* BrcmBluetoothInjector */,
 			);
 			path = BrcmPatchRAM;
 			sourceTree = "<group>";
