@@ -60,6 +60,10 @@ OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
 OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
+#ifndef NON_RESIDENT
+IOLock* BrcmPatchRAM::mLoadFirmwareLock = NULL;
+#endif
+
 void BrcmPatchRAM::initBrcmStrings()
 {
     if (!brcmBundleIdentifier)
@@ -137,6 +141,19 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mWorkLock = IOLockAlloc();
     if (!mWorkLock)
         return NULL;
+
+    // Note: mLoadFirmwareLock is static (global), not instance data...
+    IOLockLock(mWorkLock);  // in case two BrcmPatchRAM instances starting simultaneously
+    if (!mLoadFirmwareLock)
+    {
+        mLoadFirmwareLock = IOLockAlloc();
+        if (!mLoadFirmwareLock)
+        {
+            IOLockUnlock(mWorkLock);
+            return NULL;
+        }
+    }
+    IOLockUnlock(mWorkLock);
 #endif
 
     mCompletionLock = IOLockAlloc();
@@ -271,6 +288,10 @@ void BrcmPatchRAM::stop(IOService* provider)
 #endif
 
     mStopping = true;
+
+    // allow firmware load already started to finish
+    IOLockLock(mLoadFirmwareLock);
+
     OSSafeReleaseNULL(mFirmwareStore);
 
     IOWorkLoop* workLoop = getWorkLoop();
@@ -305,7 +326,18 @@ void BrcmPatchRAM::stop(IOService* provider)
         IOLockFree(mWorkLock);
         mWorkLock = NULL;
     }
+
+    IOLockUnlock(mLoadFirmwareLock);
+#if 0
+    //REVIEW: just leak mLoadFirmwareLock since it could be used by multiple BrcmPatchRAM instances
+    // freeing this lock would require counting instances, protecting the count with another lock, etc.
+    if (mLoadFirmwareLock)
+    {
+        IOLockFree(mLoadFirmwareLock);
+        mLoadFirmwareLock = NULL;
+    }
 #endif
+#endif // #ifndef NON_RESIDENT
 
     mDevice.setDevice(NULL);
 
@@ -372,12 +404,19 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
 {
     DebugLog("sendFirmwareThread enter\n");
 
-    BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
-    me->resetDevice();
-    IOSleep(20);
-    me->uploadFirmware();
-    me->publishPersonality();
-    me->scheduleWork(kWorkFinished);
+    // don't start firmware load when lock is held (instance is shutting down)
+    if (IOLockTryLock(mLoadFirmwareLock))
+    {
+        BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
+        me->resetDevice();
+        IOSleep(20);
+        me->uploadFirmware();
+#ifndef TARGET_ELCAPITAN
+        me->publishPersonality();
+#endif
+        me->scheduleWork(kWorkFinished);
+        IOLockUnlock(mLoadFirmwareLock);
+    }
 
     DebugLog("sendFirmwareThread termination\n");
     thread_terminate(current_thread());
@@ -395,7 +434,14 @@ void BrcmPatchRAM::uploadFirmware()
     if (!getProperty(kFirmwareKey))
         return;
 
-    if (mDevice.open(this))
+    if (!mDevice.open(this))
+    {
+        AlwaysLog("uploadFirmware could not open the device!\n");
+        return;
+    }
+
+    //REVIEW: this block to avoid merge conflicts (remove once merged)
+    ////if (mDevice.open(this))
     {
         // Print out additional device information
         printDeviceInfo();
@@ -451,6 +497,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
         // in the case the instance is shutting down, don't do anything
         if (!mStopping)
         {
+#ifndef TARGET_ELCAPITAN
             // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
             if (result != kIOReturnSuccess)
@@ -460,6 +507,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 
             // unpublish native bluetooth personality
             removePersonality();
+#endif
         }
     }
     else if (which == kMyOnPowerState)
@@ -526,6 +574,7 @@ void BrcmPatchRAM::printPersonalities()
 #endif //DEBUG
 
 #ifndef NON_RESIDENT
+#ifndef TARGET_ELCAPITAN
 void BrcmPatchRAM::removePersonality()
 {
     DebugLog("removePersonality\n");
@@ -558,6 +607,7 @@ void BrcmPatchRAM::removePersonality()
     printPersonalities();
 #endif
 }
+#endif // #ifndef TARGET_ELCAPITAN
 #endif // #ifndef NON_RESIDENT
 
 void BrcmPatchRAM::publishPersonality()

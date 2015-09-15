@@ -104,6 +104,7 @@ private:
 
     IOInterruptEventSource* mWorkSource = NULL;
     IOLock* mWorkLock = NULL;
+    static IOLock* mLoadFirmwareLock;
     enum WorkPending
     {
         kWorkLoadFirmware = 0x01,
@@ -117,7 +118,9 @@ private:
     void publishPersonality();
 
 #ifndef NON_RESIDENT
+#ifndef TARGET_ELCAPITAN
     void removePersonality();
+#endif
 #endif
     bool publishFirmwareStorePersonality();
     BrcmFirmwareStore* getFirmwareStore();
