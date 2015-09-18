@@ -57,11 +57,19 @@ enum DeviceState
     kUpdateAborted,
 };
 
+#ifdef TARGET_ELCAPITAN
+#define BrcmPatchRAM BrcmPatchRAM2
+#endif
+
 class BrcmPatchRAM : public IOService
 {
 private:
     typedef IOService super;
+#ifndef TARGET_ELCAPITAN
     OSDeclareDefaultStructors(BrcmPatchRAM);
+#else
+    OSDeclareDefaultStructors(BrcmPatchRAM2);
+#endif
     
     UInt16 mVendorId;
     UInt16 mProductId;

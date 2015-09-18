@@ -287,7 +287,11 @@ exit_error:
     return NULL;
 }
 
+#ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmFirmwareStore, IOService)
+#else
+OSDefineMetaClassAndStructors(BrcmFirmwareStore2, IOService)
+#endif
 
 bool BrcmFirmwareStore::start(IOService *provider)
 {

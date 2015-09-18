@@ -54,7 +54,11 @@ static IOPMPowerState myTwoStates[2] =
     { kIOPMPowerStateVersion1, kIOPMPowerOn, kIOPMPowerOn, kIOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
+#ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
+#else
+OSDefineMetaClassAndStructors(BrcmPatchRAM2, IOService)
+#endif
 
 OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
@@ -125,6 +129,11 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     DebugLog("probe\n");
 
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
+
+#ifdef TARGET_ELCAPITAN
+    // preference towards starting BrcmPatchRAM2.kext when BrcmPatchRAM.kext also exists
+    *probeScore = 2000;
+#endif
 
 #ifndef TARGET_ELCAPITAN
     // BrcmPatchRAM.kext, if installed on 10.11+... fails immediately
@@ -689,8 +698,8 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     OSDictionary* dict = OSDictionary::withCapacity(3);
     if (!dict) return false;
     setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
-    setStringInDict(dict, kIOClassKey, "BrcmFirmwareStore");
-    setStringInDict(dict, kIOMatchCategoryKey, "BrcmFirmwareStore");
+    setStringInDict(dict, kIOClassKey, kBrcmFirmwareStoreService);
+    setStringInDict(dict, kIOMatchCategoryKey, kBrcmFirmwareStoreService);
 
     // retrieve currently matching IOKit driver personalities
     OSDictionary* personality = NULL;

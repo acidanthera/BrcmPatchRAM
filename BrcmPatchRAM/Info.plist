@@ -87,10 +87,10 @@
 			<string>BCM20702A1_001.002.014.1443.1484_v5580</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>57410</integer>
 			<key>idVendor</key>
@@ -106,10 +106,10 @@
 			<string>BCM4335C0_003.001.009.0066.0115_v4211</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>57465</integer>
 			<key>idVendor</key>
@@ -144,10 +144,10 @@
 			<string>BCM20702A1_001.002.014.1443.1488_v5584</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8195</integer>
 			<key>idVendor</key>
@@ -315,10 +315,10 @@
 			<string>BCM4335C0_003.001.009.0066.0105_v4201</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8558</integer>
 			<key>idVendor</key>
@@ -486,10 +486,10 @@
 			<string>BCM20702A1_001.002.014.1315.1338_v5434</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOResourceMatch</key>
-			<string>BrcmFirmwareStore</string>
 			<key>idProduct</key>
 			<integer>8894</integer>
 			<key>idVendor</key>
