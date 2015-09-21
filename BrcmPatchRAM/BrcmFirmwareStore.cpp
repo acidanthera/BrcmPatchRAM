@@ -85,6 +85,7 @@ OSData* BrcmFirmwareStore::decompressFirmware(OSData* firmware)
         && *magic != 0xda78) // Zlib maximum compression
     {
         // Return the data as-is
+        firmware->retain();
         return firmware;
     }
     
