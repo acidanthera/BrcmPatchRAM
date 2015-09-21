@@ -84,10 +84,8 @@ OSData* BrcmFirmwareStore::decompressFirmware(OSData* firmware)
         && *magic != 0x9c78  // Zlib default compression
         && *magic != 0xda78) // Zlib maximum compression
     {
-        // Copy the data as-is
-        result = OSData::withData(firmware);
-        OSSafeRelease(firmware);
-        return result;
+        // Return the data as-is
+        return firmware;
     }
     
     bufferSize = firmware->getLength() * 4;
