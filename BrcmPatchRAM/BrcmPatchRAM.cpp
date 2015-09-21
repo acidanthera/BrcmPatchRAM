@@ -17,19 +17,34 @@
  *
  */
 
+//REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
+
 #include <IOKit/IOLib.h>
 #include <IOKit/IOMessage.h>
 
+#ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
+#else
+#include <IOKit/usb/IOUSBHostFamily.h>
+#include <IOKit/usb/IOUSBHostInterface.h>
+#include <IOKit/usb/USBSpec.h>
+#include <IOKit/usb/USB.h>
+#include <sys/utfconv.h>
+#endif
 #include <IOKit/IOCatalogue.h>
 
 #include <kern/clock.h>
-#include <libkern/version.h>
 #include <libkern/zlib.h>
+#include <string.h>
+
+#include <libkern/version.h>
+extern kmod_info_t kmod_info;
 
 #include "Common.h"
 #include "hci.h"
 #include "BrcmPatchRAM.h"
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum { kMyOffPowerState = 0, kMyOnPowerState = 1 };
 
@@ -39,13 +54,21 @@ static IOPMPowerState myTwoStates[2] =
     { kIOPMPowerStateVersion1, kIOPMPowerOn, kIOPMPowerOn, kIOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
+#ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
+#else
+OSDefineMetaClassAndStructors(BrcmPatchRAM2, IOService)
+#endif
 
 OSString* BrcmPatchRAM::brcmBundleIdentifier = NULL;
 OSString* BrcmPatchRAM::brcmIOClass = NULL;
 OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
-bool BrcmPatchRAM::initBrcmStrings()
+#ifndef NON_RESIDENT
+IOLock* BrcmPatchRAM::mLoadFirmwareLock = NULL;
+#endif
+
+void BrcmPatchRAM::initBrcmStrings()
 {
     if (!brcmBundleIdentifier)
     {
@@ -101,56 +124,75 @@ bool BrcmPatchRAM::initBrcmStrings()
 
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
-    extern kmod_info_t kmod_info;
     uint64_t start_time, end_time, nano_secs;
-    
+
     DebugLog("probe\n");
-    
+
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
 
-    // place version/build info in ioreg properties RM,Build and RM,Version
-    char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
-    setProperty("RM,Version", buf);
-#ifdef DEBUG
-    setProperty("RM,Build", "Debug-" LOGNAME);
-#else
-    setProperty("RM,Build", "Release-" LOGNAME);
+#ifdef TARGET_ELCAPITAN
+    // preference towards starting BrcmPatchRAM2.kext when BrcmPatchRAM.kext also exists
+    *probeScore = 2000;
+#endif
+
+#ifndef TARGET_ELCAPITAN
+    // BrcmPatchRAM.kext, if installed on 10.11+... fails immediately
+    if (version_major >= 15)
+    {
+        AlwaysLog("Aborting -- BrcmPatchRAM.kext should not be installed on 10.11+.  Use BrcmPatchRAM2.kext instead.\n");
+        return NULL;
+    }
 #endif
 
     clock_get_uptime(&start_time);
 
+#ifndef NON_RESIDENT
     mWorkLock = IOLockAlloc();
     if (!mWorkLock)
         return NULL;
+
+    // Note: mLoadFirmwareLock is static (global), not instance data...
+    IOLockLock(mWorkLock);  // in case two BrcmPatchRAM instances starting simultaneously
+    if (!mLoadFirmwareLock)
+    {
+        mLoadFirmwareLock = IOLockAlloc();
+        if (!mLoadFirmwareLock)
+        {
+            IOLockUnlock(mWorkLock);
+            return NULL;
+        }
+    }
+    IOLockUnlock(mWorkLock);
+#endif
 
     mCompletionLock = IOLockAlloc();
     if (!mCompletionLock)
         return NULL;
 
-    mDevice = OSDynamicCast(IOUSBDevice, provider);
-    if (!mDevice)
+    mDevice.setDevice(provider);
+    if (!mDevice.getValidatedDevice())
     {
-        AlwaysLog("Provider is not a USB device.\n");
+        AlwaysLog("Provider type is incorrect (not IOUSBDevice or IOUSBHostDevice)\n");
         return NULL;
     }
-    mDevice->retain();
-    
+
     // personality strings depend on version
     initBrcmStrings();
 
+#ifndef NON_RESIDENT
     // longest time seen in normal re-probe was ~200ms (400+ms on 10.11)
     if (version_major >= 15)
         mBlurpWait = 800;
     else
         mBlurpWait = 400;
+#endif
 
     OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
     if (displayName)
         provider->setProperty(kUSBProductString, displayName);
     
-    mVendorId = mDevice->GetVendorID();
-    mProductId = mDevice->GetProductID();
+    mVendorId = mDevice.getVendorID();
+    mProductId = mDevice.getProductID();
 
     // get firmware here to pre-cache for eventual use on wakeup or now
     if (OSString* firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey)))
@@ -166,18 +208,35 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Processing time %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
-    
+
+#ifdef NON_RESIDENT
+    // maybe residency is not required for 10.11?
+    mDevice.setDevice(NULL);
+    return NULL;
+#endif
+
     return this;
 }
 
+#ifndef NON_RESIDENT
 bool BrcmPatchRAM::start(IOService *provider)
 {
     DebugLog("start\n");
 
     if (!super::start(provider))
         return false;
-    
-    // add interrupt source for delayed actions...
+
+    // place version/build info in ioreg properties RM,Build and RM,Version
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    setProperty("RM,Version", buf);
+#ifdef DEBUG
+    setProperty("RM,Build", "Debug-" LOGNAME);
+#else
+    setProperty("RM,Build", "Release-" LOGNAME);
+#endif
+
+   // add interrupt source for delayed actions...
     IOWorkLoop* workLoop = getWorkLoop();
     if (!workLoop)
         return false;
@@ -206,18 +265,24 @@ bool BrcmPatchRAM::start(IOService *provider)
     return true;
 }
 
+#ifdef DEBUG
 static uint64_t wake_time;
+#endif
 
 void BrcmPatchRAM::stop(IOService* provider)
 {
+#ifdef DEBUG
     uint64_t stop_time, nano_secs;
     clock_get_uptime(&stop_time);
     absolutetime_to_nanoseconds(stop_time - wake_time, &nano_secs);
     uint64_t milli_secs = nano_secs / 1000000;
     AlwaysLog("Time since wake %llu.%llu seconds.\n", milli_secs / 1000, milli_secs % 1000);
+#endif
 
     DebugLog("stop\n");
 
+#if 0
+#ifndef TARGET_ELCAPITAN
 //REVIEW: so kext can be unloaded with kextunload -p
     // unload native bluetooth driver
     IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
@@ -228,8 +293,14 @@ void BrcmPatchRAM::stop(IOService* provider)
 
     // unpublish native bluetooth personality
     removePersonality();
+#endif
+#endif
 
     mStopping = true;
+
+    // allow firmware load already started to finish
+    IOLockLock(mLoadFirmwareLock);
+
     OSSafeReleaseNULL(mFirmwareStore);
 
     IOWorkLoop* workLoop = getWorkLoop();
@@ -258,13 +329,26 @@ void BrcmPatchRAM::stop(IOService* provider)
         IOLockFree(mCompletionLock);
         mCompletionLock = NULL;
     }
+#ifndef NON_RESIDENT
     if (mWorkLock)
     {
         IOLockFree(mWorkLock);
         mWorkLock = NULL;
     }
 
-    OSSafeReleaseNULL(mDevice);
+    IOLockUnlock(mLoadFirmwareLock);
+#if 0
+    //REVIEW: just leak mLoadFirmwareLock since it could be used by multiple BrcmPatchRAM instances
+    // freeing this lock would require counting instances, protecting the count with another lock, etc.
+    if (mLoadFirmwareLock)
+    {
+        IOLockFree(mLoadFirmwareLock);
+        mLoadFirmwareLock = NULL;
+    }
+#endif
+#endif // #ifndef NON_RESIDENT
+
+    mDevice.setDevice(NULL);
 
     mStopping = false;
 
@@ -275,7 +359,7 @@ IOReturn BrcmPatchRAM::onTimerEvent()
 {
     DebugLog("onTimerEvent\n");
 
-    if (!mDevice->getProperty(kFirmwareLoaded))
+    if (!mDevice.getProperty(kFirmwareLoaded))
     {
         AlwaysLog("BLURP!! no firmware loaded and timer expiried (no re-probe)\n");
         scheduleWork(kWorkLoadFirmware);
@@ -329,67 +413,87 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
 {
     DebugLog("sendFirmwareThread enter\n");
 
-    BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
-    me->resetDevice();
-    IOSleep(20);
-    me->uploadFirmware();
-    me->publishPersonality();
-    me->scheduleWork(kWorkFinished);
+    // don't start firmware load when lock is held (instance is shutting down)
+    if (IOLockTryLock(mLoadFirmwareLock))
+    {
+        BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
+        me->resetDevice();
+        IOSleep(20);
+        me->uploadFirmware();
+#ifndef TARGET_ELCAPITAN
+        me->publishPersonality();
+#endif
+        me->scheduleWork(kWorkFinished);
+        IOLockUnlock(mLoadFirmwareLock);
+    }
 
     DebugLog("sendFirmwareThread termination\n");
     thread_terminate(current_thread());
     DebugLog("!!! sendFirmwareThread post-terminate !!! should not be here\n");
 }
 
+#endif // #ifndef NON_RESIDENT
+
 void BrcmPatchRAM::uploadFirmware()
 {
     // signal to timer that firmware already loaded
-    mDevice->setProperty(kFirmwareLoaded, true);
+    mDevice.setProperty(kFirmwareLoaded, true);
 
     // don't bother with devices that have no firmware
     if (!getProperty(kFirmwareKey))
         return;
 
-    if (mDevice->open(this))
+    if (!mDevice.open(this))
+    {
+        AlwaysLog("uploadFirmware could not open the device!\n");
+        return;
+    }
+
+    //REVIEW: this block to avoid merge conflicts (remove once merged)
+    ////if (mDevice.open(this))
     {
         // Print out additional device information
         printDeviceInfo();
         
         // Set device configuration to composite configuration index 0
         // Obtain first interface
-        if (setConfiguration(0) && (mInterface = findInterface()) && mInterface->open(this))
+        if (setConfiguration(0) && findInterface(&mInterface) && mInterface.open(this))
         {
-            mInterruptPipe = findPipe(kUSBInterrupt, kUSBIn);
-            mBulkPipe = findPipe(kUSBBulk, kUSBOut);
-            if (mInterruptPipe && mBulkPipe)
+            DebugLog("set configuration and interface opened\n");
+            mInterface.findPipe(&mInterruptPipe, kUSBInterrupt, kUSBIn);
+            mInterface.findPipe(&mBulkPipe, kUSBBulk, kUSBOut);
+            if (mInterruptPipe.getValidatedPipe() && mBulkPipe.getValidatedPipe())
             {
+                DebugLog("got pipes\n");
                 if (performUpgrade())
-                    AlwaysLog("[%04x:%04x]: Firmware upgrade completed successfully.\n", mVendorId, mProductId);
+                    if (mDeviceState == kUpdateComplete)
+                        AlwaysLog("[%04x:%04x]: Firmware upgrade completed successfully.\n", mVendorId, mProductId);
+                    else
+                        AlwaysLog("[%04x:%04x]: Firmware upgrade not needed.\n", mVendorId, mProductId);
                 else
                     AlwaysLog("[%04x:%04x]: Firmware upgrade failed.\n", mVendorId, mProductId);
                 OSSafeReleaseNULL(mReadBuffer); // mReadBuffer is allocated by performUpgrade but not released
             }
-            mInterface->close(this);
+            mInterface.close(this);
         }
         
         // cleanup
-        if (mInterruptPipe)
+        if (mInterruptPipe.getValidatedPipe())
         {
-            mInterruptPipe->Abort();
-            mInterruptPipe->release(); // retained in findPipe
-            mInterruptPipe = NULL;
+            mInterruptPipe.abort();
+            mInterruptPipe.setPipe(NULL);
         }
-        if (mBulkPipe)
+        if (mBulkPipe.getValidatedPipe())
         {
-            mBulkPipe->Abort();
-            mBulkPipe->release(); // retained in findPipe
-            mBulkPipe = NULL;
+            mBulkPipe.abort();
+            mBulkPipe.setPipe(NULL);
         }
-        OSSafeReleaseNULL(mInterface);// retained in findInterface
-        mDevice->close(this);
+        mInterface.setInterface(NULL);
+        mDevice.close(this);
     }
 }
 
+#ifndef NON_RESIDENT
 IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 {
     DebugLog("setPowerState: which = 0x%lx\n", which);
@@ -397,11 +501,12 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
     if (which == kMyOffPowerState)
     {
         // consider firmware no longer loaded
-        mDevice->removeProperty(kFirmwareLoaded);
+        mDevice.removeProperty(kFirmwareLoaded);
 
         // in the case the instance is shutting down, don't do anything
         if (!mStopping)
         {
+#ifndef TARGET_ELCAPITAN
             // unload native bluetooth driver
             IOReturn result = gIOCatalogue->terminateDriversForModule(brcmBundleIdentifier, false);
             if (result != kIOReturnSuccess)
@@ -411,18 +516,22 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 
             // unpublish native bluetooth personality
             removePersonality();
+#endif
         }
     }
     else if (which == kMyOnPowerState)
     {
+#ifdef DEBUG
         clock_get_uptime(&wake_time);
-        // start loading firmware for case probe is never called after wake
-        if (!mDevice->getProperty(kFirmwareLoaded))
+#endif
+        // start a timer for loading firmware for case probe is never called after wake
+        if (!mDevice.getProperty(kFirmwareLoaded))
             mTimer->setTimeoutMS(mBlurpWait);
     }
 
     return IOPMAckImplied;
 }
+#endif // #ifndef NON_RESIDENT
 
 static void setStringInDict(OSDictionary* dict, const char* key, const char* value)
 {
@@ -473,6 +582,8 @@ void BrcmPatchRAM::printPersonalities()
 }
 #endif //DEBUG
 
+#ifndef NON_RESIDENT
+#ifndef TARGET_ELCAPITAN
 void BrcmPatchRAM::removePersonality()
 {
     DebugLog("removePersonality\n");
@@ -482,13 +593,13 @@ void BrcmPatchRAM::removePersonality()
 #endif
     
     // remove Broadcom matching personality
-    OSDictionary* dict = OSDictionary::withCapacity(5);
+    OSDictionary* dict = OSDictionary::withCapacity(4);
     if (!dict) return;
     dict->setObject(kIOProviderClassKey, brcmProviderClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
     dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
-    gIOCatalogue->removeDrivers(dict, true);
+    gIOCatalogue->removeDrivers(dict, false); // no nub matching on removal
 
     // remove generic matching personality
     dict->removeObject(kUSBProductID);
@@ -497,7 +608,7 @@ void BrcmPatchRAM::removePersonality()
     setNumberInDict(dict, "bDeviceClass", 224);
     setNumberInDict(dict, "bDeviceProtocol", 1);
     setNumberInDict(dict, "bDeviceSubClass", 1);
-    gIOCatalogue->removeDrivers(dict, true);
+    gIOCatalogue->removeDrivers(dict, false); // no nub matching on removal
 
     dict->release();
     
@@ -505,6 +616,8 @@ void BrcmPatchRAM::removePersonality()
     printPersonalities();
 #endif
 }
+#endif // #ifndef TARGET_ELCAPITAN
+#endif // #ifndef NON_RESIDENT
 
 void BrcmPatchRAM::publishPersonality()
 {
@@ -552,8 +665,21 @@ void BrcmPatchRAM::publishPersonality()
         if (OSArray* array = OSArray::withCapacity(1))
         {
             array->setObject(dict);
-            if (gIOCatalogue->addDrivers(array, true))
+            if (gIOCatalogue->addDrivers(array, false))
+            {
                 AlwaysLog("[%04x:%04x]: Published new IOKit personality.\n", mVendorId, mProductId);
+                if (OSDictionary* dict1 = OSDynamicCast(OSDictionary, dict->copyCollection()))
+                {
+                    //dict1->removeObject(kIOClassKey);
+                    //dict1->removeObject(kIOProviderClassKey);
+                    dict1->removeObject(kUSBProductID);
+                    dict1->removeObject(kUSBVendorID);
+                    dict1->removeObject(kBundleIdentifier);
+                    if (!gIOCatalogue->startMatching(dict1))
+                        AlwaysLog("[%04x:%04x]: startMatching failed.\n", mVendorId, mProductId);
+                    dict1->release();
+                }
+            }
             else
                 AlwaysLog("[%04x:%04x]: ERROR in addDrivers for new IOKit personality.\n", mVendorId, mProductId);
             array->release();
@@ -572,8 +698,8 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     OSDictionary* dict = OSDictionary::withCapacity(3);
     if (!dict) return false;
     setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
-    setStringInDict(dict, kIOClassKey, "BrcmFirmwareStore");
-    setStringInDict(dict, kIOMatchCategoryKey, "BrcmFirmwareStore");
+    setStringInDict(dict, kIOClassKey, kBrcmFirmwareStoreService);
+    setStringInDict(dict, kIOMatchCategoryKey, kBrcmFirmwareStoreService);
 
     // retrieve currently matching IOKit driver personalities
     OSDictionary* personality = NULL;
@@ -607,7 +733,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     }
 
     // unpublish disabled personality
-    gIOCatalogue->removeDrivers(dict);
+    gIOCatalogue->removeDrivers(dict, false);  // no nub matching on removal
     dict->release();
 
     // Add new personality into the kernel
@@ -655,15 +781,15 @@ void BrcmPatchRAM::printDeviceInfo()
     char serial[255];
     
     // Retrieve device information
-    mDevice->GetStringDescriptor(mDevice->GetProductStringIndex(), product, sizeof(product));
-    mDevice->GetStringDescriptor(mDevice->GetManufacturerStringIndex(), manufacturer, sizeof(manufacturer));
-    mDevice->GetStringDescriptor(mDevice->GetSerialNumberStringIndex(), serial, sizeof(serial));
+    mDevice.getStringDescriptor(mDevice.getProductStringIndex(), product, sizeof(product));
+    mDevice.getStringDescriptor(mDevice.getManufacturerStringIndex(), manufacturer, sizeof(manufacturer));
+    mDevice.getStringDescriptor(mDevice.getSerialNumberStringIndex(), serial, sizeof(serial));
     
     AlwaysLog("[%04x:%04x]: USB [%s v%d] \"%s\" by \"%s\"\n",
               mVendorId,
               mProductId,
               serial,
-              mDevice->GetDeviceRelease(),
+              mDevice.getDeviceRelease(),
               product,
               manufacturer);
 }
@@ -673,7 +799,7 @@ int BrcmPatchRAM::getDeviceStatus()
     IOReturn result;
     USBStatus status;
     
-    if ((result = mDevice->GetDeviceStatus(&status)) != kIOReturnSuccess)
+    if ((result = mDevice.getDeviceStatus(this, &status)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to get device status (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return 0;
@@ -688,7 +814,7 @@ bool BrcmPatchRAM::resetDevice()
 {
     IOReturn result;
     
-    if ((result = mDevice->ResetDevice()) != kIOReturnSuccess)
+    if ((result = mDevice.resetDevice()) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -702,13 +828,13 @@ bool BrcmPatchRAM::resetDevice()
 bool BrcmPatchRAM::setConfiguration(int configurationIndex)
 {
     IOReturn result;
-    const IOUSBConfigurationDescriptor* configurationDescriptor;
+    const USBCONFIGURATIONDESCRIPTOR* configurationDescriptor;
     UInt8 currentConfiguration = 0xFF;
     
     // Find the first config/interface
     UInt8 numconf = 0;
     
-    if ((numconf = mDevice->GetNumConfigurations()) < (configurationIndex + 1))
+    if ((numconf = mDevice.getNumConfigurations()) < (configurationIndex + 1))
     {
         AlwaysLog("[%04x:%04x]: Composite configuration index %d is not available, %d total composite configurations.\n",
                   mVendorId, mProductId, configurationIndex, numconf);
@@ -717,7 +843,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     else
         DebugLog("[%04x:%04x]: Available composite configurations: %d.\n", mVendorId, mProductId, numconf);
     
-    configurationDescriptor = mDevice->GetFullConfigurationDescriptor(configurationIndex);
+    configurationDescriptor = mDevice.getFullConfigurationDescriptor(configurationIndex);
     
     // Set the configuration to the requested configuration index
     if (!configurationDescriptor)
@@ -726,7 +852,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
         return false;
     }
     
-    if ((result = mDevice->GetConfiguration(&currentConfiguration)) != kIOReturnSuccess)
+    if ((result = mDevice.getConfiguration(this, &currentConfiguration)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to retrieve active configuration (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -741,7 +867,7 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     }
     
     // Set the configuration to the first configuration
-    if ((result = mDevice->SetConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
+    if ((result = mDevice.setConfiguration(this, configurationDescriptor->bConfigurationValue, true)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: Unable to (re-)configure device (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         return false;
@@ -753,56 +879,44 @@ bool BrcmPatchRAM::setConfiguration(int configurationIndex)
     return true;
 }
 
-IOUSBInterface* BrcmPatchRAM::findInterface()
+bool BrcmPatchRAM::findInterface(USBInterfaceShim* shim)
 {
-    // Find the interface for bulk endpoint transfers
-    IOUSBFindInterfaceRequest request;
-    request.bAlternateSetting  = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceClass    = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
-    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
-    
-    if (IOUSBInterface* interface = mDevice->FindNextInterface(NULL, &request))
+    mDevice.findFirstInterface(shim);
+    if (IOService* interface = shim->getValidatedInterface())
     {
-        interface->retain();
         DebugLog("[%04x:%04x]: Interface %d (class %02x, subclass %02x, protocol %02x) located.\n",
                  mVendorId,
                  mProductId,
-                 interface->GetInterfaceNumber(),
-                 interface->GetInterfaceClass(),
-                 interface->GetInterfaceSubClass(),
-                 interface->GetInterfaceProtocol());
+                 shim->getInterfaceNumber(),
+                 shim->getInterfaceClass(),
+                 shim->getInterfaceSubClass(),
+                 shim->getInterfaceProtocol());
         
-        return interface;
+        return true;
     }
     
     AlwaysLog("[%04x:%04x]: No interface could be located.\n", mVendorId, mProductId);
     
-    return NULL;
+    return false;
 }
 
-IOUSBPipe* BrcmPatchRAM::findPipe(UInt8 type, UInt8 direction)
+bool BrcmPatchRAM::findPipe(USBPipeShim* shim, UInt8 type, UInt8 direction)
 {
-    IOUSBFindEndpointRequest findEndpointRequest;
-    findEndpointRequest.type = type;
-    findEndpointRequest.direction = direction;
-    
-    if (IOUSBPipe* pipe = mInterface->FindNextPipe(NULL, &findEndpointRequest))
+    if (!mInterface.findPipe(shim, type, direction))
     {
-        pipe->retain();
-#ifdef DEBUG
-        const IOUSBEndpointDescriptor* desc = pipe->GetEndpointDescriptor();
-        if (!desc)
-            DebugLog("[%04x:%04x]: No endpoint descriptor for pipe.\n", mVendorId, mProductId);
-        else
-            DebugLog("[%04x:%04x]: Located pipe at 0x%02x.\n", mVendorId, mProductId, desc->bEndpointAddress);
-#endif
-        return pipe;
-    }
-    else
         AlwaysLog("[%04x:%04x]: Unable to locate pipe.\n", mVendorId, mProductId);
+        return false;
+    }
     
-    return NULL;
+#ifdef DEBUG
+    const USBENDPOINTDESCRIPTOR* desc = shim->getEndpointDescriptor();
+    if (!desc)
+        DebugLog("[%04x:%04x]: No endpoint descriptor for pipe.\n", mVendorId, mProductId);
+    else
+        DebugLog("[%04x:%04x]: Located pipe at 0x%02x.\n", mVendorId, mProductId, desc->bEndpointAddress);
+#endif
+
+    return true;
 }
 
 bool BrcmPatchRAM::continuousRead()
@@ -815,7 +929,11 @@ bool BrcmPatchRAM::continuousRead()
             AlwaysLog("[%04x:%04x]: continuousRead - failed to allocate read buffer.\n", mVendorId, mProductId);
             return false;
         }
+#ifndef TARGET_ELCAPITAN
         mInterruptCompletion.target = this;
+#else
+        mInterruptCompletion.owner = this;
+#endif
         mInterruptCompletion.action = readCompletion;
         mInterruptCompletion.parameter = NULL;
     }
@@ -827,14 +945,14 @@ bool BrcmPatchRAM::continuousRead()
         return false;
     }
 
-    if ((result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess)
+    if ((result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: continuousRead - Failed to queue read (0x%08x)\n", mVendorId, mProductId, result);
 
         if (result == kIOUSBPipeStalled)
         {
-            mInterruptPipe->Reset();
-            result = mInterruptPipe->Read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
+            mInterruptPipe.clearStall();
+            result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
             
             if (result != kIOReturnSuccess)
             {
@@ -847,7 +965,11 @@ bool BrcmPatchRAM::continuousRead()
     return true;
 }
 
+#ifndef TARGET_ELCAPITAN
 void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining)
+#else
+void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status, uint32_t bytesTransferred)
+#endif
 {
     BrcmPatchRAM *me = (BrcmPatchRAM*)target;
 
@@ -860,7 +982,11 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
     switch (status)
     {
         case kIOReturnSuccess:
+#ifndef TARGET_ELCAPITAN
             me->hciParseResponse(me->mReadBuffer->getBytesNoCopy(), me->mReadBuffer->getLength() - bufferSizeRemaining, NULL, NULL);
+#else
+            me->hciParseResponse(me->mReadBuffer->getBytesNoCopy(), bytesTransferred, NULL, NULL);
+#endif
             break;
         case kIOReturnAborted:
             AlwaysLog("[%04x:%04x]: readCompletion - Return aborted (0x%08x)\n", me->mVendorId, me->mProductId, status);
@@ -875,7 +1001,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
             break;
         case kIOReturnNotResponding:
             AlwaysLog("[%04x:%04x]: Not responding - Delaying next read.\n", me->mVendorId, me->mProductId);
-            me->mInterruptPipe->ClearStall();
+            me->mInterruptPipe.clearStall();
             break;
         default:
             AlwaysLog("[%04x:%04x]: readCompletion - Unknown error (0x%08x)\n", me->mVendorId, me->mProductId, status);
@@ -892,18 +1018,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
 IOReturn BrcmPatchRAM::hciCommand(void * command, UInt16 length)
 {
     IOReturn result;
-    
-    IOUSBDevRequest request =
-    {
-        .bmRequestType = USBmakebmRequestType(kUSBOut, kUSBClass, kUSBDevice),
-        .bRequest = 0,
-        .wValue = 0,
-        .wIndex = 0,
-        .wLength = length,
-        .pData = command
-    };
-    
-    if ((result = mInterface->DeviceRequest(&request)) != kIOReturnSuccess)
+    if ((result = mInterface.hciCommand(command, length)) != kIOReturnSuccess)
         AlwaysLog("[%04x:%04x]: device request failed (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
     
     return result;
@@ -933,7 +1048,7 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     
                     // Device does not require a firmware patch at this time
                     if (mFirmareVersion > 0)
-                        mDeviceState = kUpdateComplete;
+                        mDeviceState = kUpdateNotNeeded;
                     else
                         mDeviceState = kFirmwareVersion;
                     break;
@@ -1019,7 +1134,7 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
     {
         if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
-            if ((result = mBulkPipe->Write(buffer, 0, 0, buffer->getLength(), (IOUSBCompletion*)NULL)) == kIOReturnSuccess)
+            if ((result = mBulkPipe.write(buffer, 0, 0, buffer->getLength(), NULL)) == kIOReturnSuccess)
             {
                 //DEBUG_LOG("%s: Wrote %d bytes to bulk pipe.\n", getName(), length);
             }
@@ -1065,7 +1180,7 @@ bool BrcmPatchRAM::performUpgrade()
 #endif
 
         // Break out when done
-        if (mDeviceState == kUpdateAborted || mDeviceState == kUpdateComplete)
+        if (mDeviceState == kUpdateAborted || mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded)
             break;
 
         // Note on following switch/case:
@@ -1148,6 +1263,7 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kUnknown:
+            case kUpdateNotNeeded:
             case kUpdateComplete:
             case kUpdateAborted:
                 DebugLog("Error: kUnkown/kUpdateComplete/kUpdateAborted cases should be unreachable.\n");
@@ -1167,7 +1283,7 @@ bool BrcmPatchRAM::performUpgrade()
     IOLockUnlock(mCompletionLock);
     OSSafeRelease(iterator);
 
-    return mDeviceState == kUpdateComplete;
+    return mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded;
 }
 
 #ifdef DEBUG
@@ -1183,6 +1299,7 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
         {kFirmwareWritten,    "Firmware written"     },
         {kResetComplete,      "Reset complete"       },
         {kUpdateComplete,     "Update complete"      },
+        {kUpdateNotNeeded,    "Update not needed"    },
         {0,                   NULL                   }
     };
     
@@ -1201,6 +1318,8 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
         {kIOReturnIsoTooOld,          "Isochronous I/O request for distant past"     },
         {kIOReturnIsoTooNew,          "Isochronous I/O request for distant future"   },
         {kIOReturnNotFound,           "Data was not found"                           },
+//REVIEW: new error identifiers?
+#ifndef TARGET_ELCAPITAN
         {kIOUSBUnknownPipeErr,        "Pipe ref not recognized"                      },
         {kIOUSBTooManyPipesErr,       "Too many pipes"                               },
         {kIOUSBNoAsyncPortErr,        "No async port"                                },
@@ -1233,6 +1352,7 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
         {kIOUSBDataToggleErr,         "Pipe stall, Bad data toggle"                  },
         {kIOUSBBitstufErr,            "Pipe stall, bitstuffing"                      },
         {kIOUSBCRCErr,                "Pipe stall, bad CRC"                          },
+#endif
         {0,                           NULL                                           }
     };
     

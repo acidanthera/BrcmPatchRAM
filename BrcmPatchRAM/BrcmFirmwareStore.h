@@ -20,15 +20,28 @@
 #ifndef __BrcmPatchRAM__BrcmFirmwareStore__
 #define __BrcmPatchRAM__BrcmFirmwareStore__
 
-#include <IOKit/usb/IOUSBDevice.h>
+#include <IOKit/IOLib.h>
+#include <IOKit/IOService.h>
 
+#ifndef TARGET_ELCAPITAN
 #define kBrcmFirmwareStoreService   "BrcmFirmwareStore"
+#else
+#define kBrcmFirmwareStoreService   "BrcmFirmwareStore2"
+#endif
+
+#ifdef TARGET_ELCAPITAN
+#define BrcmFirmwareStore BrcmFirmwareStore2
+#endif
 
 class BrcmFirmwareStore : public IOService
 {
     private:
         typedef IOService super;
+#ifndef TARGET_ELCAPITAN
         OSDeclareDefaultStructors(BrcmFirmwareStore);
+#else
+        OSDeclareDefaultStructors(BrcmFirmwareStore2);
+#endif
     
         OSDictionary* mFirmwares;
     

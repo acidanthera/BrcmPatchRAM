@@ -19,13 +19,18 @@
 #ifndef __BrcmPatchRAM__
 #define __BrcmPatchRAM__
 
+#ifdef TARGET_ELCAPITAN
+// 10.11 works better if probe simply exits after updating firmware
+#define NON_RESIDENT 1
+#endif
+
 #include <IOKit/IOService.h>
 #include <IOKit/IOLib.h>
-#include <IOKit/usb/IOUSBDevice.h>
 #include <IOKit/IOInterruptEventSource.h>
 #include <IOKit/IOTimerEventSource.h>
 
 #include "BrcmFirmwareStore.h"
+#include "USBDeviceShim.h"
 
 #define kDisplayName "DisplayName"
 #define kBundleIdentifier "CFBundleIdentifier"
@@ -48,26 +53,37 @@ enum DeviceState
     kFirmwareWritten,
     kResetComplete,
     kUpdateComplete,
+    kUpdateNotNeeded,
     kUpdateAborted,
 };
+
+#ifdef TARGET_ELCAPITAN
+#define BrcmPatchRAM BrcmPatchRAM2
+#endif
 
 class BrcmPatchRAM : public IOService
 {
 private:
     typedef IOService super;
+#ifndef TARGET_ELCAPITAN
     OSDeclareDefaultStructors(BrcmPatchRAM);
+#else
+    OSDeclareDefaultStructors(BrcmPatchRAM2);
+#endif
     
     UInt16 mVendorId;
     UInt16 mProductId;
     
-    IOUSBDevice* mDevice = NULL;
-    IOUSBInterface* mInterface = NULL;
-    IOUSBPipe* mInterruptPipe = NULL;
-    IOUSBPipe* mBulkPipe = NULL;
+    USBDeviceShim mDevice;
+    USBInterfaceShim mInterface;
+    USBPipeShim mInterruptPipe;
+    USBPipeShim mBulkPipe;
     BrcmFirmwareStore* mFirmwareStore = NULL;
+#ifndef NON_RESIDENT
     bool mStopping = false;
+#endif
     
-    IOUSBCompletion mInterruptCompletion;
+    USBCOMPLETION mInterruptCompletion;
     IOBufferMemoryDescriptor* mReadBuffer;
     
     volatile DeviceState mDeviceState = kInitialize;
@@ -80,11 +96,13 @@ private:
     static OSString* brcmBundleIdentifier;
     static OSString* brcmIOClass;
     static OSString* brcmProviderClass;
-    static bool initBrcmStrings();
+    static void initBrcmStrings();
+
 #ifdef DEBUG
     void printPersonalities();
 #endif
 
+#ifndef NON_RESIDENT
     UInt32 mBlurpWait;
     IOTimerEventSource* mTimer = NULL;
     IOReturn onTimerEvent(void);
@@ -94,6 +112,7 @@ private:
 
     IOInterruptEventSource* mWorkSource = NULL;
     IOLock* mWorkLock = NULL;
+    static IOLock* mLoadFirmwareLock;
     enum WorkPending
     {
         kWorkLoadFirmware = 0x01,
@@ -102,9 +121,15 @@ private:
     unsigned mWorkPending = 0;
     void scheduleWork(unsigned newWork);
     void processWorkQueue(IOInterruptEventSource*, int);
+#endif // #ifndef NON_RESIDENT
 
     void publishPersonality();
+
+#ifndef NON_RESIDENT
+#ifndef TARGET_ELCAPITAN
     void removePersonality();
+#endif
+#endif
     bool publishFirmwareStorePersonality();
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
@@ -115,11 +140,15 @@ private:
     bool resetDevice();
     bool setConfiguration(int configurationIndex);
     
-    IOUSBInterface* findInterface();
-    IOUSBPipe* findPipe(uint8_t type, uint8_t direction);
+    bool findInterface(USBInterfaceShim* interface);
+    bool findPipe(USBPipeShim* pipe, uint8_t type, uint8_t direction);
     
     bool continuousRead();
+#ifndef TARGET_ELCAPITAN
     static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
+#else
+    static void readCompletion(void* target, void* parameter, IOReturn status, uint32_t bytesTransferred);
+#endif
     
     IOReturn hciCommand(void * command, uint16_t length);
     IOReturn hciParseResponse(void* response, uint16_t length, void* output, uint8_t* outputLength);
@@ -131,9 +160,11 @@ private:
     bool performUpgrade();
 public:
     virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+#ifndef NON_RESIDENT
     virtual bool start(IOService* provider);
     virtual void stop(IOService* provider);
     virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+#endif
     virtual const char* stringFromReturn(IOReturn rtn);
 };
 

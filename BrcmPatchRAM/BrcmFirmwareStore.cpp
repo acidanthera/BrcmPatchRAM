@@ -287,7 +287,11 @@ exit_error:
     return NULL;
 }
 
+#ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmFirmwareStore, IOService)
+#else
+OSDefineMetaClassAndStructors(BrcmFirmwareStore2, IOService)
+#endif
 
 bool BrcmFirmwareStore::start(IOService *provider)
 {
@@ -296,6 +300,17 @@ bool BrcmFirmwareStore::start(IOService *provider)
     if (!super::start(provider))
         return false;
     
+    // place version/build info in ioreg properties RM,Build and RM,Version
+    extern kmod_info_t kmod_info;
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    setProperty("RM,Version", buf);
+#ifdef DEBUG
+    setProperty("RM,Build", "Debug-" LOGNAME);
+#else
+    setProperty("RM,Build", "Release-" LOGNAME);
+#endif
+
     mFirmwares = OSDictionary::withCapacity(1);
     if (!mFirmwares)
         return false;

@@ -1,11 +1,19 @@
 # really just some handy scripts...
 
+# use BrcmPatchRAM.kext on 10.10 and prior
+# use BrcmPatchRAM2.kext on 10.11 and later
+OSXVER=$(shell if [[ "`sw_vers -productVersion`" == 10.11* ]]; then echo 10.11+; else echo 10.10-; fi)
+ifeq "$(OSXVER)" "10.10-" 
 KEXT=BrcmPatchRAM.kext
+else
+KEXT=BrcmPatchRAM2.kext
+endif
+
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
-BUILDDIR=./Build/Products
 #INSTDIR=/kexts
 INSTDIR=/System/Library/Extensions
+BUILDDIR=./Build/Products
 
 ifeq ($(findstring 32,$(BITS)),32)
 OPTIONS:=$(OPTIONS) -arch i386
