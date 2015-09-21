@@ -23,6 +23,10 @@
 #include <IOKit/IOLib.h>
 #include <IOKit/IOService.h>
 
+#define kBrcmFirmwareLocation       "/usr/local/share/BrcmPatchRAM"
+#define kBrcmFirmwareCompressed     "zhx"
+#define kBrmcmFirwareUncompressed   "hex"
+
 #ifndef TARGET_ELCAPITAN
 #define kBrcmFirmwareStoreService   "BrcmFirmwareStore"
 #else
@@ -47,12 +51,14 @@ class BrcmFirmwareStore : public IOService
     
         OSData* decompressFirmware(OSData* firmware);
         OSArray* parseFirmware(OSData* firmwareData);
-        OSArray* loadFirmware(OSString* firmwareIdentifier);
+        OSData* loadFirmwareFile(const char* filename, const char* suffix);
+        OSData* loadFirmwareFiles(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
+        OSArray* loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
     public:
         virtual bool start(IOService *provider);
         virtual void stop(IOService *provider);
     
-        OSArray* getFirmware(OSString* firmwareIdentifier);
+        OSArray* getFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
 };
 
 #endif /* defined(__BrcmPatchRAM__BrcmFirmwareStore__) */
