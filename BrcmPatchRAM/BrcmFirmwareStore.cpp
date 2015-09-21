@@ -21,6 +21,10 @@
 #include "Common.h"
 #include "BrcmFirmwareStore.h"
 
+#include <sys/time.h>
+#include <sys/vnode.h>
+#include <sys/fcntl.h>
+
 /***************************************
  * Zlib Decompression
  ***************************************/
@@ -328,27 +332,105 @@ void BrcmFirmwareStore::stop(IOService *provider)
     super::stop(provider);
 }
 
-OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
+OSData* BrcmFirmwareStore::loadFirmwareFile(const char* filename, const char* suffix)
+{
+    OSData* result = NULL;
+    int error = 0;
+    vnode_t firmware_vnode = NULLVP;
+    char path[PATH_MAX];
+    
+    snprintf(path, PATH_MAX, "%s/%s.%s", kBrcmFirmwareLocation, filename, suffix);
+    error = vnode_open(path, O_RDONLY, 0, 0, &firmware_vnode, NULL);
+    
+    if (error == 0)
+    {
+        int remaining;
+        int bufferSize = 128 * 1024; // 128 Kb
+        void* buffer = NULL;
+        buffer = IOMalloc(bufferSize);
+        
+        error = vn_rdwr(UIO_READ, firmware_vnode, (caddr_t)buffer,
+                        bufferSize, 0, UIO_SYSSPACE, 0, NULL, &remaining, NULL);
+        
+        if (error != 0)
+        {
+            AlwaysLog("Error reading from \"%s\": %d\n", path, error);
+            return NULL;
+        }
+        
+        error = vnode_close(firmware_vnode, 0, NULL);
+        
+        if (error != 0)
+            AlwaysLog("Error closing \"%s\": %d.\n", path, error);
+        
+        //error = vnode_put(firmware_vnode);
+        
+        //if (error)
+        //    AlwaysLog("Error putting vnode: %x.\n", error);
+        
+        AlwaysLog("Retrieved firmware \"%s\" from \"%s\".\n", filename, path);
+        
+        result = OSData::withBytes(buffer, bufferSize - remaining);
+        IOFree(buffer, bufferSize);
+    }
+    else
+        AlwaysLog("No firmware present on filesystem for \"%s\".\n", path);
+
+    return result;
+}
+
+OSData* BrcmFirmwareStore::loadFirmwareFiles(UInt16 vendorId, UInt16 productId, OSString* firmwareKey)
+{
+    OSData* result = NULL;
+    char filename[PATH_MAX];
+    
+    snprintf(filename, PATH_MAX, "%04x_%04x", vendorId, productId);
+
+    result = loadFirmwareFile(filename, kBrcmFirmwareCompressed);
+
+    if (!result)
+        loadFirmwareFile(filename, kBrmcmFirwareUncompressed);
+
+    if (!result)
+        result = loadFirmwareFile(firmwareKey->getCStringNoCopy(), kBrcmFirmwareCompressed);
+    
+    if (!result)
+        result = loadFirmwareFile(firmwareKey->getCStringNoCopy(), kBrmcmFirwareUncompressed);
+    
+    return result;
+}
+
+OSArray* BrcmFirmwareStore::loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareKey)
 {
     DebugLog("loadFirmware\n");
     
-    OSDictionary* firmwares = OSDynamicCast(OSDictionary, this->getProperty("Firmwares"));
+    OSData* configuredData = NULL;
     
-    if (!firmwares)
-    {
-        AlwaysLog("Unable to locate BrcmFirmwareStore configured firmwares.\n");
-        return NULL;
-    }
+    // First try to load firmware from disk
+    configuredData = loadFirmwareFiles(vendorId, productId, firmwareKey);
     
-    OSData* configuredData = OSDynamicCast(OSData, firmwares->getObject(firmwareKey));
-    
+    // Next try to load firmware from configuration
     if (!configuredData)
     {
-        AlwaysLog("No firmware for firmware key \"%s\".\n", firmwareKey->getCStringNoCopy());
+        OSDictionary* firmwares = OSDynamicCast(OSDictionary, this->getProperty("Firmwares"));
+    
+        if (!firmwares)
+        {
+            AlwaysLog("Unable to locate BrcmFirmwareStore configured firmwares.\n");
+            return NULL;
+        }
+    
+        configuredData = OSDynamicCast(OSData, firmwares->getObject(firmwareKey));
+        
+        if (configuredData)
+            AlwaysLog("Retrieved firmware \"%s\" from internal configuration.\n", firmwareKey->getCStringNoCopy());
+    }
+        
+    if (!configuredData)
+    {
+        AlwaysLog("No firmware available for firmware key \"%s\".\n", firmwareKey->getCStringNoCopy());
         return NULL;
     }
-    
-    AlwaysLog("Retrieved firmware for firmware key \"%s\".\n", firmwareKey->getCStringNoCopy());
     
     OSData* firmwareData = decompressFirmware(configuredData);
     
@@ -377,7 +459,7 @@ OSArray* BrcmFirmwareStore::loadFirmware(OSString* firmwareKey)
     return instructions;
 }
 
-OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
+OSArray* BrcmFirmwareStore::getFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareKey)
 {
     DebugLog("getFirmware\n");
     
@@ -393,7 +475,7 @@ OSArray* BrcmFirmwareStore::getFirmware(OSString* firmwareKey)
     if (!instructions)
     {
         // Load instructions for firmwareKey
-        instructions = loadFirmware(firmwareKey);
+        instructions = loadFirmware(vendorId, productId, firmwareKey);
         
         // Add instructions to the firmwares cache
         if (instructions)

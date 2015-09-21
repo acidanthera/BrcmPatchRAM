@@ -198,7 +198,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     if (OSString* firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey)))
     {
         if (BrcmFirmwareStore* firmwareStore = getFirmwareStore())
-            firmwareStore->getFirmware(firmwareKey);
+            firmwareStore->getFirmware(mVendorId, mProductId, firmwareKey);
     }
 
     uploadFirmware();
@@ -1200,7 +1200,7 @@ bool BrcmPatchRAM::performUpgrade()
                     mDeviceState = kUpdateAborted;
                     continue;
                 }
-                instructions = firmwareStore->getFirmware(OSDynamicCast(OSString, getProperty(kFirmwareKey)));
+                instructions = firmwareStore->getFirmware(mVendorId, mProductId, OSDynamicCast(OSString, getProperty(kFirmwareKey)));
                 // Unable to retrieve firmware instructions
                 if (!instructions)
                 {
