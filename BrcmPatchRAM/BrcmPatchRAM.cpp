@@ -625,9 +625,10 @@ void BrcmPatchRAM::publishPersonality()
     OSDictionary* dict = OSDictionary::withCapacity(5);
     if (!dict) return;
     dict->setObject(kIOProviderClassKey, brcmProviderClass);
+    dict->setObject(kIOClassKey, brcmIOClass);
     setNumberInDict(dict, kUSBProductID, mProductId);
     setNumberInDict(dict, kUSBVendorID, mVendorId);
-    
+
     // Retrieve currently matching IOKit driver personalities
     OSDictionary* personality = NULL;
     SInt32 generationCount;
@@ -659,8 +660,7 @@ void BrcmPatchRAM::publishPersonality()
         DebugLog("brcmIOClass: \"%s\"\n", brcmIOClass->getCStringNoCopy());
         DebugLog("brcmProviderClass: \"%s\"\n", brcmProviderClass->getCStringNoCopy());
         dict->setObject(kBundleIdentifier, brcmBundleIdentifier);
-        dict->setObject(kIOClassKey, brcmIOClass);
-        
+
         // Add new personality into the kernel
         if (OSArray* array = OSArray::withCapacity(1))
         {
