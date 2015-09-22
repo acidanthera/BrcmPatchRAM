@@ -21,6 +21,8 @@
 #include "Common.h"
 #include "BrcmFirmwareStore.h"
 
+#include <libkern/OSKextLib.h>
+
 /***************************************
  * Zlib Decompression
  ***************************************/
@@ -299,9 +301,8 @@ bool BrcmFirmwareStore::start(IOService *provider)
         return false;
     
     // place version/build info in ioreg properties RM,Build and RM,Version
-    extern kmod_info_t kmod_info;
     char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    snprintf(buf, sizeof(buf), "%s %s", OSKextGetCurrentIdentifier(), OSKextGetCurrentVersionString());
     setProperty("RM,Version", buf);
 #ifdef DEBUG
     setProperty("RM,Build", "Debug-" LOGNAME);
