@@ -20,6 +20,7 @@
 		ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
 		ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		ED9E48351BB1F50600DC58E4 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx in Resources */ = {isa = PBXBuildFile; fileRef = D43475551BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx */; settings = {ASSET_TAGS = (); }; };
 		EDA03B781BA47A0E005BDCA2 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		EDA03B791BA47A0F005BDCA2 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		EDA03B7A1BA47A12005BDCA2 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
@@ -310,6 +311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED9E48351BB1F50600DC58E4 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
