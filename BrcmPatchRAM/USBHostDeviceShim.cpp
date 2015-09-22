@@ -20,10 +20,7 @@
 #include "USBDeviceShim.h"
 #include "Common.h"
 
-#include <IOKit/usb/IOUSBHostFamily.h>
 #include <IOKit/usb/IOUSBHostInterface.h>
-#include <IOKit/usb/USBSpec.h>
-#include <IOKit/usb/USB.h>
 #include <sys/utfconv.h>
 
 USBDeviceShim::USBDeviceShim()

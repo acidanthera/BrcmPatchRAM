@@ -304,9 +304,8 @@ bool BrcmFirmwareStore::start(IOService *provider)
         return false;
     
     // place version/build info in ioreg properties RM,Build and RM,Version
-    extern kmod_info_t kmod_info;
     char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    snprintf(buf, sizeof(buf), "%s %s", OSKextGetCurrentIdentifier(), OSKextGetCurrentVersionString());
     setProperty("RM,Version", buf);
 #ifdef DEBUG
     setProperty("RM,Build", "Debug-" LOGNAME);
@@ -316,6 +315,10 @@ bool BrcmFirmwareStore::start(IOService *provider)
 
     mFirmwares = OSDictionary::withCapacity(1);
     if (!mFirmwares)
+        return false;
+    
+    mCompletionLock = IOLockAlloc();
+    if (!mCompletionLock)
         return false;
 
     registerService();
@@ -329,54 +332,65 @@ void BrcmFirmwareStore::stop(IOService *provider)
     
     OSSafeRelease(mFirmwares);
     
+    if (mCompletionLock)
+    {
+        IOLockFree(mCompletionLock);
+        mCompletionLock = NULL;
+    }
+    
     super::stop(provider);
+}
+
+void BrcmFirmwareStore::requestResourceCallback(OSKextRequestTag requestTag, OSReturn result, const void * resourceData, uint32_t resourceDataLength, void* context)
+{
+    BrcmFirmwareStore *me = (BrcmFirmwareStore*)context;
+    
+    IOLockLock(me->mCompletionLock);
+
+    if (kOSReturnSuccess == result)
+    {
+        DebugLog("OSKextRequestResource Callback: %d bytes of data.\n", resourceDataLength);
+        
+        me->mFirmware = OSData::withBytes(resourceData, resourceDataLength);
+    }
+    else
+        DebugLog("OSKextRequestResource Callback: %08x.\n", result);
+    
+    IOLockUnlock(me->mCompletionLock);
+    
+    // wake waiting task in performUpgrade (in IOLockSleep)...
+    IOLockWakeup(me->mCompletionLock, me, true);
 }
 
 OSData* BrcmFirmwareStore::loadFirmwareFile(const char* filename, const char* suffix)
 {
-    OSData* result = NULL;
-    int error = 0;
-    vnode_t firmware_vnode = NULLVP;
     char path[PATH_MAX];
     
-    snprintf(path, PATH_MAX, "%s/%s.%s", kBrcmFirmwareLocation, filename, suffix);
-    error = vnode_open(path, O_RDONLY, 0, 0, &firmware_vnode, NULL);
+    IOLockLock(mCompletionLock);
     
-    if (error == 0)
+    mFirmware = NULL;
+    snprintf(path, PATH_MAX, "%s.%s", filename, suffix);
+    
+    OSReturn ret = OSKextRequestResource(OSKextGetCurrentIdentifier(),
+                          path,
+                          requestResourceCallback,
+                          this,
+                          NULL);
+    
+    AlwaysLog("OSKextRequestResource: %08x\n", ret);
+    
+    // wait for completion of the async read
+    IOLockSleep(mCompletionLock, this, 0);
+    
+    IOLockUnlock(mCompletionLock);
+    
+    if (mFirmware)
     {
-        int remaining;
-        int bufferSize = 128 * 1024; // 128 Kb
-        void* buffer = NULL;
-        buffer = IOMalloc(bufferSize);
-        
-        error = vn_rdwr(UIO_READ, firmware_vnode, (caddr_t)buffer,
-                        bufferSize, 0, UIO_SYSSPACE, 0, NULL, &remaining, NULL);
-        
-        if (error != 0)
-        {
-            AlwaysLog("Error reading from \"%s\": %d\n", path, error);
-            return NULL;
-        }
-        
-        error = vnode_close(firmware_vnode, 0, NULL);
-        
-        if (error != 0)
-            AlwaysLog("Error closing \"%s\": %d.\n", path, error);
-        
-        //error = vnode_put(firmware_vnode);
-        
-        //if (error)
-        //    AlwaysLog("Error putting vnode: %x.\n", error);
-        
-        AlwaysLog("Retrieved firmware \"%s\" from \"%s\".\n", filename, path);
-        
-        result = OSData::withBytes(buffer, bufferSize - remaining);
-        IOFree(buffer, bufferSize);
+        AlwaysLog("Loaded firmware \"%s\" from resources.\n", path);
+        return mFirmware;
     }
-    else
-        AlwaysLog("No firmware present on filesystem for \"%s\".\n", path);
 
-    return result;
+    return NULL;
 }
 
 OSData* BrcmFirmwareStore::loadFirmwareFiles(UInt16 vendorId, UInt16 productId, OSString* firmwareKey)

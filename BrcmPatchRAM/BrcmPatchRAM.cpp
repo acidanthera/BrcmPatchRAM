@@ -19,26 +19,15 @@
 
 //REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
 
-#include <IOKit/IOLib.h>
-#include <IOKit/IOMessage.h>
-
 #ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
 #else
-#include <IOKit/usb/IOUSBHostFamily.h>
-#include <IOKit/usb/IOUSBHostInterface.h>
-#include <IOKit/usb/USBSpec.h>
 #include <IOKit/usb/USB.h>
-#include <sys/utfconv.h>
 #endif
 #include <IOKit/IOCatalogue.h>
 
-#include <kern/clock.h>
-#include <libkern/zlib.h>
-#include <string.h>
-
 #include <libkern/version.h>
-extern kmod_info_t kmod_info;
+#include <libkern/OSKextLib.h>
 
 #include "Common.h"
 #include "hci.h"
@@ -128,7 +117,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
     DebugLog("probe\n");
 
-    AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", kmod_info.version, version_major, version_minor);
+    AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", OSKextGetCurrentVersionString(), version_major, version_minor);
 
 #ifdef TARGET_ELCAPITAN
     // preference towards starting BrcmPatchRAM2.kext when BrcmPatchRAM.kext also exists
@@ -228,7 +217,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 
     // place version/build info in ioreg properties RM,Build and RM,Version
     char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", kmod_info.name, kmod_info.version);
+    snprintf(buf, sizeof(buf), "%s %s", OSKextGetCurrentIdentifier(), OSKextGetCurrentVersionString());
     setProperty("RM,Version", buf);
 #ifdef DEBUG
     setProperty("RM,Build", "Debug-" LOGNAME);
