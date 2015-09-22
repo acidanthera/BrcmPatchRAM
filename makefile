@@ -2,8 +2,8 @@
 
 # use BrcmPatchRAM.kext on 10.10 and prior
 # use BrcmPatchRAM2.kext on 10.11 and later
-OSXVER=$(shell if [[ "`sw_vers -productVersion`" == 10.11* ]]; then echo 10.11+; else echo 10.10-; fi)
-ifeq "$(OSXVER)" "10.10-" 
+VERSION_ERA=$(shell ./print_version.sh)
+ifeq "$(VERSION_ERA)" "10.10-"
 KEXT=BrcmPatchRAM.kext
 else
 KEXT=BrcmPatchRAM2.kext
@@ -47,9 +47,9 @@ install_debug:
 
 .PHONY: install
 install:
-	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
-	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
-	make update_kernelcache
+	echo # sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
+	echo # if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
+	echo # make update_kernelcache
 
 .PHONY: install_inject
 install_inject:
