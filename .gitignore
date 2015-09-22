@@ -9,5 +9,4 @@ BrcmPatchRAM.xcodeproj/xcuserdata
 scm.plist
 *.xccheckout
 .DS_Store
-
-ModuleCache/Session.modulevalidation
+ModuleCache
