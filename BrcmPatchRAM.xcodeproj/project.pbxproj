@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D4049E571A3252B1003A1893 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		D43475561BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx in Resources */ = {isa = PBXBuildFile; fileRef = D43475551BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx */; settings = {ASSET_TAGS = (); }; };
 		D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
 		D4E0A25D1BA30FD300A5FE05 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; };
 		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
@@ -58,6 +59,7 @@
 /* Begin PBXFileReference section */
 		D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmFirmwareStore.cpp; sourceTree = "<group>"; };
 		D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrcmFirmwareStore.h; sourceTree = "<group>"; };
+		D43475551BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx */ = {isa = PBXFileReference; lastKnownFileType = file; name = BCM20702A1_001.002.014.1483.1674_v5770.zhx; path = Firmware/BCM20702A1_001.002.014.1483.1674_v5770.zhx; sourceTree = "<group>"; };
 		D45427691A2A045E000B0964 /* hci.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hci.h; sourceTree = "<group>"; };
 		D454276C1A2A07A7000B0964 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = USBHostDeviceShim.cpp; sourceTree = "<group>"; };
@@ -108,6 +110,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D43475541BB1CFFE00BA7661 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D43475551BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx */,
+			);
+			name = Resources;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		D4F91AF41A2998CE0030D10D = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +153,7 @@
 				D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */,
 				D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */,
 				ED2A7DD91B37DEAD00DC200F /* BrcmBluetoothInjector */,
+				D43475541BB1CFFE00BA7661 /* Resources */,
 			);
 			path = BrcmPatchRAM;
 			sourceTree = "<group>";
@@ -312,6 +324,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D43475561BB1D09400BA7661 /* BCM20702A1_001.002.014.1483.1674_v5770.zhx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
