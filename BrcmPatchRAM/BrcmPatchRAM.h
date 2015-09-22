@@ -24,8 +24,6 @@
 #define NON_RESIDENT 1
 #endif
 
-#include <IOKit/IOService.h>
-#include <IOKit/IOLib.h>
 #include <IOKit/IOInterruptEventSource.h>
 #include <IOKit/IOTimerEventSource.h>
 

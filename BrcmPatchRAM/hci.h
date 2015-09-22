@@ -20,8 +20,6 @@
 #ifndef BRCMPatchRAM_hci_h
 #define BRCMPatchRAM_hci_h
 
-#include <IOKit/IOService.h>
-
 typedef enum
 {
     HCI_COMMAND = 0x01,

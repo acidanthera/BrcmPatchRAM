@@ -19,23 +19,12 @@
 
 //REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
 
-#include <IOKit/IOLib.h>
-#include <IOKit/IOMessage.h>
-
 #ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
 #else
-#include <IOKit/usb/IOUSBHostFamily.h>
-#include <IOKit/usb/IOUSBHostInterface.h>
-#include <IOKit/usb/USBSpec.h>
 #include <IOKit/usb/USB.h>
-#include <sys/utfconv.h>
 #endif
 #include <IOKit/IOCatalogue.h>
-
-#include <kern/clock.h>
-#include <libkern/zlib.h>
-#include <string.h>
 
 #include <libkern/version.h>
 extern kmod_info_t kmod_info;
