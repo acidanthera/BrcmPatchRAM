@@ -9,6 +9,14 @@ else
 KEXT=BrcmPatchRAM2.kext
 endif
 
+# for using BrcmFirmwareRepo.kext (firmware in Resources)
+KEXT2=BrcmFirmwareRepo.kext
+KEXTDEL=BrcmFirmwareStore.kext
+
+# for using BrcmFirmwareStore.kext (firmware in Info.plist)
+#KEXT2=BrcmFirmwareStore.kext
+#KEXTDEL=BrcmFirmwareRepo.kext
+
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
 #INSTDIR=/kexts
@@ -41,14 +49,20 @@ update_kernelcache:
 
 .PHONY: install_debug
 install_debug:
+	if [ "$(KEXTDEL)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL); fi
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT); fi
+	sudo cp -R $(BUILDDIR)/Debug/$(KEXT2) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT2); fi
 	make update_kernelcache
 
 .PHONY: install
 install:
+	if [ "$(KEXTDEL)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL); fi
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
+	sudo cp -R $(BUILDDIR)/Release/$(KEXT2) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT2); fi
 	make update_kernelcache
 
 .PHONY: install_inject

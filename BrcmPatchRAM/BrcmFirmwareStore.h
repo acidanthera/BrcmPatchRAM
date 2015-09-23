@@ -27,47 +27,36 @@
 #define kBrcmFirmwareCompressed     "zhx"
 #define kBrmcmFirwareUncompressed   "hex"
 
-#ifndef TARGET_ELCAPITAN
-#define kBrcmFirmwareStoreService   "BrcmFirmwareStore"
-#else
-#define kBrcmFirmwareStoreService   "BrcmFirmwareStore2"
-#endif
-
-#ifdef TARGET_ELCAPITAN
-#define BrcmFirmwareStore BrcmFirmwareStore2
-#endif
+#define kBrcmFirmwareStoreService "BrcmFirmwareStore"
 
 class BrcmFirmwareStore : public IOService
 {
-    private:
-        typedef IOService super;
-#ifndef TARGET_ELCAPITAN
-        OSDeclareDefaultStructors(BrcmFirmwareStore);
-#else
-        OSDeclareDefaultStructors(BrcmFirmwareStore2);
-#endif
+private:
+    typedef IOService super;
+    OSDeclareDefaultStructors(BrcmFirmwareStore);
 
-        struct ResourceCallbackContext
-        {
-            BrcmFirmwareStore* me;
-            OSData* firmware;
-        };
-    
-        IOLock* mDataLock;
-        OSDictionary* mFirmwares;
-        IOLock* mCompletionLock = NULL;
+    struct ResourceCallbackContext
+    {
+        BrcmFirmwareStore* me;
+        OSData* firmware;
+    };
 
-        OSData* decompressFirmware(OSData* firmware);
-        OSArray* parseFirmware(OSData* firmwareData);
-        static void requestResourceCallback(OSKextRequestTag requestTag, OSReturn result, const void * resourceData, uint32_t resourceDataLength, void* context);
-        OSData* loadFirmwareFile(const char* filename, const char* suffix);
-        OSData* loadFirmwareFiles(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
-        OSArray* loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
-    public:
-        virtual bool start(IOService *provider);
-        virtual void stop(IOService *provider);
-    
-        OSArray* getFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
+    IOLock* mDataLock;
+    OSDictionary* mFirmwares;
+    IOLock* mCompletionLock = NULL;
+
+    OSData* decompressFirmware(OSData* firmware);
+    OSArray* parseFirmware(OSData* firmwareData);
+    static void requestResourceCallback(OSKextRequestTag requestTag, OSReturn result, const void * resourceData, uint32_t resourceDataLength, void* context);
+    OSData* loadFirmwareFile(const char* filename, const char* suffix);
+    OSData* loadFirmwareFiles(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
+    OSArray* loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
+
+public:
+    virtual bool start(IOService *provider);
+    virtual void stop(IOService *provider);
+
+    virtual OSArray* getFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
 };
 
 #endif /* defined(__BrcmPatchRAM__BrcmFirmwareStore__) */
