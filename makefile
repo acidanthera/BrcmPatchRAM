@@ -47,9 +47,9 @@ install_debug:
 
 .PHONY: install
 install:
-	echo # sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
-	echo # if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
-	echo # make update_kernelcache
+	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
+	make update_kernelcache
 
 .PHONY: install_inject
 install_inject:
