@@ -46,11 +46,17 @@ class BrcmFirmwareStore : public IOService
 #else
         OSDeclareDefaultStructors(BrcmFirmwareStore2);
 #endif
+
+        struct ResourceCallbackContext
+        {
+            BrcmFirmwareStore* me;
+            OSData* firmware;
+        };
     
+        IOLock* mDataLock;
         OSDictionary* mFirmwares;
-        OSData* mFirmware;
         IOLock* mCompletionLock = NULL;
-    
+
         OSData* decompressFirmware(OSData* firmware);
         OSArray* parseFirmware(OSData* firmwareData);
         static void requestResourceCallback(OSKextRequestTag requestTag, OSReturn result, const void * resourceData, uint32_t resourceDataLength, void* context);
