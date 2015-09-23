@@ -469,7 +469,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Broadcom 4352 (20702A1 Combo v5744)</string>
+			<string>Azurewave CE-123H 20702A1</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1502.1766_v5862</string>
 			<key>IOClass</key>
