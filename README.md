@@ -1,21 +1,29 @@
 ###BrcmPatchRAM -- RehabMan fork
 
-This version (v1.7) of BrcmPatchRAM has a fix for a problem I noticed on my Lenovo u430.
+For the most part this fork is kept in sync with the-darkvoid's verson.  We are working together to improve the project.
 
-Description of the problem: Intermittently, bluetooth would not be available after a sleep/wake cycle.  The problem turns out that sometimes Yosemite doesn't "tear down" and "reconstruct" the USB (either EHC or XHC) ioreg tree after wake.  This results in the instance of BrcmPatchRAM that was resident prior to sleep to remain resident and attached to the bluetooth device.  This means no call to ::probe will be made and thus no firmware loaded into the device.  The problem was observed intermittently, approx. 1 of 25 wakes.
 
-The fix: Since the device has no firmware and no reprobe will be happening in that case, we need to load firmware after the wake notification is received but not before we know that a re-probe is not going to occur.  By intrumenting ::stop, it was determined that, in normal cases, the device is reconstructed (thus old instance gets ::stop, new instance gets ::probe) within approx 100-200ms.  The solution, then, is to create a timer on wake and should the timer expire (before ::stop is called), spin up a thread to load firmware.  The timer used currently is 400ms.  The longest time between wake and reprobe (non failure case) was 214ms.
-
-I mention the specific timing as I don't believe the code will deal gracefully if a USB teardown happens in the middle of firmware uploading.  I will look at improving the robustness in the (near) future.  This version has been tested on my u430 over many sleep/wake cycles without issue.  No instances of failed bluetooth after sleep, and no crashes caused by the firmware uploader thread.
-
-### RehabMan Fork Downloads
+###RehabMan Fork Downloads
 
 Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads
 
 
-###BrcmPatchRAM.kext
+###Installation
 
-For Yosemite and earlier.
+Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on OS X version, never both.
+
+  * BrcmPatchRAM.kext: for 10.10 or earlier.
+
+  * BrcmPatchRAM2.kext: for 10.11 or later.
+
+Also, install one firmware kext BrcmFirmwareStore.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
+
+  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions.  This kext is much more memory efficient than BrcmFirmwareStore.kext and is the preferred configuration.
+
+  * BrcmFirmwareStore.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareStore.kext
+
+
+###BrcmPatchRAM
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
 
@@ -34,20 +42,13 @@ The firmware applied is extracted from the Windows drivers and the functionality
 Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
 
 
-###BrcmPatchRAM2.kext
-
-To be used for OS X 10.11 or newer.
-
-This kext is re-written to use the new USB stack in 10.11 (IOUSBHostFamily vs. former IOUSBFamily).
-
-BrcmPatchRAM.kext will refuse to load on versions prior to 10.11.
-
-
 ###BrcmBluetoothInjector.kext
 
 To be used for OS X 10.11 or newer.
 
 This kext is a simple injector... it does not contain a firmware uploader.  Try this kext if you wish to see if the built-in firmware uploader in 10.11+ will work for your device.
+
+Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareStore) with this kext.
 
 
 ####Supported Devices
@@ -125,19 +126,37 @@ This means that for all intents and purposes your device will be native on OS X 
 
 It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through Clover or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
 
-Clover users can make use of the following kext patch:
+Clover users can patch using KextsToPatch in config.plist.
+
+The patch for 10.10 is:
 ```XML
 <dict>
     <key>Comment</key>
-    <string>IOBluetoothFamily - Continuity &amp; Hand-off</string>
+    <string>10.10.2+ BT4LE-Handoff-Hotspot, Dokterdok</string>
     <key>Find</key>
-    <data>i4eMAQAA</data>
+    <data>SIXAdFwPt0g=</data>
     <key>Name</key>
     <string>IOBluetoothFamily</string>
     <key>Replace</key>
-    <data>uA8AAACQ</data>
+    <data>Qb4PAAAA61k=</data>
 </dict>
 ```	
+
+The patch for 10.11 is:
+```XML
+<dict>
+    <key>Comment</key>
+    <string>10.11.dp1+ BT4LE-Handoff-Hotspot, credit RehabMan based on Dokterdok original</string>
+    <key>Find</key>
+    <data>SIX/dEdIiwc=</data>
+    <key>Name</key>
+    <string>IOBluetoothFamily</string>
+    <key>Replace</key>
+    <data>Qb4PAAAA60Q=</data>
+</dict>
+```
+
+
 ####Troubleshooting
 
 After installing BrcmPatchRAM, even though your Bluetooth icon may show up, it could be that the firmware has not been properly updated.
@@ -161,6 +180,7 @@ In order to report an error log an issue on github with the following informatio
  * BrcmPatchRAM version used
  * Dump of BrcmPatchRAM debug output from /var/log/system.log showing the firmware upload failure
 
+
 ####Firmware Compatibility
 
 Some USB devices are very firmware specific and trying to upload any other firmware for the same chipset into them will fail.
@@ -180,7 +200,8 @@ The errors in between mean the firmware was not uploaded successfully, and the d
 
 For other devices the newest firmware available (even though not specified specifically in the Windows drivers) works fine.
 
-#### New devices
+
+####New devices
 
 In order to support a new device, the firmware for the device needs to be extracted from existing Windows drivers.
 
@@ -217,7 +238,7 @@ zlib.pl deflate BCM20702A1_001.002.014.1443.1457.hex > BCM20702A1_001.002.014.14
 ```	
  * After this a hex dump can be created for pasting into a plist editor:
 ```bash	
-xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.dmp
+xxd -ps BCM20702A1_001.002.014.1443.1457.zhx|tr '\n' ' ' > BCM20702A1_001.002.014.1443.1457.dmp
 ```		
  * Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
  
@@ -226,6 +247,8 @@ xxd -ps BCM20702A1_001.002.014.1443.1457.zhx > BCM20702A1_001.002.014.1443.1457.
   So in this case the firmware version in OS X would be: "*c14 v5553*".
 	
  * After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
+
+Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resources, either by firmware key name (see above), or by naming the file with just the vendor and device-id.  For example, 0930_0223.hex (uncompressed) or 0930_0223.zhx (compressed).
  
  Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
