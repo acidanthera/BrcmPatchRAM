@@ -403,7 +403,7 @@ OSData* BrcmFirmwareStore::loadFirmwareFiles(UInt16 vendorId, UInt16 productId, 
     result = loadFirmwareFile(filename, kBrcmFirmwareCompressed);
 
     if (!result)
-        loadFirmwareFile(filename, kBrmcmFirwareUncompressed);
+        result = loadFirmwareFile(filename, kBrmcmFirwareUncompressed);
 
     if (!result)
         result = loadFirmwareFile(firmwareKey->getCStringNoCopy(), kBrcmFirmwareCompressed);
