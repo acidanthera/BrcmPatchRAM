@@ -42,20 +42,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "842B20A31BB2F02900D3C468"
-               BuildableName = "BrcmFirmwareStore.kext"
-               BlueprintName = "BrcmFirmwareStore"
-               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "842B20B71BB2F0D900D3C468"
                BuildableName = "BrcmFirmwareRepo.kext"
                BlueprintName = "BrcmFirmwareRepo"

@@ -9,15 +9,12 @@ else
 KEXT=BrcmPatchRAM2.kext
 endif
 
+# Note: BrcmFirmwareStore.kext obsolete (but still deleted here if present)
+
 # for using BrcmFirmwareRepo.kext (firmware in Resources)
 KEXT2=BrcmFirmwareRepo.kext
-KEXTDEL1=BrcmFirmwareStore.kext
-KEXTDEL2=BrcmFirmwareData.kext
-
-# for using BrcmFirmwareStore.kext (firmware in Info.plist)
-#KEXT2=BrcmFirmwareStore.kext
-#KEXTDEL1=BrcmFirmwareRepo.kext
-#KEXTDEL2=BrcmFirmwareData.kext
+KEXTDEL1=BrcmFirmwareData.kext
+KEXTDEL2=BrcmFirmwareStore.kext
 
 # for using BrcmFirmwareData.kext (firmware in the kext itself)
 #KEXT2=BrcmFirmwareData.kext

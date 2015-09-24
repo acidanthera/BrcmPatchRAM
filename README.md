@@ -16,11 +16,11 @@ Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on OS X version
 
   * BrcmPatchRAM2.kext: for 10.11 or later.
 
-Also, install one firmware kext BrcmFirmwareStore.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
+Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
-  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions.  This kext is much more memory efficient than BrcmFirmwareStore.kext and is the preferred configuration.
+  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions.  This kext is much more memory efficient than BrcmFirmwareData.kext and is the preferred configuration.
 
-  * BrcmFirmwareStore.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareStore.kext
+  * BrcmFirmwareData.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareData.kext
 
 
 ###BrcmPatchRAM
@@ -48,7 +48,7 @@ To be used for OS X 10.11 or newer.
 
 This kext is a simple injector... it does not contain a firmware uploader.  Try this kext if you wish to see if the built-in firmware uploader in 10.11+ will work for your device.
 
-Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareStore) with this kext.
+Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareData) with this kext.
 
 
 ####Supported Devices
@@ -113,7 +113,7 @@ BrcmPatchRAM consists of 3 parts:
  
   If a firmware update is required, the matching firmware data will be uploaded to the device and the device will be reset.
 	
- * BrcmFirmwareStore is a shared resource which holds all the configured firmwares for different Broadcom Bluetooth USB devices.
+ * BrcmFirmwareStore (implemented by either BrcmFirmwareData.kext or BrcmFirmwareRepo.kext) is a shared resource which holds all the configured firmwares for different Broadcom Bluetooth USB devices.
 
    Some devices require device specific firmware, while others can use the newest version available in the Windows drivers without issue.
 
@@ -189,8 +189,8 @@ This usually displays in the system log as:
     
     BrcmPatchRAM: Version 0.5 starting.
 	BrcmPatchRAM: USB [0a5c:21e8 5CF3706267E9 v274] "BCM20702A0" by "Broadcom Corp"
-	BrcmFirmwareStore: Retrieved firmware for firmware key "BCM20702A1_001.002.014.1443.1612_v5708".
-	BrcmFirmwareStore: Decompressed firmware (29714 bytes --> 70016 bytes).
+	BrcmPatchRAM: Retrieved firmware for firmware key "BCM20702A1_001.002.014.1443.1612_v5708".
+	BrcmPatchRAM: Decompressed firmware (29714 bytes --> 70016 bytes).
 	BrcmPatchRAM: device request failed (0xe000404f).
 	BrcmPatchRAM: Failed to reset the device (0xe00002d5).
 	BrcmPatchRAM: Unable to get device status (0xe000404f).
