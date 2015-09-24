@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.no-one.BrcmFirmwareStore</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>${CURRENT_PROJECT_VERSION}</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>${CURRENT_PROJECT_VERSION}</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>BrcmFirmwareStore</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.BrcmFirmwareStore</string>
+			<key>IOClass</key>
+			<string>BrcmFirmwareStore</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmFirmwareStore</string>
+			<key>IOProviderClass</key>
+			<string>disabled_IOResources</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kpi.iokit</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.libkern</key>
+		<string>9.0</string>
+		<key>com.apple.kpi.mach</key>
+		<string>9.0</string>
+	</dict>
+	<key>OSBundleCompatibleVersion</key>
+	<string>${CURRENT_PROJECT_VERSION}</string>
+	<key>#OSBundleRequired</key>
+	<string>Safe Boot</string>
+	<key>Source Code</key>
+	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
+</dict>
+</plist>

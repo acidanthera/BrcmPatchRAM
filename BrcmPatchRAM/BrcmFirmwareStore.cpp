@@ -20,6 +20,9 @@
 
 #include "Common.h"
 #include "BrcmFirmwareStore.h"
+#ifdef FIRMWAREDATA
+#include "FirmwareData.h"
+#endif
 
 #include <sys/time.h>
 #include <sys/vnode.h>
@@ -383,7 +386,7 @@ OSData* BrcmFirmwareStore::loadFirmwareFile(const char* filename, const char* su
                           &context,
                           NULL);
     
-    AlwaysLog("OSKextRequestResource: %08x\n", ret);
+    DebugLog("OSKextRequestResource: %08x\n", ret);
     
     // wait for completion of the async read
     IOLockSleep(mCompletionLock, this, 0);
@@ -414,7 +417,7 @@ OSData* BrcmFirmwareStore::loadFirmwareFiles(UInt16 vendorId, UInt16 productId, 
     
     if (!result)
         result = loadFirmwareFile(firmwareKey->getCStringNoCopy(), kBrmcmFirwareUncompressed);
-    
+
     return result;
 }
 
@@ -424,7 +427,26 @@ OSArray* BrcmFirmwareStore::loadFirmware(UInt16 vendorId, UInt16 productId, OSSt
     
     // First try to load firmware from disk
     OSData* configuredData = loadFirmwareFiles(vendorId, productId, firmwareKey);
-    
+
+#ifdef FIRMWAREDATA
+    char filename[PATH_MAX];
+    // Next try to load from internal binary data
+    if (!configuredData)
+    {
+        snprintf(filename, PATH_MAX, "%s.%s", firmwareKey->getCStringNoCopy(), kBrcmFirmwareCompressed);
+        configuredData = lookupFirmware(filename);
+        if (configuredData)
+            AlwaysLog("Loaded compressed embedded firmware for key \"%s\".\n", firmwareKey->getCStringNoCopy());
+    }
+    if (!configuredData)
+    {
+        snprintf(filename, PATH_MAX, "%s.%s", firmwareKey->getCStringNoCopy(), kBrmcmFirwareUncompressed);
+        configuredData = lookupFirmware(filename);
+        if (configuredData)
+            AlwaysLog("Loaded compressed embedded firmware for key \"%s\".\n", firmwareKey->getCStringNoCopy());
+    }
+#endif
+
     // Next try to load firmware from configuration
     if (!configuredData)
     {

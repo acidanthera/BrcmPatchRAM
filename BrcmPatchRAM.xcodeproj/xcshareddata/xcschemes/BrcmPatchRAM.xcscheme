@@ -76,6 +76,34 @@
                ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "84CDEE051BB3CA2200238DD1"
+               BuildableName = "Prebuild"
+               BlueprintName = "Prebuild"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "841AD87C1BB3C0350082B7B0"
+               BuildableName = "BrcmFirmwareData.kext"
+               BlueprintName = "BrcmFirmwareData"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

@@ -11,11 +11,18 @@ endif
 
 # for using BrcmFirmwareRepo.kext (firmware in Resources)
 KEXT2=BrcmFirmwareRepo.kext
-KEXTDEL=BrcmFirmwareStore.kext
+KEXTDEL1=BrcmFirmwareStore.kext
+KEXTDEL2=BrcmFirmwareData.kext
 
 # for using BrcmFirmwareStore.kext (firmware in Info.plist)
 #KEXT2=BrcmFirmwareStore.kext
-#KEXTDEL=BrcmFirmwareRepo.kext
+#KEXTDEL1=BrcmFirmwareRepo.kext
+#KEXTDEL2=BrcmFirmwareData.kext
+
+# for using BrcmFirmwareData.kext (firmware in the kext itself)
+#KEXT2=BrcmFirmwareData.kext
+#KEXTDEL1=BrcmFirmwareRepo.kext
+#KEXTDEL2=BrcmFirmwareStore.kext
 
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
@@ -49,7 +56,8 @@ update_kernelcache:
 
 .PHONY: install_debug
 install_debug:
-	if [ "$(KEXTDEL)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL); fi
+	if [ "$(KEXTDEL1)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL1); fi
+	if [ "$(KEXTDEL2)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL2); fi
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT); fi
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT2) $(INSTDIR)
@@ -58,7 +66,8 @@ install_debug:
 
 .PHONY: install
 install:
-	if [ "$(KEXTDEL)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL); fi
+	if [ "$(KEXTDEL1)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL1); fi
+	if [ "$(KEXTDEL2)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL2); fi
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT2) $(INSTDIR)

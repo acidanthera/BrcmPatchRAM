@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		841AD87E1BB3C0350082B7B0 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; settings = {ASSET_TAGS = (); }; };
+		841AD8811BB3C0350082B7B0 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
+		841AD8821BB3C0350082B7B0 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		841AD8831BB3C0350082B7B0 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
+		841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		841AD8851BB3C0350082B7B0 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
+		841AD88F1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841AD88E1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist */; settings = {ASSET_TAGS = (); }; };
+		841AD8911BB3C12F0082B7B0 /* FirmwareData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841AD8901BB3C12F0082B7B0 /* FirmwareData.cpp */; settings = {ASSET_TAGS = (); }; };
+		841AD8931BB3C1960082B7B0 /* FirmwareData.h in Headers */ = {isa = PBXBuildFile; fileRef = 841AD8921BB3C1960082B7B0 /* FirmwareData.h */; settings = {ASSET_TAGS = (); }; };
+		841AD8951BB3C27E0082B7B0 /* generate_firmware_data.sh in Resources */ = {isa = PBXBuildFile; fileRef = 841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */; settings = {ASSET_TAGS = (); }; };
 		842B20A91BB2F02900D3C468 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		842B20AA1BB2F02900D3C468 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		842B20AB1BB2F02900D3C468 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
@@ -69,6 +79,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		841AD8871BB3C0350082B7B0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		842B20B01BB2F02900D3C468 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -117,6 +136,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		841AD88C1BB3C0350082B7B0 /* BrcmFirmwareData.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmFirmwareData.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		841AD88E1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmFirmwareData-Info.plist"; sourceTree = "<group>"; };
+		841AD8901BB3C12F0082B7B0 /* FirmwareData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirmwareData.cpp; sourceTree = "<group>"; };
+		841AD8921BB3C1960082B7B0 /* FirmwareData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareData.h; sourceTree = "<group>"; };
+		841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = generate_firmware_data.sh; sourceTree = "<group>"; };
 		842B209F1BB2EED000D3C468 /* BrcmFirmwareStore-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmFirmwareStore-Info.plist"; sourceTree = "<group>"; };
 		842B20A11BB2EFA200D3C468 /* BrcmFirmwareRepo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmFirmwareRepo-Info.plist"; sourceTree = "<group>"; };
 		842B20B51BB2F02900D3C468 /* BrcmFirmwareStore.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmFirmwareStore.kext; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +198,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		841AD87F1BB3C0350082B7B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		842B20A71BB2F02900D3C468 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				ED4CA64B1B86437100EBED28 /* makefile */,
+				841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */,
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
@@ -279,6 +311,7 @@
 				ED5817C91B7A6AEF006C5522 /* BrcmPatchRAM2.kext */,
 				842B20B51BB2F02900D3C468 /* BrcmFirmwareStore.kext */,
 				842B20C91BB2F0D900D3C468 /* BrcmFirmwareRepo.kext */,
+				841AD88C1BB3C0350082B7B0 /* BrcmFirmwareData.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,6 +321,8 @@
 			children = (
 				D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */,
 				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
+				841AD8921BB3C1960082B7B0 /* FirmwareData.h */,
+				841AD8901BB3C12F0082B7B0 /* FirmwareData.cpp */,
 				D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */,
 				D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */,
 				D4F91B011A2998CE0030D10D /* Supporting Files */,
@@ -308,6 +343,7 @@
 				D4F91B021A2998CE0030D10D /* Info.plist */,
 				ED5817CB1B7A6BDF006C5522 /* Info_IOUSBHostDevice.plist */,
 				842B209F1BB2EED000D3C468 /* BrcmFirmwareStore-Info.plist */,
+				841AD88E1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist */,
 				842B20A11BB2EFA200D3C468 /* BrcmFirmwareRepo-Info.plist */,
 			);
 			name = "Supporting Files";
@@ -325,6 +361,18 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		841AD8801BB3C0350082B7B0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				841AD8811BB3C0350082B7B0 /* BrcmPatchRAM.h in Headers */,
+				841AD8821BB3C0350082B7B0 /* BrcmFirmwareStore.h in Headers */,
+				841AD8831BB3C0350082B7B0 /* Common.h in Headers */,
+				841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */,
+				841AD8851BB3C0350082B7B0 /* hci.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		842B20A81BB2F02900D3C468 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -354,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4F91B041A2998CE0030D10D /* BrcmPatchRAM.h in Headers */,
+				841AD8931BB3C1960082B7B0 /* FirmwareData.h in Headers */,
 				D4049E581A3252B1003A1893 /* BrcmFirmwareStore.h in Headers */,
 				EDA03B7B1BA47A12005BDCA2 /* Common.h in Headers */,
 				D4E0A25F1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */,
@@ -382,7 +431,44 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		84CDEE051BB3CA2200238DD1 /* Prebuild */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 84CDEE081BB3CA2200238DD1 /* Build configuration list for PBXLegacyTarget "Prebuild" */;
+			buildPhases = (
+			);
+			buildToolPath = ./generate_firmware_data.sh;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = Prebuild;
+			passBuildSettingsInEnvironment = 0;
+			productName = Prebuild;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
+		841AD87C1BB3C0350082B7B0 /* BrcmFirmwareData */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 841AD8891BB3C0350082B7B0 /* Build configuration list for PBXNativeTarget "BrcmFirmwareData" */;
+			buildPhases = (
+				841AD87D1BB3C0350082B7B0 /* Sources */,
+				841AD87F1BB3C0350082B7B0 /* Frameworks */,
+				841AD8801BB3C0350082B7B0 /* Headers */,
+				841AD8861BB3C0350082B7B0 /* Resources */,
+				841AD8871BB3C0350082B7B0 /* CopyFiles */,
+				841AD8881BB3C0350082B7B0 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrcmFirmwareData;
+			productName = BrcmPatchRAM;
+			productReference = 841AD88C1BB3C0350082B7B0 /* BrcmFirmwareData.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
 		842B20A31BB2F02900D3C468 /* BrcmFirmwareStore */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 842B20B21BB2F02900D3C468 /* Build configuration list for PBXNativeTarget "BrcmFirmwareStore" */;
@@ -491,6 +577,9 @@
 			attributes = {
 				LastUpgradeCheck = 0620;
 				TargetAttributes = {
+					84CDEE051BB3CA2200238DD1 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					D4F91AFD1A2998CE0030D10D = {
 						CreatedOnToolsVersion = 6.1;
 					};
@@ -508,9 +597,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				84CDEE051BB3CA2200238DD1 /* Prebuild */,
 				ED5817BB1B7A6AEF006C5522 /* BrcmPatchRAM2 */,
 				D4F91AFD1A2998CE0030D10D /* BrcmPatchRAM */,
 				842B20A31BB2F02900D3C468 /* BrcmFirmwareStore */,
+				841AD87C1BB3C0350082B7B0 /* BrcmFirmwareData */,
 				842B20B71BB2F0D900D3C468 /* BrcmFirmwareRepo */,
 				ED2A7DC81B37DE6E00DC200F /* BrcmBluetoothInjector */,
 			);
@@ -518,6 +609,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		841AD8861BB3C0350082B7B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		842B20AE1BB2F02900D3C468 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -569,6 +667,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				841AD8951BB3C27E0082B7B0 /* generate_firmware_data.sh in Resources */,
+				841AD88F1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,6 +689,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		841AD8881BB3C0350082B7B0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
+			showEnvVarsInLog = 0;
+		};
 		842B20B11BB2F02900D3C468 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -662,6 +776,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		841AD87D1BB3C0350082B7B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				841AD8911BB3C12F0082B7B0 /* FirmwareData.cpp in Sources */,
+				841AD87E1BB3C0350082B7B0 /* BrcmFirmwareStore.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		842B20A41BB2F02900D3C468 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -706,6 +829,37 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		841AD88A1BB3C0350082B7B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+					"FIRMWAREDATA=1",
+				);
+				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		841AD88B1BB3C0350082B7B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+					"FIRMWAREDATA=1",
+				);
+				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
 		842B20B31BB2F02900D3C468 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -757,6 +911,85 @@
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
+			};
+			name = Release;
+		};
+		84CDEE061BB3CA2200238DD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		84CDEE071BB3CA2200238DD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -865,6 +1098,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		841AD8891BB3C0350082B7B0 /* Build configuration list for PBXNativeTarget "BrcmFirmwareData" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				841AD88A1BB3C0350082B7B0 /* Debug */,
+				841AD88B1BB3C0350082B7B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		842B20B21BB2F02900D3C468 /* Build configuration list for PBXNativeTarget "BrcmFirmwareStore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -879,6 +1121,15 @@
 			buildConfigurations = (
 				842B20C71BB2F0D900D3C468 /* Debug */,
 				842B20C81BB2F0D900D3C468 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84CDEE081BB3CA2200238DD1 /* Build configuration list for PBXLegacyTarget "Prebuild" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84CDEE061BB3CA2200238DD1 /* Debug */,
+				84CDEE071BB3CA2200238DD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
