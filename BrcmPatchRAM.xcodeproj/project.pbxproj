@@ -752,7 +752,6 @@
 					"FIRMWAREDATA=1",
 				);
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
@@ -767,7 +766,6 @@
 					"FIRMWAREDATA=1",
 				);
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
@@ -782,7 +780,6 @@
 					"LOGNAME=\\\"${LOGNAME}\\\"",
 				);
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
@@ -794,7 +791,6 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "LOGNAME=\\\"${LOGNAME}\\\"";
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
@@ -932,6 +928,7 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmBluetoothInjector-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = org.rehabman.injector.BrcmBluetoothInjector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
@@ -943,6 +940,7 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmBluetoothInjector-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = org.rehabman.injector.BrcmBluetoothInjector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
