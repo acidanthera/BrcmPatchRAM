@@ -179,6 +179,7 @@
 		ED4CA64B1B86437100EBED28 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; usesTabs = 1; };
 		ED5817C91B7A6AEF006C5522 /* BrcmPatchRAM2.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM2.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED5817CB1B7A6BDF006C5522 /* BrcmPatchRAM2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM2-Info.plist"; sourceTree = "<group>"; };
+		EDA673B31BB4D2F5004A85A6 /* print_version.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = print_version.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +276,7 @@
 				8480E9531BB4312200FF61B0 /* README.md */,
 				ED4CA64B1B86437100EBED28 /* makefile */,
 				841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */,
+				EDA673B31BB4D2F5004A85A6 /* print_version.sh */,
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
