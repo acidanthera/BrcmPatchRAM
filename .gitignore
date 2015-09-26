@@ -10,3 +10,4 @@ scm.plist
 *.xccheckout
 .DS_Store
 ModuleCache
+GeneratedFirmwares.cpp

@@ -2,12 +2,24 @@
 
 # use BrcmPatchRAM.kext on 10.10 and prior
 # use BrcmPatchRAM2.kext on 10.11 and later
-OSXVER=$(shell if [[ "`sw_vers -productVersion`" == 10.11* ]]; then echo 10.11+; else echo 10.10-; fi)
-ifeq "$(OSXVER)" "10.10-" 
+VERSION_ERA=$(shell ./print_version.sh)
+ifeq "$(VERSION_ERA)" "10.10-"
 KEXT=BrcmPatchRAM.kext
 else
 KEXT=BrcmPatchRAM2.kext
 endif
+
+# Note: BrcmFirmwareStore.kext obsolete (but still deleted here if present)
+
+# for using BrcmFirmwareRepo.kext (firmware in Resources)
+KEXT2=BrcmFirmwareRepo.kext
+KEXTDEL1=BrcmFirmwareData.kext
+KEXTDEL2=BrcmFirmwareStore.kext
+
+# for using BrcmFirmwareData.kext (firmware in the kext itself)
+#KEXT2=BrcmFirmwareData.kext
+#KEXTDEL1=BrcmFirmwareRepo.kext
+#KEXTDEL2=BrcmFirmwareStore.kext
 
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
@@ -41,14 +53,22 @@ update_kernelcache:
 
 .PHONY: install_debug
 install_debug:
+	if [ "$(KEXTDEL1)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL1); fi
+	if [ "$(KEXTDEL2)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL2); fi
 	sudo cp -R $(BUILDDIR)/Debug/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT); fi
+	sudo cp -R $(BUILDDIR)/Debug/$(KEXT2) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Purple $(INSTDIR)/$(KEXT2); fi
 	make update_kernelcache
 
 .PHONY: install
 install:
+	if [ "$(KEXTDEL1)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL1); fi
+	if [ "$(KEXTDEL2)" != "" ]; then sudo rm -Rf $(INSTDIR)/$(KEXTDEL2); fi
 	sudo cp -R $(BUILDDIR)/Release/$(KEXT) $(INSTDIR)
 	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT); fi
+	sudo cp -R $(BUILDDIR)/Release/$(KEXT2) $(INSTDIR)
+	if [ "`which tag`" != "" ]; then sudo tag -a Blue $(INSTDIR)/$(KEXT2); fi
 	make update_kernelcache
 
 .PHONY: install_inject
