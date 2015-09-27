@@ -7,11 +7,129 @@ require 'zlib'
 require 'rexml/document'
 include REXML
 
-def create_xml(name, value)
-  element = Element.new(name)
-  element.text = value
+def add_xml(dict, key, type, value)
+  element = Element.new("key", dict)
+  element.text = key
   
-  return element
+  element = Element.new(type, dict)
+  element.text = value
+end
+
+def parse_inf(inf_path)
+  devices = Array.new
+  in_device_block = 0
+  device = nil
+  
+  if !File.exist?(inf_path)
+    puts "Error: bcbtums-win8x64-brcm.inf not found in firmware input folder."
+    exit
+  end
+
+  File.open(inf_path).each do |line|
+
+    # When in the device block, parse all devices
+    if in_device_block == 1 and line =~ /^%([\w\.]*)%=Blue(\w*),\s*USB\\VID_([0-9A-F]{4})\&PID_([0-9A-F]{4})\s*;\s(.*?)\r\n$/
+      # Example match: %BRCM20702.DeviceDesc%=BlueRAMUSB21E8,          USB\VID_0A5C&PID_21E8       ; 20702A1 dongles
+      device = OpenStruct.new
+    
+      device.stringKey = $1
+      device.deviceKey = $2
+      device.vendorId  = $3.hex
+      device.productId = $4.hex
+      device.comment   = $5
+    
+      devices << device
+    
+      device = nil
+    end
+  
+    # Extract the firmware file name from the current device block
+    if device and line =~ /^(BCM.*\.hex)/
+      device.firmware = $1
+      device.firmwareVersion = $1[-8..-1].chomp(".hex").to_i + 4096
+      device = nil
+    end
+  
+    # Determine the firmware filename for each device
+    if line =~ /^\[(RAMUSB[0-9A-F]{4})\.CopyList\]/
+      # Example match: [RAMUSB21E8.CopyList]
+      #/^\[(RAMUSB[0-9A-F]{4})\.CopyList\]$/
+
+      # Locate the device information for this RAMUSB device in the firmware array
+      device = devices.find { |f| f.deviceKey.casecmp($1) == 0 }
+    end
+  
+    # Extract device descriptions
+    if line =~ /^(\w*\.DeviceDesc)\=\s*"(.*)"/
+      matches = devices.each.select { |f| f.stringKey.casecmp($1) == 0 }
+    
+      matches.each do |match|
+        match.description = $2
+      end
+    end
+
+    # Found start of Windows 10 drivers block
+    if line =~ /^\[Broadcom\.NTamd64\.10\.0\]/
+      in_device_block = 1
+    end
+    
+    # Found end of Windows 10 drivers block
+    if line =~ /^\[Broadcom\.NTamd64\.6\.3\]/
+      in_device_block = 0
+    end
+  end
+  
+  return devices
+end
+
+def create_firmwares(devices, input_path, output_path)
+  # Create output folder
+  FileUtils::mkdir_p output_path
+
+  # Prune and rename existing firmwares
+  Dir.glob(File.join(input_path, "*.hex")).each do |firmware|
+    basename = File.basename(firmware)
+  
+    # Validate if we have a matching firmware definition
+    device = devices.find { |d| d.firmware.casecmp(basename) == 0 }
+  
+    if device  
+      output_file = "#{File.basename(firmware, File.extname(firmware))}_v#{device.firmwareVersion}.zhx"
+      data_to_compress = File.read(firmware)
+      data_compressed = Zlib::Deflate.deflate(data_to_compress, Zlib::BEST_COMPRESSION)
+    
+      puts "Compressed firmware #{output_file} (#{data_to_compress.size} --> #{data_compressed.size})"
+    
+      FileUtils::mkdir_p(File.join(output_path, "%04x_%04x" % [ device.vendorId, device.productId ]))
+      File.write(File.join(output_path, "%04x_%04x" % [ device.vendorId, device.productId ], output_file), data_compressed)
+    else
+      puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
+    end
+  end
+end
+
+def create_plist(devices, output_path)
+  # Generate plist XML snippet
+  xml = Document.new "<dict />"
+
+  devices.sort_by{|d| [d.vendorId, d.productId]}.each do |device|
+    Element.new("key", xml.root).text = "%04x_%04x" % [ device.vendorId, device.productId ]
+  
+    device_xml = Element.new("dict", xml.root)
+  
+    add_xml(device_xml, "CFBundleIdentifier", "string", "com.no-one.$(PRODUCT_NAME:rfc1034identifier)")
+    add_xml(device_xml, "DisplayName", "string", device.description)
+    add_xml(device_xml, "FirmwareKey", "string", "#{device.firmware.chomp(".hex")}_v#{device.firmwareVersion}")
+    add_xml(device_xml, "IOClass", "string", "BrcmPatchRAM")
+    add_xml(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM")
+    add_xml(device_xml, "IOProviderClass", "string", "IOUSBDevice")
+    add_xml(device_xml, "idProduct", "integer", device.productId)
+    add_xml(device_xml, "idVendor", "integer", device.vendorId)
+  end
+
+  formatter = REXML::Formatters::Pretty.new
+  formatter.compact = true
+  File.open(File.join(output_path, "firmwares.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
 end
 
 if ARGV.length != 2
@@ -22,122 +140,11 @@ end
 input = ARGV.shift
 output = ARGV.shift
 
-inf = File.join(input, "bcbtums-win8x64-brcm.inf")
-firmwares = Array.new
-firmware = nil
-devices=0
+# Parse Windows INF file into device objects
+devices = parse_inf(File.join(input, "bcbtums-win8x64-brcm.inf"))
 
-if !File.exist?(inf)
-  puts "Error: bcbtums-win8x64-brcm.inf not found in firmware input folder."
-  exit
-end
+# Extract and compress all device firmwares
+create_firmwares(devices, input, output)
 
-File.open(inf).each do |line|
-
-  # When in the device block, parse all devices
-  if devices == 1 and line =~ /^%([\w\.]*)%=Blue(\w*),\s*USB\\VID_([0-9A-F]{4})\&PID_([0-9A-F]{4})\s*;\s(.*?)\r\n$/
-    # Example match: %BRCM20702.DeviceDesc%=BlueRAMUSB21E8,          USB\VID_0A5C&PID_21E8       ; 20702A1 dongles
-    firmware = OpenStruct.new
-    
-    firmware.stringKey = $1
-    firmware.deviceKey = $2
-    firmware.vendorId  = $3.hex
-    firmware.productId = $4.hex
-    firmware.comment   = $5
-    
-    firmwares << firmware
-    
-    firmware = nil
-  end
-  
-  # Extract the firmware file name from the current device block
-  if firmware and line =~ /^(BCM.*\.hex)/
-    firmware.file = $1
-    firmware.version = $1[-8..-1].chomp(".hex").to_i + 4096
-    firmware = nil
-  end
-  
-  # Determine the firmware filename for each device
-  if line =~ /^\[(RAMUSB[0-9A-F]{4})\.CopyList\]/
-    # Example match: [RAMUSB21E8.CopyList]
-    #/^\[(RAMUSB[0-9A-F]{4})\.CopyList\]$/
-
-    # Locate the device information for this RAMUSB device in the firmware array
-    firmware = firmwares.find { |f| f.deviceKey.casecmp($1) == 0 }
-  end
-  
-  # Extract device descriptions
-  if line =~ /^(\w*\.DeviceDesc)\=\s*"(.*)"/
-    matches = firmwares.each.select { |f| f.stringKey.casecmp($1) == 0 }
-    
-    matches.each do |match|
-      match.description = $2
-    end
-  end
-
-  # Found start of Windows 10 drivers block
-  if line =~ /^\[Broadcom\.NTamd64\.10\.0\]/
-    devices=1
-  end
-    
-  # Found end of Windows 10 drivers block
-  if line =~ /^\[Broadcom\.NTamd64\.6\.3\]/
-    devices=0
-  end
-end
-
-# Create output folder
-FileUtils::mkdir_p output
-
-# Prune and rename existing firmwares
-Dir.glob(File.join(input, "*.hex")).each do |file|
-  basename = File.basename(file)
-  
-  # Validate if we have a matching firmware definition
-  firmware = firmwares.find { |f| f.file.casecmp(basename) == 0 }
-  
-  if firmware  
-    output_file = "#{File.basename(file, File.extname(file))}_v#{firmware.version}.zhx"
-    data_to_compress = File.read(file)
-    data_compressed = Zlib::Deflate.deflate(data_to_compress, Zlib::BEST_COMPRESSION)
-    
-    puts "Compressed firmware #{output_file} (#{data_to_compress.size} --> #{data_compressed.size})"
-    
-    FileUtils::mkdir_p(File.join(output, "%04x_%04x" % [ firmware.vendorId, firmware.productId ]))
-    File.write(File.join(output, "%04x_%04x" % [ firmware.vendorId, firmware.productId ], output_file), data_compressed)
-  else
-    puts "Firmware file %s is not matched in INF file... skipping." % basename
-  end
-end
-
-# Generate plist XML snippet
-xml = Document.new "<dict />"
-
-firmwares.sort_by{|f| [f.vendorId, f.productId]}.each do |firmware|
-  xml.root.elements << create_xml("key", "%04x_%04x" % [ firmware.vendorId, firmware.productId ])
-  
-  device = Element.new("dict")
-  
-  device << create_xml("key", "CFBundleIdentifier")
-  device << create_xml("string", "com.no-one.$(PRODUCT_NAME:rfc1034identifier)")
-  device << create_xml("key", "DisplayName")
-  device << create_xml("string", firmware.description)
-  device << create_xml("key", "FirmwareKey")
-  device << create_xml("string", "#{firmware.file.chomp(".hex")}_v#{firmware.version}")
-  device << create_xml("key", "IOClass")
-  device << create_xml("string", "BrcmPatchRAM")
-  device << create_xml("key", "IOMatchCategory")
-  device << create_xml("string", "BrcmPatchRAM")
-  device << create_xml("key", "IOProviderClass")
-  device << create_xml("string", "IOUSBDevice")
-  device << create_xml("key", "idProduct")
-  device << create_xml("integer", firmware.productId)
-  device << create_xml("key", "idVendor")
-  device << create_xml("integer", firmware.vendorId)
-  
-  xml.root.elements << device
-end
-
-formatter = REXML::Formatters::Pretty.new
-formatter.compact = true
-File.open(File.join(output, "firmwares.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
+# 
+create_plist(devices, output)
