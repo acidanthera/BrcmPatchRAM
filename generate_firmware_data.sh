@@ -4,9 +4,8 @@ out="GeneratedFirmwares.cpp"
 cksum="GeneratedFirmwaresMD5.txt"
 cksum_temp="/tmp/org_rehabman_GeneratedFirmwareMD5.txt"
 
-firmwaredir=./build/Products/Release/BrcmFirmwareRepo.kext/Contents/Resources
-if [[ ! -e $firmwares ]]; then firmwaredir=./build/Products/Debug/BrcmFirmwareRepo.kext/Contents/Resources; fi
-firmwares=$firmwaredir/*
+firmwaredir=./firmwares
+firmwares=$firmwaredir/*.zhx
 
 if [[ "$1" == "clean" ]]; then
     if [ -e $out ]; then rm $out; fi
