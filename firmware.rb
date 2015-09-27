@@ -85,6 +85,12 @@ end
 def create_firmwares(devices, input_path, output_path)
   # Create output folder
   FileUtils::mkdir_p output_path
+  
+  # Wipe any existing symbolic links - Ignore exceptions
+  begin
+    FileUtils::remove(File.join(output_path, "*.zhx"))
+  rescue
+  end
 
   # Prune and rename existing firmwares
   Dir.glob(File.join(input_path, "*.hex")).each do |firmware|
@@ -100,8 +106,15 @@ def create_firmwares(devices, input_path, output_path)
     
       puts "Compressed firmware #{output_file} (#{data_to_compress.size} --> #{data_compressed.size})"
     
-      FileUtils::mkdir_p(File.join(output_path, "%04x_%04x" % [ device.vendorId, device.productId ]))
-      File.write(File.join(output_path, "%04x_%04x" % [ device.vendorId, device.productId ], output_file), data_compressed)
+      device_file = "%04x_%04x" % [ device.vendorId, device.productId ]
+      device_dir = File.join(output_path, device_file)
+    
+      FileUtils::makedirs(device_dir)
+      File.write(File.join(device_dir, output_file), data_compressed)
+      
+      # Determine latest firmware for the current device and symlink
+      latest_firmware = Dir.glob(File.join(device_dir, "*.zhx")).sort_by{ |f| f[-8..1] }.reverse.each.first    
+      FileUtils::symlink(latest_firmware, File.join(output_path, output_file))
     else
       puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
     end
