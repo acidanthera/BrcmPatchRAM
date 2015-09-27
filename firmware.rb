@@ -84,11 +84,12 @@ end
 
 def create_firmwares(devices, input_path, output_path)
   # Create output folder
-  FileUtils::mkdir_p output_path
+  FileUtils::makedirs output_path
+  FileUtils::chdir output_path
   
   # Wipe any existing symbolic links - Ignore exceptions
   begin
-    FileUtils::remove(File.join(output_path, "*.zhx"))
+    FileUtils::remove(Dir.glob(File.join(output_path, "*.zhx")))
   rescue
   end
 
@@ -106,15 +107,20 @@ def create_firmwares(devices, input_path, output_path)
     
       puts "Compressed firmware #{output_file} (#{data_to_compress.size} --> #{data_compressed.size})"
     
-      device_file = "%04x_%04x" % [ device.vendorId, device.productId ]
-      device_dir = File.join(output_path, device_file)
+      device_folder = "%04x_%04x" % [ device.vendorId, device.productId ]
+      device_path = File.join(output_path, device_folder)
     
-      FileUtils::makedirs(device_dir)
-      File.write(File.join(device_dir, output_file), data_compressed)
+      FileUtils::makedirs(device_path)
+      File.write(File.join(device_path, output_file), data_compressed)
       
       # Determine latest firmware for the current device and symlink
-      latest_firmware = Dir.glob(File.join(device_dir, "*.zhx")).sort_by{ |f| f[-8..1] }.reverse.each.first    
-      FileUtils::symlink(latest_firmware, File.join(output_path, output_file))
+      latest_firmware = Dir.glob(File.join(device_path, "*.zhx")).sort_by{ |f| f[-8..1] }.reverse.each.first
+      
+      if File.exist?(File.basename(latest_firmware))
+        puts "Firmware symlink #{File.basename(latestfirmware)} already created for another device."
+      else  
+        FileUtils::symlink("./" + File.join(device_folder, File.basename(latest_firmware)), File.basename(latest_firmware))
+      end
     else
       puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
     end
@@ -150,8 +156,8 @@ if ARGV.length != 2
   exit
 end
 
-input = ARGV.shift
-output = ARGV.shift
+input = File.expand_path(ARGV.shift)
+output = File.expand_path(ARGV.shift)
 
 # Parse Windows INF file into device objects
 devices = parse_inf(File.join(input, "bcbtums-win8x64-brcm.inf"))
