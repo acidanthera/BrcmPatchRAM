@@ -115,7 +115,12 @@ def create_firmwares(devices, input_path, output_path)
       
       # Determine latest firmware for the current device and symlink
       latest_firmware = Dir.glob(File.join(device_path, "*.zhx")).sort_by{ |f| f[-8..1] }.reverse.each.first
-      FileUtils::symlink("./" + File.join(device_folder, File.basename(latest_firmware)), File.basename(latest_firmware))
+      
+      if File.exist?(File.basename(latest_firmware))
+        puts "Firmware symlink #{File.basename(latestfirmware)} already created for another device."
+      else  
+        FileUtils::symlink("./" + File.join(device_folder, File.basename(latest_firmware)), File.basename(latest_firmware))
+      end
     else
       puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
     end
