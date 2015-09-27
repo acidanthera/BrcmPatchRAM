@@ -1,7 +1,8 @@
 #!/bin/bash
 
-outfinal="GeneratedFirmwares.cpp"
-out="/tmp/org_rehabman_GeneratedFirmwares.cpp"
+out="GeneratedFirmwares.cpp"
+cksum="GeneratedFirmwaresMD5.txt"
+cksum_temp="/tmp/org_rehabman_GeneratedFirmwareMD5.txt"
 
 firmwaredir=./build/Products/Release/BrcmFirmwareRepo.kext/Contents/Resources
 if [[ ! -e $firmwares ]]; then firmwaredir=./build/Products/Debug/BrcmFirmwareRepo.kext/Contents/Resources; fi
@@ -9,12 +10,24 @@ firmwares=$firmwaredir/*
 
 if [[ "$1" == "clean" ]]; then
     if [ -e $out ]; then rm $out; fi
+    if [ -e $cksum ]; then rm $cksum; fi
     exit 0
 fi
 
+if [ -e $cksum_temp ]; then rm $cksum_temp; fi
+for firmware in $firmwares; do
+    echo "`basename $firmware` `md5 -q $firmware`" >>$cksum_temp
+done
+
 cksum_old="unknown"
-if [[ -e $outfinal ]]; then
-    cksum_old=`md5 -q $outfinal`
+if [[ -e $cksum ]]; then
+    cksum_old=`md5 -q $cksum`
+fi
+
+cksum_new=`md5 -q $cksum_temp`
+if [[ $cksum_new == $cksum_old ]]; then
+    echo "Firmwares unchanged, no need to update GeneratedFirmwares.cpp"
+    exit 0
 fi
 
 echo "// GeneratedFirmwares.cpp">$out
@@ -43,10 +56,4 @@ done
 echo "    { NULL, NULL, 0, },">>$out
 echo "};">>$out
 
-cksum_new=`md5 -q $out`
-if [[ $cksum_new != $cksum_old ]]; then
-    cp $out $outfinal
-    echo "Updated GeneratedFirmwares.cpp"
-else
-    echo "Firmwares unchanged, no need to update GeneratedFirmwares.cpp"
-fi
+cp $cksum_temp $cksum
