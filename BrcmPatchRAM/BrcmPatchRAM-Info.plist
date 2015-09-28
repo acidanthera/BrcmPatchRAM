@@ -63,7 +63,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>20702 Combo USB</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1485_v5581</string>
 			<key>IOClass</key>
@@ -82,7 +82,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>20702A1 Lenovo China</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1484_v5580</string>
 			<key>IOClass</key>
@@ -96,12 +96,107 @@
 			<key>idVendor</key>
 			<integer>1161</integer>
 		</dict>
+		<key>0489_e046</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1465_v5561</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57414</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e04f</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1486_v5582</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57423</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e052</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom BCM20702 Bluetooth USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1483.1668_v5764</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57426</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e055</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0331_v4427</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57429</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e059</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1466_v5562</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57433</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
 		<key>0489_e079</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Lenovo China 43162 NGFF</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM4335C0_003.001.009.0066.0115_v4211</string>
 			<key>IOClass</key>
@@ -120,7 +215,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Lenovo NGFF (4352 / 20702)</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1483.1651_v5747</string>
 			<key>IOClass</key>
@@ -134,12 +229,69 @@
 			<key>idVendor</key>
 			<integer>1161</integer>
 		</dict>
+		<key>0489_e087</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1532_v5628</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57479</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e096</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0340_v4436</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57494</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e097</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0104_v4200</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57495</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
 		<key>04ca_2003</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>LiteOn (4352 Combo)</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1488_v5584</string>
 			<key>IOClass</key>
@@ -153,12 +305,88 @@
 			<key>idVendor</key>
 			<integer>1226</integer>
 		</dict>
+		<key>04ca_2004</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1489_v5585</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8196</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2005</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1490_v5586</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8197</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2006</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0327_v4423</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8198</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2009</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0330_v4426</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8201</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
 		<key>04ca_200a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>LiteOn (4352 Combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1492_v5588</string>
 			<key>IOClass</key>
@@ -177,9 +405,9 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>LiteOn (4352 Combo)</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1443.1612_v5708</string>
+			<string>BCM20702A1_001.002.014.1443.1493_v5589</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -196,7 +424,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>LiteOn (4352 Combo)</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1494_v5590</string>
 			<key>IOClass</key>
@@ -210,12 +438,31 @@
 			<key>idVendor</key>
 			<integer>1226</integer>
 		</dict>
+		<key>04ca_200e</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1499_v5595</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8206</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
 		<key>04ca_200f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Acer / LiteOn (4352 Combo)</string>
+			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1521_v5617</string>
 			<key>IOClass</key>
@@ -229,12 +476,126 @@
 			<key>idVendor</key>
 			<integer>1226</integer>
 		</dict>
+		<key>04ca_2012</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0339_v4435</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8210</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2013</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0122_v4218</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8211</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2014</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0120_v4216</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8212</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04ca_2016</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4335C0_003.001.009.0066.0121_v4217</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8214</integer>
+			<key>idVendor</key>
+			<integer>1226</integer>
+		</dict>
+		<key>04f2_b4a1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0316_v4412</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>46241</integer>
+			<key>idVendor</key>
+			<integer>1266</integer>
+		</dict>
+		<key>04f2_b4a2</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0183_v4279</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>46242</integer>
+			<key>idVendor</key>
+			<integer>1266</integer>
+		</dict>
 		<key>050d_065a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Belkin (20702)</string>
+			<string>Belkin Bluetooth 4.0 USB Adapter</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1482_v5578</string>
 			<key>IOClass</key>
@@ -248,14 +609,52 @@
 			<key>idVendor</key>
 			<integer>1293</integer>
 		</dict>
+		<key>0930_021e</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom BCM20702 Bluetooth USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1483.1672_v5768</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>542</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0930_021f</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0335_v4431</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>543</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
 		<key>0930_0221</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Toshiba (4352 / 20702)</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1673_v5769</string>
+			<string>BCM20702A1_001.002.014.1502.1762_v5858</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -272,9 +671,9 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Toshiba NGFF (4352/20702A1)</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1674_v5770</string>
+			<string>BCM20702A1_001.002.014.1502.1763_v5859</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -286,14 +685,128 @@
 			<key>idVendor</key>
 			<integer>2352</integer>
 		</dict>
+		<key>0930_0225</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0334_v4430</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>549</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0930_0226</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0334_v4430</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>550</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0930_0229</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM4335C0_003.001.009.0066.0104_v4200</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>553</integer>
+			<key>idVendor</key>
+			<integer>2352</integer>
+		</dict>
+		<key>0a5c_2168</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>BCM43162 Bluetooth 4.0 +HS USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM4335C0_003.001.009.0066.0108_v4204</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8552</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_2169</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom BCM20702 Bluetooth USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1462_v5558</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8553</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_216a</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Dell Wireless 1708 Bluetooth 4.0 LE Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0336_v4432</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8554</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0a5c_216b</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>HP Rapture 4352Z NGFF Combo</string>
+			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1646_v5742</string>
+			<string>BCM20702A1_001.002.014.1502.1768_v5864</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -305,12 +818,50 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
+		<key>0a5c_216c</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom 43142 Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0328_v4424</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8556</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_216d</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom 43142 Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0329_v4425</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8557</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0a5c_216e</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>HP Blackbird 43162 NGFF</string>
+			<string>Broadcom 43162 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
 			<string>BCM4335C0_003.001.009.0066.0105_v4201</string>
 			<key>IOClass</key>
@@ -329,7 +880,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Dell DW1560 (4352/20702)</string>
+			<string>DW1560 Bluetooth 4.0 LE</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1572_v5668</string>
 			<key>IOClass</key>
@@ -343,12 +894,31 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
+		<key>0a5c_21d7</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Dell Wireless 1704 Bluetooth v4.0+HS</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0341_v4437</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8663</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0a5c_21de</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>4352/20702A1 combo</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1461_v5557</string>
 			<key>IOClass</key>
@@ -367,7 +937,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>HP Softsailing (20702A1)</string>
+			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1483.1647_v5743</string>
 			<key>IOClass</key>
@@ -381,12 +951,31 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
+		<key>0a5c_21e3</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1767_v5863</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8675</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0a5c_21e6</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>non-UHE Lenovo Bluetooth (20702)</string>
+			<string>ThinkPad Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1483.1669_v5765</string>
 			<key>IOClass</key>
@@ -405,7 +994,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>IOGear GBU-512 Bluetooth Dongle</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1459_v5555</string>
 			<key>IOClass</key>
@@ -424,7 +1013,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Inateck Bluetooth (20702A1)</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1460_v5556</string>
 			<key>IOClass</key>
@@ -438,12 +1027,69 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
+		<key>0a5c_21f1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1765_v5861</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8689</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_21f3</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1761_v5857</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8691</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_21f4</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1760_v5856</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>8692</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
 		<key>0a5c_21fb</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave CE-123H 20702A1</string>
+			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1502.1766_v5862</string>
 			<key>IOClass</key>
@@ -462,7 +1108,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Broadcom 4352Z</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1463_v5559</string>
 			<key>IOClass</key>
@@ -476,14 +1122,14 @@
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
-		<key>0a5c_22be</key>
+		<key>0a5c_640a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
+			<string>BCM4356 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1315.1338_v5434</string>
+			<string>BCM4356A2_001.003.015.0080.0225_v4321</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -491,16 +1137,149 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
 			<key>idProduct</key>
-			<integer>8894</integer>
+			<integer>25610</integer>
 			<key>idVendor</key>
 			<integer>2652</integer>
+		</dict>
+		<key>0a5c_640b</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1769_v5865</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25611</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_640e</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.1 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0080.0225_v4321</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25614</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_6410</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Dell Wireless 1830 Bluetooth 4.1 LE</string>
+			<key>FirmwareKey</key>
+			<string>BCM20703A1_001.001.005.0214.0403_v4499</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25616</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_6412</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Dell Wireless 1820A Bluetooth 4.1 LE</string>
+			<key>FirmwareKey</key>
+			<string>BCM4350C5_003.006.007.0095.1703_v5799</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25618</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_6413</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM4350C5_003.006.007.0095.1704_v5800</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25619</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_6414</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.1 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM4350C5_003.006.007.0095.1668_v5764</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>25620</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0b05_17b5</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1468_v5564</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>6069</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
 		</dict>
 		<key>0b05_17cb</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Asus BT-400 Bluetooth Dongle</string>
+			<string>ASUS USB-BT400</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1467_v5563</string>
 			<key>IOClass</key>
@@ -519,7 +1298,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Asus (4352/20702A1 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1469_v5565</string>
 			<key>IOClass</key>
@@ -538,7 +1317,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4360/20702 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1714_v5810</string>
 			<key>IOClass</key>
@@ -552,12 +1331,145 @@
 			<key>idVendor</key>
 			<integer>2821</integer>
 		</dict>
+		<key>0b05_181d</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0132_v4228</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>6173</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>105b_e065</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0312_v4408</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57445</integer>
+			<key>idVendor</key>
+			<integer>4187</integer>
+		</dict>
+		<key>105b_e066</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1487_v5583</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57446</integer>
+			<key>idVendor</key>
+			<integer>4187</integer>
+		</dict>
+		<key>13d3_3384</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1477_v5573</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13188</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3388</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>BCM43142 Bluetooth 4.0 +HS USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0332_v4428</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13192</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3389</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>BCM43142 Bluetooth 4.0 +HS USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0333_v4429</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13193</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3392</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1478_v5574</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13202</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
 		<key>13d3_3404</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4352HMB)</string>
+			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1479_v5575</string>
 			<key>IOClass</key>
@@ -576,7 +1488,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Dell Alienware (4352/20702A1 combo)</string>
+			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1450_v5546</string>
 			<key>IOClass</key>
@@ -595,7 +1507,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4360/20702 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1481_v5577</string>
 			<key>IOClass</key>
@@ -614,7 +1526,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4352/20702 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1480_v5576</string>
 			<key>IOClass</key>
@@ -628,12 +1540,31 @@
 			<key>idVendor</key>
 			<integer>5075</integer>
 		</dict>
+		<key>13d3_3427</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.0 USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM43142A0_001.001.011.0311.0334_v4430</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13351</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
 		<key>13d3_3435</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4352/20702 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1501_v5597</string>
 			<key>IOClass</key>
@@ -652,7 +1583,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave (4352/20702 combo)</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1502_v5598</string>
 			<key>IOClass</key>
@@ -666,14 +1597,14 @@
 			<key>idVendor</key>
 			<integer>5075</integer>
 		</dict>
-		<key>19ff_0239</key>
+		<key>13d3_3473</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Insignia NS-PCY5BMA Bluetooth Dongle</string>
+			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702B0_002.001.014.0527.0557_v4653</string>
+			<string>BCM4356A2_001.003.015.0046.0125_v4221</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
@@ -681,16 +1612,130 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
 			<key>idProduct</key>
-			<integer>569</integer>
+			<integer>13427</integer>
 			<key>idVendor</key>
-			<integer>6655</integer>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3485</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0197_v4293</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13445</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3488</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0127_v4223</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13448</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3492</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0195_v4291</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>13458</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>145f_01a3</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Trust Bluetooth 4.0 Adapter</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1483_v5579</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>419</integer>
+			<key>idVendor</key>
+			<integer>5215</integer>
+		</dict>
+		<key>2b54_5600</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0154_v4250</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>22016</integer>
+			<key>idVendor</key>
+			<integer>11092</integer>
+		</dict>
+		<key>2b54_5601</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM4356A2_001.003.015.0046.0162_v4258</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>22017</integer>
+			<key>idVendor</key>
+			<integer>11092</integer>
 		</dict>
 		<key>413c_8143</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Dell DW1550 (4352/20702 combo)</string>
+			<string>DW1550 Bluetooth 4.0 LE</string>
 			<key>FirmwareKey</key>
 			<string>BCM20702A1_001.002.014.1443.1449_v5545</string>
 			<key>IOClass</key>
@@ -701,6 +1746,25 @@
 			<string>IOUSBDevice</string>
 			<key>idProduct</key>
 			<integer>33091</integer>
+			<key>idVendor</key>
+			<integer>16700</integer>
+		</dict>
+		<key>413c_8197</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Dell Wireless 380 Bluetooth 4.0 Module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1443.1447_v5543</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>33175</integer>
 			<key>idVendor</key>
 			<integer>16700</integer>
 		</dict>

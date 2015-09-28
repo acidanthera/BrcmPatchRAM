@@ -11,3 +11,4 @@ scm.plist
 .DS_Store
 ModuleCache
 GeneratedFirmwares.cpp
+GeneratedFirmwaresMD5.txt
