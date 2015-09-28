@@ -125,14 +125,15 @@ def create_firmwares(devices, input_path, output_path)
         FileUtils::symlink("./" + File.join(device_folder, File.basename(latest_firmware)), File.basename(latest_firmware))
       end
       
-      create_injector(device, data_compressed, device_path)
+      create_injector(device, false, data_compressed, device_path)
+      create_injector(device, true, data_compressed, device_path)
     else
       puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
     end
   end
 end
 
-def create_injector(device, compressed_data, output_path)
+def create_injector(device, for_usbhost, compressed_data, output_path)
   xml = Document.new('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"/>');
   
   root_dict = Element.new("dict", xml.root)
@@ -150,13 +151,13 @@ def create_injector(device, compressed_data, output_path)
   add_element(iokit_dict, "key", "%04x_%04x" % [ device.vendorId, device.productId ])
   
   device_dict = Element.new("dict", iokit_dict);
-  add_key_value(device_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmPatchRAM2")
+  add_key_value(device_dict, "CFBundleIdentifier", "string", for_usbhost ? "com.no-one.BrcmPatchRAM2" : "com.no-one.BrcmPatchRAM")
   add_key_value(device_dict, "DisplayName", "string", device.description)
   add_key_value(device_dict, "FirmwareKey", "string", "%04x_%04x_v%4d" % [ device.vendorId, device.productId, device.firmwareVersion ])
-  add_key_value(device_dict, "IOClass", "string", "BrcmPatchRAM2")
-  add_key_value(device_dict, "IOMatchCategory", "string", "BrcmPatchRAM2")
+  add_key_value(device_dict, "IOClass", "string", for_usbhost ? "BrcmPatchRAM2" : "BrcmPatchRAM" )
+  add_key_value(device_dict, "IOMatchCategory", "string", for_usbhost ? "BrcmPatchRAM2" : "BrcmPatchRAM")
   add_key_value(device_dict, "IOProbeScore", "integer", "2000")
-  add_key_value(device_dict, "IOProviderClass", "string", "IOUSBHostDevice")
+  add_key_value(device_dict, "IOProviderClass", "string", for_usbhost ? "IOUSBHostDevice" : "IOUSBDevice")
   add_key_value(device_dict, "idProduct", "integer", device.productId.to_i())
   add_key_value(device_dict, "idVendor", "integer", device.vendorId.to_i())
   
@@ -174,7 +175,7 @@ def create_injector(device, compressed_data, output_path)
   add_key_value(firmware_dict, "IOProbeScore", "integer", "2000")
   add_key_value(firmware_dict, "IOProviderClass", "string", "disabled_IOResources")
   
-  injector_path = File.join(output_path, "BrcmFirmwareInjector_%04x_%04x.kext/Contents" % [ device.vendorId, device.productId, device.version ])
+  injector_path = File.join(output_path, "BrcmFirmwareInjector%s_%04x_%04x.kext/Contents" % [ for_usbhost ? "2" : "", device.vendorId, device.productId, device.version ])
   
   FileUtils::makedirs(injector_path)
   
