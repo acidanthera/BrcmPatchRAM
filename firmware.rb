@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 
+require 'base64'
 require 'fileutils'
 require 'optparse'
 require 'ostruct'
@@ -7,12 +8,14 @@ require 'zlib'
 require 'rexml/document'
 include REXML
 
-def add_xml(dict, key, type, value)
-  element = Element.new("key", dict)
-  element.text = key
-  
-  element = Element.new(type, dict)
-  element.text = value
+def add_element(parent, name, text)
+  element = Element.new(name, parent)
+  element.text = text
+end
+
+def add_key_value(dict, key, type, value)
+  add_element(dict, "key", key)
+  add_element(dict, type, value)
 end
 
 def parse_inf(inf_path)
@@ -121,10 +124,63 @@ def create_firmwares(devices, input_path, output_path)
       else  
         FileUtils::symlink("./" + File.join(device_folder, File.basename(latest_firmware)), File.basename(latest_firmware))
       end
+      
+      create_injector(device, data_compressed, device_path)
     else
       puts "Firmware file %s is not matched against devices in INF file... skipping." % basename
     end
   end
+end
+
+def create_injector(device, compressed_data, output_path)
+  xml = Document.new('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"/>');
+  
+  root_dict = Element.new("dict", xml.root)
+  add_key_value(root_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmInjector.%04x.%04x" % [ device.vendorId, device.productId ])
+  add_key_value(root_dict, "CFBundleInfoDictionaryVersion", "string", "6.0")
+  add_key_value(root_dict, "CFBundleName", "string", "BrcmInjector.%04x.%04x" % [ device.vendorId, device.productId ])
+  add_key_value(root_dict, "CFBundlePackageType", "string", "KEXT")
+  add_key_value(root_dict, "CFBundleShortVersionString", "string", "2.1.0")
+  add_key_value(root_dict, "CFBundleSignature", "string", "????")
+  add_key_value(root_dict, "CFBundleVersion", "string", "2.1.0")
+  
+  add_element(root_dict, "key", "IOKitPersonalities")
+  iokit_dict = Element.new("dict", root_dict)
+  
+  add_element(iokit_dict, "key", "%04x_%04x" % [ device.vendorId, device.productId ])
+  
+  device_dict = Element.new("dict", iokit_dict);
+  add_key_value(device_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmPatchRAM2")
+  add_key_value(device_dict, "DisplayName", "string", device.description)
+  add_key_value(device_dict, "FirmwareKey", "string", "%04x_%04x_v%4d" % [ device.vendorId, device.productId, device.firmwareVersion ])
+  add_key_value(device_dict, "IOClass", "string", "BrcmPatchRAM2")
+  add_key_value(device_dict, "IOMatchCategory", "string", "BrcmPatchRAM2")
+  add_key_value(device_dict, "IOProbeScore", "integer", "2000")
+  add_key_value(device_dict, "IOProviderClass", "string", "IOUSBHostDevice")
+  add_key_value(device_dict, "idProduct", "integer", device.productId.to_i())
+  add_key_value(device_dict, "idVendor", "integer", device.vendorId.to_i())
+  
+  add_element(iokit_dict, "key", "BrcmFirmwareStore")
+  
+  firmware_dict = Element.new("dict", iokit_dict)
+  add_key_value(firmware_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmFirmwareStore")
+  add_element(firmware_dict, "key", "Firmwares")
+  
+  firmwares_dict = Element.new("dict", firmware_dict)
+  add_key_value(firmwares_dict,  "%04x_%04x_v%4d" % [ device.vendorId, device.productId, device.firmwareVersion ], "data", Base64.encode64(compressed_data))
+  
+  add_key_value(firmware_dict, "IOClass", "string", "BrcmFirmwareStore")
+  add_key_value(firmware_dict, "IOMatchCategory", "string", "BrcmFirmwareStore")
+  add_key_value(firmware_dict, "IOProbeScore", "integer", "2000")
+  add_key_value(firmware_dict, "IOProviderClass", "string", "disabled_IOResources")
+  
+  injector_path = File.join(output_path, "BrcmFirmwareInjector_%04x_%04x.kext/Contents" % [ device.vendorId, device.productId, device.version ])
+  
+  FileUtils::makedirs(injector_path)
+  
+  formatter = REXML::Formatters::Pretty.new
+  formatter.compact = true
+  File.open(File.join(injector_path, "Info.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
 end
 
 def create_plist(devices, output_path)
@@ -136,14 +192,14 @@ def create_plist(devices, output_path)
   
     device_xml = Element.new("dict", xml.root)
   
-    add_xml(device_xml, "CFBundleIdentifier", "string", "com.no-one.$(PRODUCT_NAME:rfc1034identifier)")
-    add_xml(device_xml, "DisplayName", "string", device.description)
-    add_xml(device_xml, "FirmwareKey", "string", "#{device.firmware.chomp(".hex")}_v#{device.firmwareVersion}")
-    add_xml(device_xml, "IOClass", "string", "BrcmPatchRAM")
-    add_xml(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM")
-    add_xml(device_xml, "IOProviderClass", "string", "IOUSBDevice")
-    add_xml(device_xml, "idProduct", "integer", device.productId)
-    add_xml(device_xml, "idVendor", "integer", device.vendorId)
+    add_key_value(device_xml, "CFBundleIdentifier", "string", "com.no-one.$(PRODUCT_NAME:rfc1034identifier)")
+    add_key_value(device_xml, "DisplayName", "string", device.description)
+    add_key_value(device_xml, "FirmwareKey", "string", "#{device.firmware.chomp(".hex")}_v#{device.firmwareVersion}")
+    add_key_value(device_xml, "IOClass", "string", "BrcmPatchRAM")
+    add_key_value(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM")
+    add_key_value(device_xml, "IOProviderClass", "string", "IOUSBDevice")
+    add_key_value(device_xml, "idProduct", "integer", device.productId)
+    add_key_value(device_xml, "idVendor", "integer", device.vendorId)
   end
 
   formatter = REXML::Formatters::Pretty.new
