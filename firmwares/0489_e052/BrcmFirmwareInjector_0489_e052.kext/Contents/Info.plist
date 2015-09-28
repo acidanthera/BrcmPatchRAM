@@ -19,19 +19,19 @@
       <key>0489_e052</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM2</string>
+        <string>com.no-one.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>Broadcom BCM20702 Bluetooth USB Device</string>
         <key>FirmwareKey</key>
         <string>0489_e052_v5764</string>
         <key>IOClass</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOMatchCategory</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOProbeScore</key>
         <integer>2000</integer>
         <key>IOProviderClass</key>
-        <string>IOUSBHostDevice</string>
+        <string>IOUSBDevice</string>
         <key>idProduct</key>
         <integer>57426</integer>
         <key>idVendor</key>

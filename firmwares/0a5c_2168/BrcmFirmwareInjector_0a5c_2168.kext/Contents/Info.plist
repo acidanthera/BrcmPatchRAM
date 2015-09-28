@@ -19,19 +19,19 @@
       <key>0a5c_2168</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM2</string>
+        <string>com.no-one.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>BCM43162 Bluetooth 4.0 +HS USB Device</string>
         <key>FirmwareKey</key>
         <string>0a5c_2168_v4204</string>
         <key>IOClass</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOMatchCategory</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOProbeScore</key>
         <integer>2000</integer>
         <key>IOProviderClass</key>
-        <string>IOUSBHostDevice</string>
+        <string>IOUSBDevice</string>
         <key>idProduct</key>
         <integer>8552</integer>
         <key>idVendor</key>

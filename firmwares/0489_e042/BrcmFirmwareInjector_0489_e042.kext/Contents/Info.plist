@@ -19,19 +19,19 @@
       <key>0489_e042</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM2</string>
+        <string>com.no-one.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>Broadcom Bluetooth 4.0 USB</string>
         <key>FirmwareKey</key>
         <string>0489_e042_v5580</string>
         <key>IOClass</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOMatchCategory</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOProbeScore</key>
         <integer>2000</integer>
         <key>IOProviderClass</key>
-        <string>IOUSBHostDevice</string>
+        <string>IOUSBDevice</string>
         <key>idProduct</key>
         <integer>57410</integer>
         <key>idVendor</key>

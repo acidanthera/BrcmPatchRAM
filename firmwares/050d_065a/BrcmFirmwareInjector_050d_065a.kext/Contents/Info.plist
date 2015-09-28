@@ -19,19 +19,19 @@
       <key>050d_065a</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM2</string>
+        <string>com.no-one.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>Belkin Bluetooth 4.0 USB Adapter</string>
         <key>FirmwareKey</key>
         <string>050d_065a_v5578</string>
         <key>IOClass</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOMatchCategory</key>
-        <string>BrcmPatchRAM2</string>
+        <string>BrcmPatchRAM</string>
         <key>IOProbeScore</key>
         <integer>2000</integer>
         <key>IOProviderClass</key>
-        <string>IOUSBHostDevice</string>
+        <string>IOUSBDevice</string>
         <key>idProduct</key>
         <integer>1626</integer>
         <key>idVendor</key>

@@ -1,6 +1,4 @@
 <dict>
-<key>#IOKitPersonalities</key>
-<dict>
   <key>0489_e032</key>
   <dict>
     <key>CFBundleIdentifier</key>
@@ -1711,5 +1709,4 @@
     <key>idVendor</key>
     <integer>16700</integer>
   </dict>
-</dict>
 </dict>
