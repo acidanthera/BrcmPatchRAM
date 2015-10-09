@@ -208,6 +208,26 @@ def create_plist(devices, output_path)
   File.open(File.join(output_path, "firmwares.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
 end
 
+def create_readme(devices, output_path)
+  File.open(File.join(output_path, "firmwares.md"), "w") do |file|
+    
+    devices.sort_by{|d| [d.vendorId, d.productId]}.each do |device|
+      device_folder = "%04x_%04x" % [ device.vendorId, device.productId ]
+      device_path = File.join(output_path, device_folder)
+
+      if Dir.exists?(device_path)
+        file.puts "* [`%04x:%04x`] %s (%s)" % [ device.vendorId, device.productId, device.comment, device.description ]
+      
+      
+        Dir.glob(File.join(device_path, "*.zhx")).each do |firmware|
+          firmware = File.basename(firmware).chomp(".zhx")
+          file.puts("  * %s (v%s)" % [ firmware[0..-7], firmware[-4..-1] ])
+        end
+      end
+    end    
+  end
+end
+
 if ARGV.length != 2
   puts "Usage: firmware.rb <input folder> <output folder>"
   exit
@@ -222,5 +242,8 @@ devices = parse_inf(File.join(input, "bcbtums-win8x64-brcm.inf"))
 # Extract and compress all device firmwares
 create_firmwares(devices, input, output)
 
-# 
+# Generate plist extract
 create_plist(devices, output)
+
+# Generate markdown readme with device / firmware information
+create_readme(devices, output)
