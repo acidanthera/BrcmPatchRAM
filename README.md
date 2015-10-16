@@ -22,6 +22,8 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
 
   * BrcmFirmwareData.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareData.kext
 
+  * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or EFI/Clover/kexts.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.
+
 
 ###BrcmPatchRAM
 
@@ -59,8 +61,12 @@ The following devices are supported at the moment:
 
 *Devices marked with * are tested successfully*
 
+Non-PatchRAM devices (BrcmPatchRAM used to speed up recovery after sleep):
+
   * ``[03f0:231d]`` HP 231d (ProBook BT built-in firmware)
   * ``[13d3:3295]`` Azurewave BCM943225 (20702A bult-in firmware)
+
+Tested PatchRAM devices:
   * ``[0489:e032]`` 20702 Combo USB
   * ``[0489:e042]`` 20702A1 Lenovo China *
   * ``[0489:e079]`` Lenovo China 43162 NGFF
@@ -95,19 +101,26 @@ The following devices are supported at the moment:
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
   * ``[19ff:0239]`` Insignia NS-PCY5BMA Bluetooth Dongle
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
-  
-####Installation
 
-BrcmPatchRAM.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions.
+All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github.
 
-Same goes for BrcmBluetoothInjector.kext.
 
+####More Installation Details
+
+BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions.
 Install only one, not both, depending on system version.
+
+BrcmFirmwareRepo.kext does not work with Clover kext injection, unless using a device specific firmware injector.
+BrcmFirmwareData.kext can work with Clover kext injection.
+
+You can also use a device specific firmware injector (in conjunction with BrcmFirmwareRepo.kext).  In this scenario, BrcmFirmwareRepo.kext does work from Clover kexts.
+
+You will find device specfic injectors in the 'firmwares' directory of the git repository.  They are not included in the distribution ZIP.
 
 
 ####Details
 
-BrcmPatchRAM consists of 3 parts:
+BrcmPatchRAM consists of 2 parts:
 
  * BrcmPatchRAM itself communicates with supported Broadcom Bluetooth USB devices (as configured in the Info.plist), and detects if they require a firmware update. 
  
