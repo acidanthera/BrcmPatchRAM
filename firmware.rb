@@ -50,6 +50,11 @@ def parse_inf(inf_path)
     if device and line =~ /^(BCM.*\.hex)/
       device.firmware = $1
       device.firmwareVersion = $1[-8..-1].chomp(".hex").to_i + 4096
+      
+      if device.firmware.start_with?("BCM4356A2")
+        devices.delete(device)
+      end
+      
       device = nil
     end
   
