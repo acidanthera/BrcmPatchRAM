@@ -426,7 +426,7 @@ IOReturn USBPipeShim::read(IOMemoryDescriptor *	buffer,
     else
     {
         uint32_t bytesTransfered;
-        IOReturn result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
+        result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
         if (bytesRead) *bytesRead = bytesTransfered;
     }
     return result;
