@@ -20,6 +20,17 @@
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
+		<key>BrcmPatchRAMResidency</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAMResidency</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAMResidency</string>
+			<key>IOProviderClass</key>
+			<string>disabled_IOResources</string>
+		</dict>
 		<key>03f0_231d no firmware</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
@@ -51,6 +62,38 @@
 			<integer>8989</integer>
 			<key>idVendor</key>
 			<integer>1008</integer>
+		</dict>
+		<key>0b05_1788 no firmware</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Asus BT-270(20702A built-in firmware)</string>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>6024</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>0b05_1788 native</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>6024</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
 		</dict>
 		<key>13d3_3295 no firmware</key>
 		<dict>
