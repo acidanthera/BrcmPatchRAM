@@ -52,6 +52,8 @@ This kext is a simple injector... it does not contain a firmware uploader.  Try 
 
 Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareData) with this kext.
 
+This kext is not provided in the distribution ZIP.  You can build it if you wish to try it.  It was removed as it presense was causing confusion for those that don't read carefully and didn't install the preferred kexts correctly.
+
 
 ####Supported Devices
 
