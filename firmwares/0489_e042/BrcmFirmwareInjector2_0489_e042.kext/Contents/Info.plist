@@ -711,7 +711,7 @@
         <key>IOProbeScore</key>
         <integer>2000</integer>
         <key>IOProviderClass</key>
-        <string>disabled_IOResources</string>
+        <string>IOResources</string>
       </dict>
     </dict>
   </dict>
