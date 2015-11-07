@@ -22,7 +22,7 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
 
   * BrcmFirmwareData.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareData.kext
 
-  * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or EFI/Clover/kexts.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector from Clover/kexts, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".
+  * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or EFI/Clover/kexts.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector from Clover/kexts, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".  And still, you may find it unreliable... as that is the way Clover kext injection is (it does not simulate kext installation perfectly).  In testing, best result was obtained if you replace the IOKitPersonalities entry in BrcmFirmwareRepo.kext Info.plist with that of the injector kext (no need for the injector at that point).
 
 
 ###BrcmPatchRAM
