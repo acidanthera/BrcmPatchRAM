@@ -85,7 +85,7 @@ private:
     IOBufferMemoryDescriptor* mReadBuffer;
     
     volatile DeviceState mDeviceState = kInitialize;
-    volatile uint16_t mFirmareVersion = 0xFFFF;
+    volatile uint16_t mFirmwareVersion = 0xFFFF;
     IOLock* mCompletionLock = NULL;
     
 #ifdef DEBUG

@@ -372,7 +372,7 @@ void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
     // start firmware loading process in a non-workloop thread
     if (mWorkPending & kWorkLoadFirmware)
     {
-        DebugLog("_workPending kWorkLoadFirmare\n");
+        DebugLog("_workPending kWorkLoadFirmware\n");
         mWorkPending &= ~kWorkLoadFirmware;
         retain();
         kern_return_t result = kernel_thread_start(&BrcmPatchRAM::uploadFirmwareThread, this, &mWorker);
@@ -1046,13 +1046,13 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     DebugLog("[%04x:%04x]: READ VERBOSE CONFIG complete (status: 0x%02x, length: %d bytes).\n",
                              mVendorId, mProductId, event->status, header->length);
                     
-                    mFirmareVersion = *(UInt16*)(((char*)response) + 10);
+                    mFirmwareVersion = *(UInt16*)(((char*)response) + 10);
                     
                     DebugLog("[%04x:%04x]: Firmware version: v%d.\n",
-                             mVendorId, mProductId, mFirmareVersion + 0x1000);
+                             mVendorId, mProductId, mFirmwareVersion + 0x1000);
                     
                     // Device does not require a firmware patch at this time
-                    if (mFirmareVersion > 0)
+                    if (mFirmwareVersion > 0)
                         mDeviceState = kUpdateNotNeeded;
                     else
                         mDeviceState = kFirmwareVersion;
