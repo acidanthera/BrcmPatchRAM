@@ -17,8 +17,6 @@
  *
  */
 
-//REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
-
 #ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
 #else

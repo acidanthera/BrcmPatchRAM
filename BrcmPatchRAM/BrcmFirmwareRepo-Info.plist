@@ -43,8 +43,6 @@
 	</dict>
 	<key>OSBundleCompatibleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
-	<key>#OSBundleRequired</key>
-	<string>Safe Boot</string>
 	<key>Source Code</key>
 	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>

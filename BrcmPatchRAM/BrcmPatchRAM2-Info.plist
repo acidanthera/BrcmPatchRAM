@@ -210,7 +210,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1668_v5764</string>
+			<string>BCM20702A1_001.002.014.1502.1758_v5854</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -333,6 +333,25 @@
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>57494</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0489_e0a1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom Bluetooth 4.1 USB</string>
+			<key>FirmwareKey</key>
+			<string>BCM20703A1_001.001.005.0214.0414_v4510</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>57505</integer>
 			<key>idVendor</key>
 			<integer>1161</integer>
 		</dict>
@@ -609,7 +628,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1672_v5768</string>
+			<string>BCM20702A1_001.002.014.1502.1759_v5855</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -932,7 +951,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1647_v5743</string>
+			<string>BCM20702A1_001.002.014.1502.1770_v5866</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -970,7 +989,7 @@
 			<key>DisplayName</key>
 			<string>ThinkPad Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1483.1669_v5765</string>
+			<string>BCM20702A1_001.002.014.1502.1757_v5853</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -989,7 +1008,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM20702A1_001.002.014.1443.1459_v5555</string>
+			<string>BCM20702A1_001.002.014.1502.1764_v5860</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -1141,7 +1160,7 @@
 			<key>DisplayName</key>
 			<string>Dell Wireless 1830 Bluetooth 4.1 LE</string>
 			<key>FirmwareKey</key>
-			<string>BCM20703A1_001.001.005.0214.0403_v4499</string>
+			<string>BCM20703A1_001.001.005.0214.0422_v4518</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -1179,7 +1198,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
-			<string>BCM4350C5_003.006.007.0095.1704_v5800</string>
+			<string>BCM4350C5_003.006.007.0120.2118_v6214</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -1198,7 +1217,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.1 USB</string>
 			<key>FirmwareKey</key>
-			<string>BCM4350C5_003.006.007.0095.1668_v5764</string>
+			<string>BCM4350C5_003.006.007.0120.1947_v6043</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -1207,6 +1226,25 @@
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
 			<integer>25620</integer>
+			<key>idVendor</key>
+			<integer>2652</integer>
+		</dict>
+		<key>0a5c_6417</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom 20702 Bluetooth 4.0</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1502.1771_v5867</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>25623</integer>
 			<key>idVendor</key>
 			<integer>2652</integer>
 		</dict>
@@ -1285,6 +1323,25 @@
 			<integer>6154</integer>
 			<key>idVendor</key>
 			<integer>2821</integer>
+		</dict>
+		<key>0bb4_0306</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom BCM20703 Bluetooth USB Device</string>
+			<key>FirmwareKey</key>
+			<string>BCM20703A1_001.001.005.0214.0409_v4505</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>774</integer>
+			<key>idVendor</key>
+			<integer>2996</integer>
 		</dict>
 		<key>105b_e065</key>
 		<dict>
@@ -1606,8 +1663,6 @@
 		<key>com.apple.kpi.mach</key>
 		<string>8.0</string>
 	</dict>
-	<key>#OSBundleRequired</key>
-	<string>Safe Boot</string>
 	<key>Source Code</key>
 	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>
