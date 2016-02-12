@@ -178,7 +178,7 @@ def create_injector(device, for_usbhost, compressed_data, output_path)
   add_key_value(firmware_dict, "IOClass", "string", "BrcmFirmwareStore")
   add_key_value(firmware_dict, "IOMatchCategory", "string", "BrcmFirmwareStore")
   add_key_value(firmware_dict, "IOProbeScore", "integer", "2000")
-  add_key_value(firmware_dict, "IOProviderClass", "string", "disabled_IOResources")
+  add_key_value(firmware_dict, "IOProviderClass", "string", "IOResources")
   
   injector_path = File.join(output_path, "BrcmFirmwareInjector%s_%04x_%04x.kext/Contents" % [ for_usbhost ? "2" : "", device.vendorId, device.productId, device.version ])
   

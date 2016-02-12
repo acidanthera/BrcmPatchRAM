@@ -17,8 +17,6 @@
  *
  */
 
-//REVIEW: re-enable OSBundleRequired="Safe Boot" in Info.plist for final build?
-
 #ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
 #else
@@ -372,7 +370,7 @@ void BrcmPatchRAM::processWorkQueue(IOInterruptEventSource*, int)
     // start firmware loading process in a non-workloop thread
     if (mWorkPending & kWorkLoadFirmware)
     {
-        DebugLog("_workPending kWorkLoadFirmare\n");
+        DebugLog("_workPending kWorkLoadFirmware\n");
         mWorkPending &= ~kWorkLoadFirmware;
         retain();
         kern_return_t result = kernel_thread_start(&BrcmPatchRAM::uploadFirmwareThread, this, &mWorker);
@@ -681,14 +679,14 @@ void BrcmPatchRAM::publishPersonality()
 #endif
 }
 
-bool BrcmPatchRAM::publishFirmwareStorePersonality()
+bool BrcmPatchRAM::publishResourcePersonality(const char* classname)
 {
     // matching dictionary for disabled BrcmFirmwareStore
     OSDictionary* dict = OSDictionary::withCapacity(3);
     if (!dict) return false;
     setStringInDict(dict, kIOProviderClassKey, "disabled_IOResources");
-    setStringInDict(dict, kIOClassKey, kBrcmFirmwareStoreService);
-    setStringInDict(dict, kIOMatchCategoryKey, kBrcmFirmwareStoreService);
+    setStringInDict(dict, kIOClassKey, classname);
+    setStringInDict(dict, kIOMatchCategoryKey, classname);
 
     // retrieve currently matching IOKit driver personalities
     OSDictionary* personality = NULL;
@@ -696,7 +694,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     if (OSOrderedSet* set = gIOCatalogue->findDrivers(dict, &generationCount))
     {
         if (set->getCount())
-            DebugLog("%d matching driver personalities for BrcmFirmwareStore.\n", set->getCount());
+            DebugLog("%d matching driver personalities for %s.\n", set->getCount(), classname);
 
         // should be only one, so we can grab just the first
         if (OSCollectionIterator* iterator = OSCollectionIterator::withCollection(set))
@@ -709,7 +707,7 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
     // if we don't find it, then something is really wrong...
     if (!personality)
     {
-        AlwaysLog("unable to find disabled BrcmFirmwareStore personality.\n");
+        AlwaysLog("unable to find disabled %s personality.\n", classname);
         dict->release();
         return false;
     }
@@ -732,9 +730,9 @@ bool BrcmPatchRAM::publishFirmwareStorePersonality()
         setStringInDict(personality, kIOProviderClassKey, "IOResources");
         array->setObject(personality);
         if (gIOCatalogue->addDrivers(array, true))
-            AlwaysLog("Published new IOKit personality for BrcmFirmwareStore.\n");
+            AlwaysLog("Published new IOKit personality for %s.\n", classname);
         else
-            AlwaysLog("ERROR in addDrivers for new BrcmFirmwareStore personality.\n");
+            AlwaysLog("ERROR in addDrivers for new %s personality.\n", classname);
         array->release();
     }
     personality->release();
@@ -751,10 +749,26 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         if (!mFirmwareStore)
         {
             // not loaded, so publish personality...
-            publishFirmwareStorePersonality();
+            publishResourcePersonality(kBrcmFirmwareStoreService);
             // and wait...
             mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
         }
+
+#ifdef NON_RESIDENT
+        // also need BrcmPatchRAMResidency
+        IOService* residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 0));
+        if (!residency)
+        {
+            // not loaded, so publish personality...
+            publishResourcePersonality(kBrcmPatchRAMResidency);
+            // and wait...
+            residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL));
+            if (residency)
+                residency->release();
+            else
+                AlwaysLog("[%04x:%04x]: BrcmPatchRAMResidency does not appear to be available.\n", mVendorId, mProductId);
+        }
+#endif
     }
     
     if (!mFirmwareStore)
@@ -1030,13 +1044,13 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                     DebugLog("[%04x:%04x]: READ VERBOSE CONFIG complete (status: 0x%02x, length: %d bytes).\n",
                              mVendorId, mProductId, event->status, header->length);
                     
-                    mFirmareVersion = *(UInt16*)(((char*)response) + 10);
+                    mFirmwareVersion = *(UInt16*)(((char*)response) + 10);
                     
                     DebugLog("[%04x:%04x]: Firmware version: v%d.\n",
-                             mVendorId, mProductId, mFirmareVersion + 0x1000);
+                             mVendorId, mProductId, mFirmwareVersion + 0x1000);
                     
                     // Device does not require a firmware patch at this time
-                    if (mFirmareVersion > 0)
+                    if (mFirmwareVersion > 0)
                         mDeviceState = kUpdateNotNeeded;
                     else
                         mDeviceState = kFirmwareVersion;
@@ -1352,3 +1366,22 @@ const char* BrcmPatchRAM::stringFromReturn(IOReturn rtn)
     
     return super::stringFromReturn(rtn);
 }
+
+
+#ifdef NON_RESIDENT
+
+OSDefineMetaClassAndStructors(BrcmPatchRAMResidency, IOService)
+
+bool BrcmPatchRAMResidency::start(IOService *provider)
+{
+    DebugLog("BrcmPatchRAMResidency start\n");
+
+    if (!super::start(provider))
+        return false;
+
+    registerService();
+
+    return true;
+}
+
+#endif

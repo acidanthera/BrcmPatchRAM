@@ -5,8 +5,10 @@
 VERSION_ERA=$(shell ./print_version.sh)
 ifeq "$(VERSION_ERA)" "10.10-"
 KEXT=BrcmPatchRAM.kext
+INSTDIR=/System/Library/Extensions
 else
 KEXT=BrcmPatchRAM2.kext
+INSTDIR=/Library/Extensions
 endif
 
 # Note: BrcmFirmwareStore.kext obsolete (but still deleted here if present)
@@ -24,7 +26,6 @@ KEXTDEL2=BrcmFirmwareStore.kext
 INJECT=BrcmBluetoothInjector.kext
 DIST=RehabMan-BrcmPatchRAM
 #INSTDIR=/kexts
-INSTDIR=/System/Library/Extensions
 BUILDDIR=./Build/Products
 
 ifeq ($(findstring 32,$(BITS)),32)
@@ -91,6 +92,7 @@ distribute:
 	mkdir ./Distribute
 	#cp -R $(BUILDDIR)/Debug ./Distribute
 	cp -R $(BUILDDIR)/Release ./Distribute
+	rm -Rf ./Distribute/Release/BrcmBluetoothInjector.kext
 	find ./Distribute -path *.DS_Store -delete
 	find ./Distribute -path *.dSYM -exec echo rm -r {} \; >/tmp/org.voodoo.rm.dsym.sh
 	chmod +x /tmp/org.voodoo.rm.dsym.sh

@@ -85,7 +85,7 @@ private:
     IOBufferMemoryDescriptor* mReadBuffer;
     
     volatile DeviceState mDeviceState = kInitialize;
-    volatile uint16_t mFirmareVersion = 0xFFFF;
+    volatile uint16_t mFirmwareVersion = 0xFFFF;
     IOLock* mCompletionLock = NULL;
     
 #ifdef DEBUG
@@ -128,7 +128,7 @@ private:
     void removePersonality();
 #endif
 #endif
-    bool publishFirmwareStorePersonality();
+    bool publishResourcePersonality(const char* classname);
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
     
@@ -165,5 +165,20 @@ public:
 #endif
     virtual const char* stringFromReturn(IOReturn rtn);
 };
+
+#ifdef NON_RESIDENT
+
+#define kBrcmPatchRAMResidency "BrcmPatchRAMResidency"
+class BrcmPatchRAMResidency : public IOService
+{
+private:
+    typedef IOService super;
+    OSDeclareDefaultStructors(BrcmPatchRAMResidency);
+
+public:
+    virtual bool start(IOService *provider);
+};
+
+#endif //NON_RESIDENT
 
 #endif //__BrcmPatchRAM__
