@@ -55,6 +55,9 @@ OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 IOLock* BrcmPatchRAM::mLoadFirmwareLock = IOLockAlloc();
 #endif
 
+extern "C"
+{
+
 __attribute__((visibility("hidden")))
 kern_return_t BrcmPatchRAM_Start(kmod_info_t* ki, void * d)
 {
@@ -79,6 +82,8 @@ kern_return_t BrcmPatchRAM_Stop(kmod_info_t* ki, void * d)
 
     return KERN_SUCCESS;
 }
+
+} // extern "C"
 
 void BrcmPatchRAM::initBrcmStrings()
 {

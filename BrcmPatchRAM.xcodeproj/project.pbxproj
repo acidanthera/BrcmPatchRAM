@@ -1083,8 +1083,6 @@
 				CURRENT_PROJECT_VERSION = 2.2.3;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				MODULE_START = BrcmPatchRAM_Start;
-				MODULE_STOP = BrcmPatchRAM_Stop;
 				SDKROOT = macosx10.6;
 				SYMROOT = build/Products;
 			};
@@ -1096,8 +1094,6 @@
 				CURRENT_PROJECT_VERSION = 2.2.3;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				MODULE_START = BrcmPatchRAM_Start;
-				MODULE_STOP = BrcmPatchRAM_Stop;
 				SDKROOT = macosx10.6;
 				SYMROOT = build/Products;
 			};
@@ -1112,6 +1108,8 @@
 				);
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_NAME = BrcmPatchRAM;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1123,6 +1121,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "LOGNAME=\\\"${LOGNAME}\\\"";
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_NAME = BrcmPatchRAM;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1163,6 +1163,8 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM2-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_NAME = BrcmPatchRAM2;
 				SDKROOT = macosx10.11;
 				WRAPPER_EXTENSION = kext;
@@ -1179,6 +1181,8 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM2-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MODULE_NAME = "com.no-one.BrcmPatchRAM";
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_NAME = BrcmPatchRAM2;
 				SDKROOT = macosx10.11;
 				WRAPPER_EXTENSION = kext;

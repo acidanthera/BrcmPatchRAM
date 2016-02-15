@@ -59,6 +59,12 @@ enum DeviceState
 #define BrcmPatchRAM BrcmPatchRAM2
 #endif
 
+extern "C"
+{
+kern_return_t BrcmPatchRAM_Start(kmod_info_t*, void*);
+kern_return_t BrcmPatchRAM_Stop(kmod_info_t*, void*);
+}
+
 class BrcmPatchRAM : public IOService
 {
 private:
