@@ -111,6 +111,9 @@ private:
     IOInterruptEventSource* mWorkSource = NULL;
     IOLock* mWorkLock = NULL;
     static IOLock* mLoadFirmwareLock;
+    friend kern_return_t BrcmPatchRAM_Start(kmod_info_t*, void*);
+    friend kern_return_t BrcmPatchRAM_Stop(kmod_info_t*, void*);
+
     enum WorkPending
     {
         kWorkLoadFirmware = 0x01,

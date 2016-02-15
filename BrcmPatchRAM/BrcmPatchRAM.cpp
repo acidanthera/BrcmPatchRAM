@@ -52,8 +52,33 @@ OSString* BrcmPatchRAM::brcmIOClass = NULL;
 OSString* BrcmPatchRAM::brcmProviderClass = NULL;
 
 #ifndef NON_RESIDENT
-IOLock* BrcmPatchRAM::mLoadFirmwareLock = NULL;
+IOLock* BrcmPatchRAM::mLoadFirmwareLock = IOLockAlloc();
 #endif
+
+__attribute__((visibility("hidden")))
+kern_return_t BrcmPatchRAM_Start(kmod_info_t* ki, void * d)
+{
+#ifndef NON_RESIDENT
+    if (!(BrcmPatchRAM::mLoadFirmwareLock = IOLockAlloc()))
+        return KERN_FAILURE;
+#endif
+
+    return KERN_SUCCESS;
+}
+
+__attribute__((visibility("hidden")))
+kern_return_t BrcmPatchRAM_Stop(kmod_info_t* ki, void * d)
+{
+#ifndef NON_RESIDENT
+    if (BrcmPatchRAM::mLoadFirmwareLock)
+    {
+        IOLockFree(BrcmPatchRAM::mLoadFirmwareLock);
+        BrcmPatchRAM::mLoadFirmwareLock = NULL;
+    }
+#endif
+
+    return KERN_SUCCESS;
+}
 
 void BrcmPatchRAM::initBrcmStrings()
 {
@@ -139,17 +164,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
         return NULL;
 
     // Note: mLoadFirmwareLock is static (global), not instance data...
-    IOLockLock(mWorkLock);  // in case two BrcmPatchRAM instances starting simultaneously
     if (!mLoadFirmwareLock)
-    {
-        mLoadFirmwareLock = IOLockAlloc();
-        if (!mLoadFirmwareLock)
-        {
-            IOLockUnlock(mWorkLock);
-            return NULL;
-        }
-    }
-    IOLockUnlock(mWorkLock);
+        return NULL;
 #endif
 
     mCompletionLock = IOLockAlloc();
@@ -324,15 +340,6 @@ void BrcmPatchRAM::stop(IOService* provider)
     }
 
     IOLockUnlock(mLoadFirmwareLock);
-#if 0
-    //REVIEW: just leak mLoadFirmwareLock since it could be used by multiple BrcmPatchRAM instances
-    // freeing this lock would require counting instances, protecting the count with another lock, etc.
-    if (mLoadFirmwareLock)
-    {
-        IOLockFree(mLoadFirmwareLock);
-        mLoadFirmwareLock = NULL;
-    }
-#endif
 #endif // #ifndef NON_RESIDENT
 
     mDevice.setDevice(NULL);
