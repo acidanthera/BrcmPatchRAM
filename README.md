@@ -27,7 +27,7 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
 
 ###BrcmPatchRAM
 
-__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
+__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/RehabMan/OS-X-BrcmPatchRAM/blob/master/README-Mac.md)__
 
 Most Broadcom USB Bluetooth devices make use of a system called RAMUSB.
 
