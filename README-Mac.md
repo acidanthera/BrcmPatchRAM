@@ -4,9 +4,9 @@ The instructions in the readme are for a [Hackintosh](http://en.wikipedia.org/wi
 
 You should __not__ follow the original instructions on a real Mac as it might inadvertently break things.
 
-BrcmPatchRAM.kext is an unsigned kernel extension.
+BrcmPatchRAM.kext, BrcmPatchRAM2.kext, BrcmFirmwareRepo.kext, and BrcmFirmwareData.kext are all unsigned kernel extensions.
 
-In order to use it unsigned kernel extensions need to be enabled.
+In order to use them, unsigned kernel extensions need to be enabled.
 Take the following steps in the Terminal:
 
  * Retrieve the current system boot arguments:
@@ -23,9 +23,19 @@ Take the following steps in the Terminal:
   ```  
  * Reboot the Mac   
 
-Next install BrcmPatchRAM.kext inside /System/Library/Extensions.
+Note: In 10.11, you must disable SIP. Refer to Apple provided documentation for disabling SIP (hint: use csrutil in Recovery).
+
+For OS X older than 10.11, install the required kexts inside /System/Library/Extensions.
 ```
 sudo cp -R ~/Downloads/BrcmPatchRAM.kext /System/Library/Extensions
+sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /System/Library/Extensions
+touch /System/Library/Extensions
+```
+
+Or for 10.11, to /Library/Extensions:
+```
+sudo cp -R ~/Downloads/BrcmPatchRAM2.kext /Library/Extensions
+sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /Library/Extensions
 touch /System/Library/Extensions
 ```
 

@@ -101,7 +101,6 @@ Tested PatchRAM devices:
   * ``[13d3:3418]`` Azurewave (4352/20702 combo)
   * ``[13d3:3435]`` Azurewave (4352/20702 combo)
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
-  * ``[19ff:0239]`` Insignia NS-PCY5BMA Bluetooth Dongle
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
 
 All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github.
