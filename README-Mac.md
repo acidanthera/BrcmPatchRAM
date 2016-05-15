@@ -29,14 +29,14 @@ For OS X older than 10.11, install the required kexts inside /System/Library/Ext
 ```
 sudo cp -R ~/Downloads/BrcmPatchRAM.kext /System/Library/Extensions
 sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /System/Library/Extensions
-touch /System/Library/Extensions
+sudo touch /System/Library/Extensions
 ```
 
 Or for 10.11, to /Library/Extensions:
 ```
 sudo cp -R ~/Downloads/BrcmPatchRAM2.kext /Library/Extensions
 sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /Library/Extensions
-touch /System/Library/Extensions
+sudo touch /System/Library/Extensions
 ```
 
 Wait about a minute before rebooting the Mac again.
