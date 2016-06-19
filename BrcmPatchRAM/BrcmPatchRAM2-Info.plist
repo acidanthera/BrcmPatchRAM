@@ -95,6 +95,38 @@
 			<key>idVendor</key>
 			<integer>2821</integer>
 		</dict>
+		<key>0b05_178a no firmware</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>HP EliteBook NB-290 (built-in firmware)</string>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>6026</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
+		<key>0b05_178a native</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOClass</key>
+			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>6026</integer>
+			<key>idVendor</key>
+			<integer>2821</integer>
+		</dict>
 		<key>13d3_3295 no firmware</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
