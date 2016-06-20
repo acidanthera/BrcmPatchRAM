@@ -56,6 +56,34 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ED7470ED1D184C5D005F75F1"
+               BuildableName = "BrcmNonPatchRAM.kext"
+               BlueprintName = "BrcmNonPatchRAM"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EDC9E2B21D185240007E69B6"
+               BuildableName = "BrcmNonPatchRAM2.kext"
+               BlueprintName = "BrcmNonPatchRAM2"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "ED2A7DC81B37DE6E00DC200F"
                BuildableName = "BrcmBluetoothInjector.kext"
                BlueprintName = "BrcmBluetoothInjector"
