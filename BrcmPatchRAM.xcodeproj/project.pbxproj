@@ -13,10 +13,8 @@
 		841AD8831BB3C0350082B7B0 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
 		841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		841AD8851BB3C0350082B7B0 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
-		841AD88F1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 841AD88E1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist */; };
 		841AD8911BB3C12F0082B7B0 /* FirmwareData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841AD8901BB3C12F0082B7B0 /* FirmwareData.cpp */; };
 		841AD8931BB3C1960082B7B0 /* FirmwareData.h in Headers */ = {isa = PBXBuildFile; fileRef = 841AD8921BB3C1960082B7B0 /* FirmwareData.h */; };
-		841AD8951BB3C27E0082B7B0 /* generate_firmware_data.sh in Resources */ = {isa = PBXBuildFile; fileRef = 841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */; };
 		842B20BD1BB2F0D900D3C468 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		842B20BE1BB2F0D900D3C468 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		842B20BF1BB2F0D900D3C468 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
@@ -927,8 +925,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				841AD8951BB3C27E0082B7B0 /* generate_firmware_data.sh in Resources */,
-				841AD88F1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
