@@ -59,6 +59,12 @@ enum DeviceState
 #define BrcmPatchRAM BrcmPatchRAM2
 #endif
 
+extern "C"
+{
+kern_return_t BrcmPatchRAM_Start(kmod_info_t*, void*);
+kern_return_t BrcmPatchRAM_Stop(kmod_info_t*, void*);
+}
+
 class BrcmPatchRAM : public IOService
 {
 private:
@@ -111,6 +117,9 @@ private:
     IOInterruptEventSource* mWorkSource = NULL;
     IOLock* mWorkLock = NULL;
     static IOLock* mLoadFirmwareLock;
+    friend kern_return_t BrcmPatchRAM_Start(kmod_info_t*, void*);
+    friend kern_return_t BrcmPatchRAM_Stop(kmod_info_t*, void*);
+
     enum WorkPending
     {
         kWorkLoadFirmware = 0x01,

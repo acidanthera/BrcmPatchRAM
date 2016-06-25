@@ -24,10 +24,16 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
 
   * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or EFI/Clover/kexts.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector from Clover/kexts, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".  And still, you may find it unreliable... as that is the way Clover kext injection is (it does not simulate kext installation perfectly).  In testing, best result was obtained if you replace the IOKitPersonalities entry in BrcmFirmwareRepo.kext Info.plist with that of the injector kext (no need for the injector at that point).
 
+Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on OS X version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
+
+  * BrcmNonPatchRAM.kext: for 10.10 or earlier
+
+  * BrcmNonPatchRAM2.kext: for 10.11 or later.
+
 
 ###BrcmPatchRAM
 
-__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/robvanoostenrijk/BrcmPatchRAM/blob/master/README-Mac.md)__
+__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/RehabMan/OS-X-BrcmPatchRAM/blob/master/README-Mac.md)__
 
 Most Broadcom USB Bluetooth devices make use of a system called RAMUSB.
 
@@ -101,7 +107,6 @@ Tested PatchRAM devices:
   * ``[13d3:3418]`` Azurewave (4352/20702 combo)
   * ``[13d3:3435]`` Azurewave (4352/20702 combo)
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
-  * ``[19ff:0239]`` Insignia NS-PCY5BMA Bluetooth Dongle
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
 
 All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github.

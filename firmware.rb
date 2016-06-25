@@ -31,8 +31,9 @@ def parse_inf(inf_path)
   File.open(inf_path).each do |line|
 
     # When in the device block, parse all devices
-    if in_device_block == 1 and line =~ /^%([\w\.]*)%=Blue(\w*),\s*USB\\VID_([0-9A-F]{4})\&PID_([0-9A-F]{4})\s*;\s(.*?)\r\n$/
+    if in_device_block == 1 and line =~ /^%([\w\.]*)%=.*(RAMUSB\w*),\s*USB\\VID_([0-9A-F]{4})\&PID_([0-9A-F]{4})\s*;\s(.*?)\r\n$/
       # Example match: %BRCM20702.DeviceDesc%=BlueRAMUSB21E8,          USB\VID_0A5C&PID_21E8       ; 20702A1 dongles
+      # new Example:   %BRCM20702.DeviceDesc%=RAMUSB21E8,          USB\VID_0A5C&PID_21E8       ; 20702A1 dongles
       device = OpenStruct.new
     
       device.stringKey = $1
