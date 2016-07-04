@@ -1241,9 +1241,7 @@ bool BrcmPatchRAM::performUpgrade()
                 // responses.
                 IOSleep(10);
 
-                // Write first 2 instructions to trigger response
-                if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite(data->getBytesNoCopy(), data->getLength());
+                // Write first instruction to trigger response
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
                     bulkWrite(data->getBytesNoCopy(), data->getLength());
                 break;
