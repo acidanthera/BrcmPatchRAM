@@ -5,7 +5,7 @@ For the most part this fork is kept in sync with the-darkvoid's verson.  We are 
 
 ###RehabMan Fork Downloads
 
-Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads
+Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads/
 
 
 ###Installation
