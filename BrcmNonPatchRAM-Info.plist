@@ -37,6 +37,44 @@
 			<key>idVendor</key>
 			<integer>1008</integer>
 		</dict>
+		<key>0489_e030 no firmware legacy - 2</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Foxconn AW-NB290</string>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>57392</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
+		<key>0a5c_219a no firmware legacy</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Broadcom BCM2070 0a5c_219a (BT on BCM43225HMB)</string>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBDevice</string>
+			<key>idProduct</key>
+			<integer>2652</integer>
+			<key>idVendor</key>
+			<integer>8602</integer>
+		</dict>
 		<key>0b05_178a no firmware legacy</key>
 		<dict>
 			<key>CFBundleIdentifier</key>

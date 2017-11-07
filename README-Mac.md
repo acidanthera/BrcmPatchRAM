@@ -23,7 +23,7 @@ Take the following steps in the Terminal:
   ```  
  * Reboot the Mac   
 
-Note: In 10.11, you must disable SIP. Refer to Apple provided documentation for disabling SIP (hint: use csrutil in Recovery).
+Note: In 10.11 and later, you must disable SIP before attempting to modify NVRAM. Refer to Apple provided documentation for disabling SIP (hint: use csrutil in Recovery).
 
 For OS X older than 10.11, install the required kexts inside /System/Library/Extensions.
 ```
@@ -32,7 +32,7 @@ sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /System/Library/Extensions
 sudo touch /System/Library/Extensions
 ```
 
-Or for 10.11, to /Library/Extensions:
+Or for 10.11 and later, to /Library/Extensions:
 ```
 sudo cp -R ~/Downloads/BrcmPatchRAM2.kext /Library/Extensions
 sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /Library/Extensions
