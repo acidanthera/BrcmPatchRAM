@@ -126,6 +126,23 @@ You can also use a device specific firmware injector (in conjunction with BrcmFi
 You will find device specfic injectors in the 'firmwares' directory of the git repository.  They are not included in the distribution ZIP.
 
 
+####Configuration
+
+There are a number of delays which can be changed with the following kernel flags. You might change these values if you find BrcmPatchRAM is hanging during firmware load.
+
+bpr_probedelay: Changes mProbeDelay.  Default value is 0.
+
+bpr_initialdelay: Changes mInitialDelay.  Default value is 100.
+
+bpr_postresetdelay: Changes mPostResetDelay.  Default value is 100.
+
+Refer to the source for futher details on these delays.
+
+Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetdelay=400.
+
+Note: In Clover, kernel flags are specified at config.plist/Boot/Arguments, or you can change them (temporarily for next boot) in Clover Options within the Clover GUI.
+
+
 ####Details
 
 BrcmPatchRAM consists of 2 parts:

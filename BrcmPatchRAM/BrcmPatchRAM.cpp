@@ -195,8 +195,26 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
         mBlurpWait = 400;
 #endif
 
-    OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName));
-    if (displayName)
+    UInt32 delay;
+    mProbeDelay = 0;
+    if (OSNumber* probeDelay = OSDynamicCast(OSNumber, getProperty("ProbeDelay")))
+        mProbeDelay = probeDelay->unsigned32BitValue();
+    if (PE_parse_boot_argn("bpr_probedelay", &delay, sizeof delay))
+        mProbeDelay = delay;
+
+    mInitialDelay = 100;
+    if (OSNumber* initialDelay = OSDynamicCast(OSNumber, getProperty("InitialDelay")))
+        mInitialDelay = initialDelay->unsigned32BitValue();
+    if (PE_parse_boot_argn("bpr_initialdelay", &delay, sizeof delay))
+        mInitialDelay = delay;
+
+    mPostResetDelay = 100;
+    if (OSNumber* postResetDelay = OSDynamicCast(OSNumber, getProperty("PostResetDelay")))
+        mPostResetDelay = postResetDelay->unsigned32BitValue();
+    if (PE_parse_boot_argn("bpr_postresetdelay", &delay, sizeof delay))
+        mPostResetDelay = delay;
+
+    if (OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName)))
         provider->setProperty(kUSBProductString, displayName);
     
     mVendorId = mDevice.getVendorID();
@@ -208,6 +226,8 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
         if (BrcmFirmwareStore* firmwareStore = getFirmwareStore())
             firmwareStore->getFirmware(mVendorId, mProductId, firmwareKey);
     }
+
+    IOSleep(mProbeDelay);
 
     uploadFirmware();
     publishPersonality();
@@ -417,7 +437,7 @@ void BrcmPatchRAM::uploadFirmwareThread(void *arg, wait_result_t wait)
     {
         BrcmPatchRAM* me = static_cast<BrcmPatchRAM*>(arg);
         me->resetDevice();
-        IOSleep(20);
+        IOSleep(me->mPostResetDelay);
         me->uploadFirmware();
 #ifndef TARGET_ELCAPITAN
         me->publishPersonality();
@@ -1239,7 +1259,7 @@ bool BrcmPatchRAM::performUpgrade()
                 // If this IOSleep is not issued, the device is not ready to receive
                 // the firmware instructions and we will deadlock due to lack of
                 // responses.
-                IOSleep(10);
+                IOSleep(mInitialDelay);
 
                 // Write first instruction to trigger response
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
