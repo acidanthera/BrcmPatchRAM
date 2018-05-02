@@ -78,6 +78,7 @@ private:
     UInt16 mVendorId;
     UInt16 mProductId;
     UInt32 mProbeDelay;
+    UInt32 mPreResetDelay;
     UInt32 mPostResetDelay;
     UInt32 mInitialDelay;
 

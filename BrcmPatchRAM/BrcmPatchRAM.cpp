@@ -214,6 +214,12 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     if (PE_parse_boot_argn("bpr_postresetdelay", &delay, sizeof delay))
         mPostResetDelay = delay;
 
+    mPreResetDelay = 20;
+    if (OSNumber* preResetDelay = OSDynamicCast(OSNumber, getProperty("PreResetDelay")))
+        mPreResetDelay = preResetDelay->unsigned32BitValue();
+    if (PE_parse_boot_argn("bpr_preresetdelay", &delay, sizeof delay))
+        mPreResetDelay = delay;
+
     if (OSString* displayName = OSDynamicCast(OSString, getProperty(kDisplayName)))
         provider->setProperty(kUSBProductString, displayName);
     
@@ -1286,6 +1292,7 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kFirmwareWritten:
+                IOSleep(mPreResetDelay);
                 hciCommand(&HCI_RESET, sizeof(HCI_RESET));
                 break;
 

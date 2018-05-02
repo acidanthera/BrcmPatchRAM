@@ -134,6 +134,8 @@ bpr_probedelay: Changes mProbeDelay.  Default value is 0.
 
 bpr_initialdelay: Changes mInitialDelay.  Default value is 100.
 
+bpr_preresetdelay: Changes mPreResetDelay.  Default value is 20.
+
 bpr_postresetdelay: Changes mPostResetDelay.  Default value is 100.
 
 Refer to the source for futher details on these delays.
