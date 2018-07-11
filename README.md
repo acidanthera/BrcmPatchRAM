@@ -144,6 +144,8 @@ Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetde
 
 Note: In Clover, kernel flags are specified at config.plist/Boot/Arguments, or you can change them (temporarily for next boot) in Clover Options within the Clover GUI.
 
+Note: Some with the typical "wake from sleep" problems are reporting success with: bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300
+
 
 ####Details
 
