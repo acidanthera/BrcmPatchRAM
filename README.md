@@ -18,7 +18,7 @@ Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on OS X version
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
-  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions.  This kext is much more memory efficient than BrcmFirmwareData.kext and is the preferred configuration.
+  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions (/Library/Extensions on 10.11 and later).  This kext is much more memory efficient than BrcmFirmwareData.kext and is the preferred configuration.
 
   * BrcmFirmwareData.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareData.kext
 
@@ -115,7 +115,7 @@ All of the firmwares from the Windows package are present in the kext and automa
 
 ####More Installation Details
 
-BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions.
+BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
 Install only one, not both, depending on system version.
 
 BrcmFirmwareRepo.kext does not work with Clover kext injection, unless using a device specific firmware injector.
