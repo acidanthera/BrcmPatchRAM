@@ -24,7 +24,7 @@ def parse_inf(inf_path)
   device = nil
   
   if !File.exist?(inf_path)
-    puts "Error: bcbtums-win8x64-brcm.inf not found in firmware input folder."
+    puts "Error: bcbtums.inf not found in firmware input folder."
     exit
   end
 
@@ -78,12 +78,12 @@ def parse_inf(inf_path)
     end
 
     # Found start of Windows 10 drivers block
-    if line =~ /^\[Broadcom\.NTamd64\.10\.0\]/
+    if line =~ /^\[Broadcom\.NT\w*\.10\.0\]/
       in_device_block = 1
     end
     
     # Found end of Windows 10 drivers block
-    if line =~ /^\[Broadcom\.NTamd64\.6\.3\]/
+    if line =~ /^\[Broadcom\.NT\w*\.6\.3\]/
       in_device_block = 0
     end
   end
@@ -107,7 +107,7 @@ def create_firmwares(devices, input_path, output_path)
     basename = File.basename(firmware)
   
     # Validate if we have a matching firmware definition
-    device = devices.find { |d| d.firmware.casecmp(basename) == 0 }
+    device = devices.find { |d| d.firmware != nil && d.firmware.casecmp(basename) == 0 }
   
     if device  
       output_file = "#{File.basename(firmware, File.extname(firmware))}_v#{device.firmwareVersion}.zhx"
@@ -195,6 +195,11 @@ def create_plist(devices, output_path)
   xml = Document.new "<dict />"
 
   devices.sort_by{|d| [d.vendorId, d.productId]}.each do |device|
+    if device.firmware == nil
+      puts "Failed to parse firmware path for %s, skipping..." % device
+      next
+    end
+
     Element.new("key", xml.root).text = "%04x_%04x" % [ device.vendorId, device.productId ]
   
     device_xml = Element.new("dict", xml.root)
@@ -243,7 +248,7 @@ input = File.expand_path(ARGV.shift)
 output = File.expand_path(ARGV.shift)
 
 # Parse Windows INF file into device objects
-devices = parse_inf(File.join(input, "bcbtums-win8x64-brcm.inf"))
+devices = parse_inf(File.join(input, "bcbtums.inf"))
 
 # Extract and compress all device firmwares
 create_firmwares(devices, input, output)

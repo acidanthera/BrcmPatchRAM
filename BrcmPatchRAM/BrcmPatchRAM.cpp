@@ -236,7 +236,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     IOSleep(mProbeDelay);
 
     uploadFirmware();
-    publishPersonality();
+    //publishPersonality();
 
     clock_get_uptime(&end_time);
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
@@ -475,7 +475,7 @@ void BrcmPatchRAM::uploadFirmware()
     }
 
     //REVIEW: this block to avoid merge conflicts (remove once merged)
-    ////if (mDevice.open(this))
+    //if (mDevice.open(this))
     {
         // Print out additional device information
         printDeviceInfo();
@@ -644,7 +644,7 @@ void BrcmPatchRAM::removePersonality()
 #endif // #ifndef TARGET_ELCAPITAN
 #endif // #ifndef NON_RESIDENT
 
-void BrcmPatchRAM::publishPersonality()
+/* void BrcmPatchRAM::publishPersonality()
 {
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
@@ -776,7 +776,7 @@ bool BrcmPatchRAM::publishResourcePersonality(const char* classname)
     personality->release();
 
     return true;
-}
+} */
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
@@ -787,7 +787,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         if (!mFirmwareStore)
         {
             // not loaded, so publish personality...
-            publishResourcePersonality(kBrcmFirmwareStoreService);
+            //publishResourcePersonality(kBrcmFirmwareStoreService);
             // and wait...
             mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
         }
@@ -798,7 +798,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         if (!residency)
         {
             // not loaded, so publish personality...
-            publishResourcePersonality(kBrcmPatchRAMResidency);
+            //publishResourcePersonality(kBrcmPatchRAMResidency);
             // and wait...
             residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL));
             if (residency)
@@ -964,7 +964,7 @@ bool BrcmPatchRAM::continuousRead()
 {
     if (!mReadBuffer)
     {
-        mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
+        mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, kIODirectionIn, 0x200);
         if (!mReadBuffer)
         {
             AlwaysLog("[%04x:%04x]: continuousRead - failed to allocate read buffer.\n", mVendorId, mProductId);
@@ -979,7 +979,7 @@ bool BrcmPatchRAM::continuousRead()
         mInterruptCompletion.parameter = NULL;
     }
 
-    IOReturn result = mReadBuffer->prepare();
+    IOReturn result = mReadBuffer->prepare(kIODirectionIn);
     if (result != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: continuousRead - failed to prepare buffer (0x%08x)\n", mVendorId, mProductId, result);
@@ -1016,7 +1016,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
 
     IOLockLock(me->mCompletionLock);
 
-    IOReturn result = me->mReadBuffer->complete();
+    IOReturn result = me->mReadBuffer->complete(kIODirectionIn);
     if (result != kIOReturnSuccess)
         DebugLog("[%04x:%04x]: ReadCompletion failed to complete read buffer (\"%s\" 0x%08x).\n", me->mVendorId, me->mProductId, me->stringFromReturn(result), result);
 
@@ -1171,9 +1171,9 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
 {
     IOReturn result;
     
-    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress((void*)data, length, kIODirectionIn))
+    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress((void*)data, length, kIODirectionOut))
     {
-        if ((result = buffer->prepare()) == kIOReturnSuccess)
+        if ((result = buffer->prepare(kIODirectionOut)) == kIOReturnSuccess)
         {
             if ((result = mBulkPipe.write(buffer, 0, 0, buffer->getLength(), NULL)) == kIOReturnSuccess)
             {
@@ -1185,7 +1185,7 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
         else
             AlwaysLog("[%04x:%04x]: Failed to prepare bulk write memory buffer (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         
-        if ((result = buffer->complete()) != kIOReturnSuccess)
+        if ((result = buffer->complete(kIODirectionOut)) != kIOReturnSuccess)
             AlwaysLog("[%04x:%04x]: Failed to complete bulk write memory buffer (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         
         buffer->release();
@@ -1293,7 +1293,12 @@ bool BrcmPatchRAM::performUpgrade()
 
             case kFirmwareWritten:
                 IOSleep(mPreResetDelay);
-                hciCommand(&HCI_RESET, sizeof(HCI_RESET));
+				if (hciCommand(&HCI_RESET, sizeof(HCI_RESET)) != kIOReturnSuccess)
+				{
+					DebugLog("HCI_RESET failed, aborting.");
+					mDeviceState = kUpdateAborted;
+					continue;
+				}
                 break;
 
             case kResetComplete:
@@ -1321,7 +1326,7 @@ bool BrcmPatchRAM::performUpgrade()
     }
 
     IOLockUnlock(mCompletionLock);
-    OSSafeRelease(iterator);
+    OSSafeReleaseNULL(iterator);
 
     return mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded;
 }

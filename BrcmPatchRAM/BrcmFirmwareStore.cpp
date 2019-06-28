@@ -289,7 +289,7 @@ OSArray* BrcmFirmwareStore::parseFirmware(OSData* firmwareData)
     DebugLog("parseFirmware - Invalid firmware.\n");
     
 exit_error:
-    OSSafeRelease(instructions);
+    OSSafeReleaseNULL(instructions);
     return NULL;
 }
 
@@ -333,7 +333,7 @@ void BrcmFirmwareStore::stop(IOService *provider)
 {
     DebugLog("Firmware store stop\n");
     
-    OSSafeRelease(mFirmwares);
+    OSSafeReleaseNULL(mFirmwares);
     
     if (mCompletionLock)
     {

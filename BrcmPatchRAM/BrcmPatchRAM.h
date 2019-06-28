@@ -134,14 +134,14 @@ private:
     void processWorkQueue(IOInterruptEventSource*, int);
 #endif // #ifndef NON_RESIDENT
 
-    void publishPersonality();
+    //void publishPersonality();
 
 #ifndef NON_RESIDENT
 #ifndef TARGET_ELCAPITAN
     void removePersonality();
 #endif
 #endif
-    bool publishResourcePersonality(const char* classname);
+    //bool publishResourcePersonality(const char* classname);
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
     

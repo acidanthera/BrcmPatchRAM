@@ -29,7 +29,7 @@
 			<key>IOMatchCategory</key>
 			<string>BrcmFirmwareStore</string>
 			<key>IOProviderClass</key>
-			<string>disabled_IOResources</string>
+			<string>IOResources</string>
 		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>
