@@ -236,7 +236,9 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     IOSleep(mProbeDelay);
 
     uploadFirmware();
-    //publishPersonality();
+#ifndef TARGET_CATALINA
+    publishPersonality();
+#endif
 
     clock_get_uptime(&end_time);
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
@@ -644,7 +646,8 @@ void BrcmPatchRAM::removePersonality()
 #endif // #ifndef TARGET_ELCAPITAN
 #endif // #ifndef NON_RESIDENT
 
-/* void BrcmPatchRAM::publishPersonality()
+#ifndef TARGET_CATALINA
+void BrcmPatchRAM::publishPersonality()
 {
     // Matching dictionary for the current device
     OSDictionary* dict = OSDictionary::withCapacity(5);
@@ -776,7 +779,8 @@ bool BrcmPatchRAM::publishResourcePersonality(const char* classname)
     personality->release();
 
     return true;
-} */
+}
+#endif
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
@@ -787,7 +791,9 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         if (!mFirmwareStore)
         {
             // not loaded, so publish personality...
-            //publishResourcePersonality(kBrcmFirmwareStoreService);
+#ifndef TARGET_CATALINA
+            publishResourcePersonality(kBrcmFirmwareStoreService);
+#endif
             // and wait...
             mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
         }
@@ -798,7 +804,9 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         if (!residency)
         {
             // not loaded, so publish personality...
-            //publishResourcePersonality(kBrcmPatchRAMResidency);
+#ifndef TARGET_CATALINA
+            publishResourcePersonality(kBrcmPatchRAMResidency);
+#endif
             // and wait...
             residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL));
             if (residency)

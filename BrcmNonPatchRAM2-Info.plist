@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>org.rehabman.injector.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -18,25 +18,6 @@
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<key>03f0_231d no firmware</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
-			<key>DisplayName</key>
-			<string>HP 231d (ProBook BT built-in firmware)</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
-			<key>IOClass</key>
-			<string>BrcmPatchRAM2</string>
-			<key>IOMatchCategory</key>
-			<string>BrcmPatchRAM2</string>
-			<key>IOProviderClass</key>
-			<string>IOUSBHostDevice</string>
-			<key>idProduct</key>
-			<integer>8989</integer>
-			<key>idVendor</key>
-			<integer>1008</integer>
-		</dict>
 		<key>03f0_231d native</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
@@ -50,14 +31,14 @@
 			<key>idVendor</key>
 			<integer>1008</integer>
 		</dict>
-		<key>0489_e030 no firmware</key>
+		<key>03f0_231d no firmware</key>
 		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Foxconn AW-NB290</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
+			<string>HP 231d (ProBook BT built-in firmware)</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -65,9 +46,9 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
-			<integer>57392</integer>
+			<integer>8989</integer>
 			<key>idVendor</key>
-			<integer>1161</integer>
+			<integer>1008</integer>
 		</dict>
 		<key>0489_e030 native</key>
 		<dict>
@@ -82,14 +63,14 @@
 			<key>idVendor</key>
 			<integer>1161</integer>
 		</dict>
-		<key>0a5c_219a no firmware</key>
+		<key>0489_e030 no firmware</key>
 		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Broadcom BCM2070 0a5c_219a (BT on BCM43225HMB)</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
+			<string>Foxconn AW-NB290</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -97,9 +78,9 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
-			<integer>2652</integer>
+			<integer>57392</integer>
 			<key>idVendor</key>
-			<integer>8602</integer>
+			<integer>1161</integer>
 		</dict>
 		<key>0a5c_219a native</key>
 		<dict>
@@ -114,14 +95,14 @@
 			<key>idVendor</key>
 			<integer>8602</integer>
 		</dict>
-		<key>0b05_1788 no firmware</key>
+		<key>0a5c_219a no firmware</key>
 		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Asus BT-270(20702A built-in firmware)</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
+			<string>Broadcom BCM2070 0a5c_219a (BT on BCM43225HMB)</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -129,9 +110,9 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
-			<integer>6024</integer>
+			<integer>2652</integer>
 			<key>idVendor</key>
-			<integer>2821</integer>
+			<integer>8602</integer>
 		</dict>
 		<key>0b05_1788 native</key>
 		<dict>
@@ -146,14 +127,14 @@
 			<key>idVendor</key>
 			<integer>2821</integer>
 		</dict>
-		<key>0b05_178a no firmware</key>
+		<key>0b05_1788 no firmware</key>
 		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>HP EliteBook NB-290 (built-in firmware)</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
+			<string>Asus BT-270(20702A built-in firmware)</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -161,7 +142,7 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
-			<integer>6026</integer>
+			<integer>6024</integer>
 			<key>idVendor</key>
 			<integer>2821</integer>
 		</dict>
@@ -178,14 +159,14 @@
 			<key>idVendor</key>
 			<integer>2821</integer>
 		</dict>
-		<key>13d3_3295 no firmware</key>
+		<key>0b05_178a no firmware</key>
 		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
 			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
-			<string>Azurewave BCM943225 (20702A built-in firmware)</string>
-			<key>#FirmwareKey</key>
-			<string>only load and unload native bluetooth</string>
+			<string>HP EliteBook NB-290 (built-in firmware)</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM2</string>
 			<key>IOMatchCategory</key>
@@ -193,9 +174,9 @@
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>
-			<integer>12949</integer>
+			<integer>6026</integer>
 			<key>idVendor</key>
-			<integer>5075</integer>
+			<integer>2821</integer>
 		</dict>
 		<key>13d3_3295 native</key>
 		<dict>
@@ -203,6 +184,25 @@
 			<string>com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport</string>
 			<key>IOClass</key>
 			<string>BroadcomBluetoothHostControllerUSBTransport</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>12949</integer>
+			<key>idVendor</key>
+			<integer>5075</integer>
+		</dict>
+		<key>13d3_3295 no firmware</key>
+		<dict>
+			<key>#FirmwareKey</key>
+			<string>only load and unload native bluetooth</string>
+			<key>CFBundleIdentifier</key>
+			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Azurewave BCM943225 (20702A built-in firmware)</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBHostDevice</string>
 			<key>idProduct</key>

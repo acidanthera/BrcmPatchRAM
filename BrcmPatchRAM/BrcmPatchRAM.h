@@ -19,6 +19,8 @@
 #ifndef __BrcmPatchRAM__
 #define __BrcmPatchRAM__
 
+#define TARGET_CATALINA	1
+
 #ifdef TARGET_ELCAPITAN
 // 10.11 works better if probe simply exits after updating firmware
 #define NON_RESIDENT 1
@@ -134,14 +136,18 @@ private:
     void processWorkQueue(IOInterruptEventSource*, int);
 #endif // #ifndef NON_RESIDENT
 
-    //void publishPersonality();
+#ifndef TARGET_CATALINA
+    void publishPersonality();
+#endif
 
 #ifndef NON_RESIDENT
 #ifndef TARGET_ELCAPITAN
     void removePersonality();
 #endif
 #endif
-    //bool publishResourcePersonality(const char* classname);
+#ifndef TARGET_CATALINA
+    bool publishResourcePersonality(const char* classname);
+#endif
     BrcmFirmwareStore* getFirmwareStore();
     void uploadFirmware();
     

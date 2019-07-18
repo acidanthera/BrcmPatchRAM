@@ -30,7 +30,7 @@ OSData* lookupFirmware(const char* filename)
     {
         if (0 == strcmp(filename, entry->filename))
         {
-            result = OSData::withBytes(entry->firmwareData, entry->firmwareSize);
+            result = OSData::withBytes(entry->firmwareData, (unsigned int)entry->firmwareSize);
             break;
         }
     }

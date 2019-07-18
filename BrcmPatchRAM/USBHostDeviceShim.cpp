@@ -422,11 +422,11 @@ IOReturn USBPipeShim::read(IOMemoryDescriptor *	buffer,
 {
     IOReturn result;
     if (completion)
-        result = m_pPipe->io(buffer, reqCount, completion, completionTimeout);
+        result = m_pPipe->io(buffer, (uint32_t)reqCount, completion, completionTimeout);
     else
     {
         uint32_t bytesTransfered;
-        result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
+        result = m_pPipe->io(buffer, (uint32_t)reqCount, bytesTransfered, completionTimeout);
         if (bytesRead) *bytesRead = bytesTransfered;
     }
     return result;
@@ -440,11 +440,11 @@ IOReturn USBPipeShim::write(IOMemoryDescriptor *	buffer,
 {
     IOReturn result;
     if (completion)
-        result = m_pPipe->io(buffer, reqCount, completion, completionTimeout);
+        result = m_pPipe->io(buffer, (uint32_t)reqCount, completion, completionTimeout);
     else
     {
         uint32_t bytesTransfered;
-        result = m_pPipe->io(buffer, reqCount, bytesTransfered, completionTimeout);
+        result = m_pPipe->io(buffer, (uint32_t)reqCount, bytesTransfered, completionTimeout);
     }
     return result;
 }
