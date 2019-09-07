@@ -115,14 +115,18 @@ void BrcmPatchRAM::initBrcmStrings()
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
         }
         // OS X - El Capitan
-        else if (version_major == 15)
+		// macOS - Sierra
+		// macOS - High Sierra
+		// macOS - Mojave
+		// macOS - Catalina
+        else if (version_major == 15 || version_major == 16 || version_major == 17 || version_major == 18)
         {
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
             providerclass = kIOUSBHostDeviceClassName;
         }
         // OS X - Future releases....
-        else if (version_major > 15)
+        else if (version_major > 18)
         {
             AlwaysLog("Unknown new Darwin version %d.%d, using possible compatible personality.\n", version_major, version_minor);
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
