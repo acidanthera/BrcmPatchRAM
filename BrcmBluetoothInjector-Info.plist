@@ -1386,7 +1386,5 @@
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
-	<key>Source Code</key>
-	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>
 </plist>

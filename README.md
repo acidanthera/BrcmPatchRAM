@@ -1,16 +1,19 @@
-### BrcmPatchRAM -- RehabMan fork
+BrcmPatchRAM
+============
 
-For the most part this fork is kept in sync with the-darkvoid's verson.  We are working together to improve the project.
+[![Build Status](https://travis-ci.com/acidanthera/BrcmPatchRAM.svg?branch=master)](https://travis-ci.com/acidanthera/BrcmPatchRAM)
 
+Most Broadcom USB Bluetooth devices make use of a system called RAMUSB. RAMUSB allows the firmware for the device to be updated on-the-fly, however any updates previously applied are lost when shutting down the machine.
 
-### RehabMan Fork Downloads
+The Broadcom Windows driver will upload firmware into the Broadcom Bluetooth device on every startup, however for macOS this functionality is not supported out of the box. BrcmPatchRAM kext is a macOS driver which applies PatchRAM updates for Broadcom RAMUSB based devices. It will apply the firmware update to your Broadcom Bluetooth device on every startup / wakeup, identical to the Windows drivers. The firmware applied is extracted from the Windows drivers and the functionality should be equal to Windows.
 
-Builds are available on bitbucket: https://bitbucket.org/RehabMan/os-x-brcmpatchram/downloads/
-
+Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
 
 ### Installation
 
-Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on OS X version, never both.
+__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/acidanthera/BrcmPatchRAM/blob/master/README-Mac.md)__
+
+Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on macOS version, never both.
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
@@ -18,43 +21,24 @@ Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on OS X version
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
-  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions (/Library/Extensions on 10.11 and later).  This kext is much more memory efficient than BrcmFirmwareData.kext and is the preferred configuration.
+  * BrcmFirmwareData.kext: Most appropriate for bootloader injection. This is the preferred configuration.
 
-  * BrcmFirmwareData.kext: Most appropriate for EFI/Clover/kexts.  BrcmFirmwareRepo.kext, while much more memory efficient, cannot be injected as can BrcmFirmwareData.kext
+  * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions (/Library/Extensions on 10.11 and later). This kext is slightly more memory efficient than BrcmFirmwareData.kext, but cannot be injected by a bootloader.
 
-  * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or EFI/Clover/kexts.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector from Clover/kexts, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".  And still, you may find it unreliable... as that is the way Clover kext injection is (it does not simulate kext installation perfectly).  In testing, best result was obtained if you replace the IOKitPersonalities entry in BrcmFirmwareRepo.kext Info.plist with that of the injector kext (no need for the injector at that point).
+  * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or through bootloader injection.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector through the bootloader, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".
 
-Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on OS X version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
+Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on macOS version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
 
   * BrcmNonPatchRAM.kext: for 10.10 or earlier
 
   * BrcmNonPatchRAM2.kext: for 10.11 or later.
 
 
-### BrcmPatchRAM
-
-__Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/RehabMan/OS-X-BrcmPatchRAM/blob/master/README-Mac.md)__
-
-Most Broadcom USB Bluetooth devices make use of a system called RAMUSB.
-
-RAMUSB allows the firmware for the device to be updated on-the-fly, however any updates previously applied are lost when shutting down the machine.
-
-The Broadcom Windows driver will upload firmware into the Broadcom Bluetooth device on every startup, however for OS X this functionality is not supported out of the box.
-
-BrcmPatchRAM kext is an OS X driver which applies PatchRAM updates for Broadcom RAMUSB based devices.
-
-It will apply the firmware update to your Broadcom Bluetooth device on every startup / wakeup, identical to the Windows drivers.
-
-The firmware applied is extracted from the Windows drivers and the functionality should be equal to Windows.
-
-Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, and thus do not have the same firmware mechanism.
-
-
 ### BrcmBluetoothInjector.kext
 
-To be used for OS X 10.11 or newer.
+To be used for macOS 10.11 or newer.
 
-This kext is a simple injector... it does not contain a firmware uploader.  Try this kext if you wish to see if your device will work without a firmware uploader.
+This kext is a simple injector, it does not contain a firmware uploader.  Try this kext if you wish to see if your device will work without a firmware uploader.
 
 Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareData) with this kext.
 
@@ -115,13 +99,13 @@ All of the firmwares from the Windows package are present in the kext and automa
 
 #### More Installation Details
 
-BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through Clover kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
+BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
 Install only one, not both, depending on system version.
 
-BrcmFirmwareRepo.kext does not work with Clover kext injection, unless using a device specific firmware injector.
-BrcmFirmwareData.kext can work with Clover kext injection.
+BrcmFirmwareRepo.kext does not work with bootloader kext injection, unless using a device specific firmware injector.
+BrcmFirmwareData.kext can work with bootloader kext injection.
 
-You can also use a device specific firmware injector (in conjunction with BrcmFirmwareRepo.kext).  In this scenario, BrcmFirmwareRepo.kext does work from Clover kexts.
+You can also use a device specific firmware injector (in conjunction with BrcmFirmwareRepo.kext).  In this scenario, BrcmFirmwareRepo.kext does work from bootloader kexts.
 
 You will find device specfic injectors in the 'firmwares' directory of the git repository.  They are not included in the distribution ZIP.
 
@@ -141,8 +125,6 @@ bpr_postresetdelay: Changes mPostResetDelay.  Default value is 100.
 Refer to the source for futher details on these delays.
 
 Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetdelay=400.
-
-Note: In Clover, kernel flags are specified at config.plist/Boot/Arguments, or you can change them (temporarily for next boot) in Clover Options within the Clover GUI.
 
 Note: Some with the typical "wake from sleep" problems are reporting success with: bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300.  Or slightly longer delays: bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400.
 
@@ -164,11 +146,11 @@ BrcmPatchRAM consists of 2 parts:
 	Firmwares can be stored using zlib compression in order to keep the configuration size manageable.
 	
 After the device firmware is uploaded, the device control is handed over to Apple's BroadcomBluetoothHostControllerUSBTransport.
-This means that for all intents and purposes your device will be native on OS X and support all functionalities fully.
+This means that for all intents and purposes your device will be native on macOS and support all functionalities fully.
 
-It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through Clover or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
+It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through the bootloader or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
 
-Clover users can patch using KextsToPatch in config.plist.
+OpenCore users can patch using Kernel patches in config.plist.
 
 The patch for 10.10 is:
 ```XML
@@ -177,10 +159,11 @@ The patch for 10.10 is:
     <string>10.10.2+ BT4LE-Handoff-Hotspot, Dokterdok</string>
     <key>Find</key>
     <data>SIXAdFwPt0g=</data>
-    <key>Name</key>
-    <string>IOBluetoothFamily</string>
+    <key>Identifier</key>
+    <string>com.apple.iokit.IOBluetoothFamily</string>
     <key>Replace</key>
     <data>Qb4PAAAA61k=</data>
+    <!-- Rest of the fields -->
 </dict>
 ```	
 
@@ -191,10 +174,11 @@ The patch for 10.11 is:
     <string>10.11.dp1+ BT4LE-Handoff-Hotspot, credit RehabMan based on Dokterdok original</string>
     <key>Find</key>
     <data>SIX/dEdIiwc=</data>
-    <key>Name</key>
-    <string>IOBluetoothFamily</string>
+    <key>Identifier</key>
+    <string>com.apple.iokit.IOBluetoothFamily</string>
     <key>Replace</key>
     <data>Qb4PAAAA60Q=</data>
+    <!-- Rest of the fields -->
 </dict>
 ```
 
@@ -209,6 +193,9 @@ If the version number is "4096", this means no firmware was updated for your dev
 
 Verify any errors in the system log by running the following command in the terminal:
 ```bash
+    # For 10.12 and newer:
+    log show --last boot | grep -i brcm[fp]
+    # For older macOS versions:
     cat /var/log/system.log | grep -i brcm[fp]
 ```	
 Ensure you check only the latest boot messages, as the system.log might go back several days.
@@ -229,7 +216,7 @@ Some USB devices are very firmware specific and trying to upload any other firmw
 
 This usually displays in the system log as:
     
-    BrcmPatchRAM: Version 0.5 starting.
+  BrcmPatchRAM: Version 0.5 starting.
 	BrcmPatchRAM: USB [0a5c:21e8 5CF3706267E9 v274] "BCM20702A0" by "Broadcom Corp"
 	BrcmPatchRAM: Retrieved firmware for firmware key "BCM20702A1_001.002.014.1443.1612_v5708".
 	BrcmPatchRAM: Decompressed firmware (29714 bytes --> 70016 bytes).
@@ -284,9 +271,9 @@ xxd -ps BCM20702A1_001.002.014.1443.1457.zhx|tr '\n' ' ' > BCM20702A1_001.002.01
 ```		
  * Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
  
-  Note that the version number displayed in OS X is the last number in the file name (1457 in our sample) + 4096.
+  Note that the version number displayed in macOS is the last number in the file name (1457 in our sample) + 4096.
 
-  So in this case the firmware version in OS X would be: "*c14 v5553*".
+  So in this case the firmware version in macOS would be: "*c14 v5553*".
 	
  * After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
 

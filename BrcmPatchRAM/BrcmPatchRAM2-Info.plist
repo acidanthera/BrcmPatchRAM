@@ -1874,7 +1874,5 @@
 		<key>com.no-one.BrcmFirmwareStore</key>
 		<string>${CURRENT_PROJECT_VERSION}</string>
 	</dict>
-	<key>Source Code</key>
-	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>
 </plist>

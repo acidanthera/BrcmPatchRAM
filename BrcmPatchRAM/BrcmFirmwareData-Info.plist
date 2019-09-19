@@ -43,7 +43,5 @@
 		<key>com.apple.kpi.mach</key>
 		<string>9.0</string>
 	</dict>
-	<key>Source Code</key>
-	<string>https://github.com/RehabMan/BrcmPatchRAM.git</string>
 </dict>
 </plist>

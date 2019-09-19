@@ -66,18 +66,6 @@ void USBDeviceShim::removeProperty(const char* name)
     m_pDevice->removeProperty(name);
 }
 
-static void hack_strlcpy(char* dest, const char* src, size_t max)
-{
-    if (!max) return;
-    --max;
-    while (max && *src)
-    {
-        *dest++ = *src++;
-        --max;
-    }
-    *dest = 0;
-}
-
 IOReturn USBDeviceShim::getStringDescriptor(UInt8 index, char *buf, int maxLen, UInt16 lang)
 {
     memset(buf, 0, maxLen);

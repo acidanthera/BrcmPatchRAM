@@ -2,7 +2,7 @@
 
 out="GeneratedFirmwares.cpp"
 cksum="GeneratedFirmwaresMD5.txt"
-cksum_temp="/tmp/org_rehabman_GeneratedFirmwareMD5.txt"
+cksum_temp="/tmp/$(uuidgen)_GeneratedFirmwareMD5.txt"
 
 firmwaredir=./firmwares
 firmwares=$firmwaredir/*.zhx

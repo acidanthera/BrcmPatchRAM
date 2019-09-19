@@ -40,7 +40,7 @@
 #endif
 #define kAppleBundlePrefix "com.apple."
 #define kFirmwareKey "FirmwareKey"
-#define kFirmwareLoaded "RM,FirmwareLoaded"
+#define kFirmwareLoaded "FirmwareLoaded"
 
 enum DeviceState
 {

@@ -266,16 +266,6 @@ bool BrcmPatchRAM::start(IOService *provider)
     if (!super::start(provider))
         return false;
 
-    // place version/build info in ioreg properties RM,Build and RM,Version
-    char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", OSKextGetCurrentIdentifier(), OSKextGetCurrentVersionString());
-    setProperty("RM,Version", buf);
-#ifdef DEBUG
-    setProperty("RM,Build", "Debug-" LOGNAME);
-#else
-    setProperty("RM,Build", "Release-" LOGNAME);
-#endif
-
    // add interrupt source for delayed actions...
     IOWorkLoop* workLoop = getWorkLoop();
     if (!workLoop)

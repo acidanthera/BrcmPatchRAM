@@ -301,16 +301,6 @@ bool BrcmFirmwareStore::start(IOService *provider)
     
     if (!super::start(provider))
         return false;
-    
-    // place version/build info in ioreg properties RM,Build and RM,Version
-    char buf[128];
-    snprintf(buf, sizeof(buf), "%s %s", OSKextGetCurrentIdentifier(), OSKextGetCurrentVersionString());
-    setProperty("RM,Version", buf);
-#ifdef DEBUG
-    setProperty("RM,Build", "Debug-" LOGNAME);
-#else
-    setProperty("RM,Build", "Release-" LOGNAME);
-#endif
 
     mFirmwares = OSDictionary::withCapacity(1);
     if (!mFirmwares)
@@ -385,7 +375,7 @@ OSData* BrcmFirmwareStore::loadFirmwareFile(const char* filename, const char* su
                           requestResourceCallback,
                           &context,
                           NULL);
-    
+    (void) ret;
     DebugLog("OSKextRequestResource: %08x\n", ret);
     
     // wait for completion of the async read
