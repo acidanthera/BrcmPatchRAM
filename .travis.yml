@@ -8,8 +8,8 @@ matrix:
     compiler: clang
 
     script:
-      - xcodebuild -configuration Debug -schema BrcmPatchRAM
-      - xcodebuild -configuration Release -schema BrcmPatchRAM
+      - xcodebuild -configuration Debug -scheme BrcmPatchRAM
+      - xcodebuild -configuration Release -scheme BrcmPatchRAM
 
     deploy:
       provider: releases
