@@ -8,8 +8,8 @@ matrix:
     compiler: clang
 
     script:
-      - xcodebuild -configuration Debug
-      - xcodebuild -configuration Release
+      - xcodebuild -configuration Debug -schema BrcmPatchRAM
+      - xcodebuild -configuration Release -schema BrcmPatchRAM
 
     deploy:
       provider: releases
@@ -27,5 +27,5 @@ matrix:
     compiler: clang
 
     script:
-      - xcodebuild analyze -quiet -scheme BrcmPathRAM -configuration Debug CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
-      - xcodebuild analyze -quiet -scheme BrcmPathRAM -configuration Release CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
+      - xcodebuild analyze -quiet -scheme BrcmPatchRAM -configuration Debug CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
+      - xcodebuild analyze -quiet -scheme BrcmPatchRAM -configuration Release CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
