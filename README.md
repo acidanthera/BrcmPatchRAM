@@ -148,7 +148,7 @@ BrcmPatchRAM consists of 2 parts:
 After the device firmware is uploaded, the device control is handed over to Apple's BroadcomBluetoothHostControllerUSBTransport.
 This means that for all intents and purposes your device will be native on macOS and support all functionalities fully.
 
-It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through the bootloader or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
+It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through https://github.com/acidanthera/BT4LEContinuityFixup or through dokterdok's script: https://github.com/dokterdok/Continuity-Activation-Tool 
 
 OpenCore users can patch using Kernel patches in config.plist.
 
