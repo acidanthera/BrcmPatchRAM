@@ -199,7 +199,7 @@
 		D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBDeviceShim.h; sourceTree = "<group>"; };
 		D4F91B021A2998CE0030D10D /* BrcmPatchRAM-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM-Info.plist"; sourceTree = "<group>"; };
 		D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrcmPatchRAM.h; sourceTree = "<group>"; };
-		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; };
+		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; usesTabs = 0; };
 		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		E26C36B222E1051E006BAA83 /* BCM43142A0_001.001.011.0311.0331_v4427.zhx */ = {isa = PBXFileReference; lastKnownFileType = file; name = BCM43142A0_001.001.011.0311.0331_v4427.zhx; path = firmwares/0489_e055/BCM43142A0_001.001.011.0311.0331_v4427.zhx; sourceTree = "<group>"; };
 		E26C36B322E1051E006BAA83 /* BCM20702A1_001.002.014.1443.1486_v5582.zhx */ = {isa = PBXFileReference; lastKnownFileType = file; name = BCM20702A1_001.002.014.1443.1486_v5582.zhx; path = firmwares/0489_e04f/BCM20702A1_001.002.014.1443.1486_v5582.zhx; sourceTree = "<group>"; };
@@ -728,7 +728,7 @@
 		D4F91AF51A2998CE0030D10D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1100;
 				TargetAttributes = {
 					84CDEE051BB3CA2200238DD1 = {
 						CreatedOnToolsVersion = 7.0;

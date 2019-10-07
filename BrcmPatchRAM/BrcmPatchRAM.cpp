@@ -35,11 +35,13 @@
 
 enum { kMyOffPowerState = 0, kMyOnPowerState = 1 };
 
+#ifndef NON_RESIDENT
 static IOPMPowerState myTwoStates[2] =
 {
     { kIOPMPowerStateVersion1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     { kIOPMPowerStateVersion1, kIOPMPowerOn, kIOPMPowerOn, kIOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
+#endif
 
 #ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
@@ -554,6 +556,7 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 }
 #endif // #ifndef NON_RESIDENT
 
+#ifndef NON_RESIDENT
 static void setStringInDict(OSDictionary* dict, const char* key, const char* value)
 {
     OSString* str = OSString::withCStringNoCopy(value);
@@ -573,6 +576,7 @@ static void setNumberInDict(OSDictionary* dict, const char* key, UInt16 value)
         num->release();
     }
 }
+#endif
 
 #ifdef DEBUG
 void BrcmPatchRAM::printPersonalities()
@@ -781,39 +785,51 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
     if (!mFirmwareStore)
     {
         // check to see if it already loaded
-        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 0));
+        IOService* tmpStore = waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 0);
+        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
         if (!mFirmwareStore)
         {
+            if (tmpStore)
+                tmpStore->release();
             // not loaded, so publish personality...
 #ifndef TARGET_CATALINA
             publishResourcePersonality(kBrcmFirmwareStoreService);
 #endif
             // and wait...
-            mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL));
+            tmpStore = waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL);
+            mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
+            if (!mFirmwareStore && tmpStore)
+                tmpStore->release();
         }
 
 #ifdef NON_RESIDENT
         // also need BrcmPatchRAMResidency
-        IOService* residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 0));
+        IOService* tmpResidency = waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 0);
+        IOService* residency = OSDynamicCast(BrcmPatchRAMResidency, tmpResidency);
         if (!residency)
         {
+            if (tmpResidency)
+                tmpResidency->release();
             // not loaded, so publish personality...
 #ifndef TARGET_CATALINA
             publishResourcePersonality(kBrcmPatchRAMResidency);
 #endif
             // and wait...
-            residency = OSDynamicCast(BrcmPatchRAMResidency, waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL));
-            if (residency)
-                residency->release();
-            else
+            tmpResidency = waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL);
+            residency = OSDynamicCast(BrcmPatchRAMResidency, tmpResidency);
+            if (tmpResidency)
+                tmpResidency->release();
+            if (!residency)
                 AlwaysLog("[%04x:%04x]: BrcmPatchRAMResidency does not appear to be available.\n", mVendorId, mProductId);
+        } else {
+            tmpResidency->release();
         }
 #endif
     }
     
     if (!mFirmwareStore)
         AlwaysLog("[%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", mVendorId, mProductId);
-    
+
     return mFirmwareStore;
 }
 
@@ -1256,6 +1272,8 @@ bool BrcmPatchRAM::performUpgrade()
                 break;
 
             case kMiniDriverComplete:
+                // Should never happen, but semantically causes a leak.
+                OSSafeReleaseNULL(iterator);
                 // Write firmware data to bulk pipe
                 iterator = OSCollectionIterator::withCollection(instructions);
                 if (!iterator)
