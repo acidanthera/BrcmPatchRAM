@@ -566,6 +566,7 @@ static void setStringInDict(OSDictionary* dict, const char* key, const char* val
         str->release();
     }
 }
+#endif
 
 static void setNumberInDict(OSDictionary* dict, const char* key, UInt16 value)
 {
@@ -576,7 +577,6 @@ static void setNumberInDict(OSDictionary* dict, const char* key, UInt16 value)
         num->release();
     }
 }
-#endif
 
 #ifdef DEBUG
 void BrcmPatchRAM::printPersonalities()
