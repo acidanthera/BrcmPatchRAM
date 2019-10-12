@@ -19,7 +19,7 @@ Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext or BrcmPatchRAM3.kext dep
 
   * BrcmPatchRAM2.kext: for 10.11 or later.
   
-    * BrcmPatchRAM3.kext: for 10.15.
+* BrcmPatchRAM3.kext: for 10.15.
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
@@ -137,7 +137,7 @@ Note: Some with the typical "wake from sleep" problems are reporting success wit
 BrcmPatchRAM consists of 2 parts:
 
  * BrcmPatchRAM itself communicates with supported Broadcom Bluetooth USB devices (as configured in the Info.plist), and detects if they require a firmware update. 
- 
+
   If a firmware update is required, the matching firmware data will be uploaded to the device and the device will be reset.
 	
  * BrcmFirmwareStore (implemented by either BrcmFirmwareData.kext or BrcmFirmwareRepo.kext) is a shared resource which holds all the configured firmwares for different Broadcom Bluetooth USB devices.
@@ -148,6 +148,7 @@ BrcmPatchRAM consists of 2 parts:
 
 	Firmwares can be stored using zlib compression in order to keep the configuration size manageable.
 	
+
 After the device firmware is uploaded, the device control is handed over to Apple's BroadcomBluetoothHostControllerUSBTransport.
 This means that for all intents and purposes your device will be native on macOS and support all functionalities fully.
 
@@ -168,7 +169,7 @@ The patch for 10.10 is:
     <data>Qb4PAAAA61k=</data>
     <!-- Rest of the fields -->
 </dict>
-```	
+```
 
 The patch for 10.11 is:
 ```XML
@@ -200,13 +201,13 @@ Verify any errors in the system log by running the following command in the term
     log show --last boot | grep -i brcm[fp]
     # For older macOS versions:
     cat /var/log/system.log | grep -i brcm[fp]
-```	
+```
 Ensure you check only the latest boot messages, as the system.log might go back several days.
 
 If the firmware upload failed with an error, try installing the debug version of BrcmPatchRAM in order to get more detailed information in the log.
 
 In order to report an error log an issue on github with the following information:
-  
+
  * Device product ID
  * Device vendor ID
  * BrcmPatchRAM version used
@@ -259,21 +260,20 @@ In order to get the device specific firmware for your device take the following 
 bcbtums.sys
 btwampfl.sys
 BCM20702A1_001.002.014.1443.1457.hex
-```	
-		
+```
+
  *  Copy the firmware hex file matching your device from the Windows package, in this case "BCM20702A1_001.002.014.1443.1457.hex"
-	
 	
  *  The firmware file can now optionally be compressed using the included zlib.pl script:
 ```bash	
 zlib.pl deflate BCM20702A1_001.002.014.1443.1457.hex > BCM20702A1_001.002.014.1443.1457.zhx
-```	
+```
  * After this a hex dump can be created for pasting into a plist editor:
 ```bash	
 xxd -ps BCM20702A1_001.002.014.1443.1457.zhx|tr '\n' ' ' > BCM20702A1_001.002.014.1443.1457.dmp
-```		
+```
  * Using a plist editor create a new firmware key under the *BcmFirmwareStore/Firmwares* dictionary.
- 
+
   Note that the version number displayed in macOS is the last number in the file name (1457 in our sample) + 4096.
 
   So in this case the firmware version in macOS would be: "*c14 v5553*".
@@ -281,6 +281,6 @@ xxd -ps BCM20702A1_001.002.014.1443.1457.zhx|tr '\n' ' ' > BCM20702A1_001.002.01
  * After configuring a key under *BcmFirmwareStore/Firmwares*, add your device ID as a new device for BrcmPatchRAM.
 
 Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resources, either by firmware key name (see above), or by naming the file with just the vendor and device-id.  For example, 0930_0223.hex (uncompressed) or 0930_0223.zhx (compressed).
- 
+
  Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
