@@ -13,11 +13,13 @@ Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, 
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/acidanthera/BrcmPatchRAM/blob/master/README-Mac.md)__
 
-Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on macOS version, never both.
+Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext or BrcmPatchRAM3.kext depending on macOS version, never both.
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
   * BrcmPatchRAM2.kext: for 10.11 or later.
+  
+    * BrcmPatchRAM3.kext: for 10.15.
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
@@ -83,6 +85,7 @@ Tested PatchRAM devices:
   * ``[0a5c:21fd]`` Broadcom 4352Z
   * ``[0a5c:22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
   * ``[0a5c:6410]`` Dell Wireless 1830 Bluetooth 4.1 LE
+  * ``[0a5c:6412]`` Dell Wireless 1820 Bluetooth 4.1 LE
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
   * ``[0b05:180a]`` Azurewave (4360/20702 combo)

@@ -1224,7 +1224,7 @@
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.1 USB</string>
 			<key>FirmwareKey</key>
-			<string>BCM4350C5_003.006.007.0145.2724_v6820</string>
+			<string>BCM4350C5_003.006.007.0222.4689_v8785</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAM</string>
 			<key>IOMatchCategory</key>
