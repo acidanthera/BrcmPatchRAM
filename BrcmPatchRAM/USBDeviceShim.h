@@ -20,21 +20,21 @@
 #ifndef __USBDeviceShim__
 #define __USBDeviceShim__
 
-#ifndef TARGET_ELCAPITAN
-#include <IOKit/usb/IOUSBDevice.h>
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
 #include <IOKit/usb/IOUSBHostDevice.h>
+#else
+#include <IOKit/usb/IOUSBDevice.h>
 #endif
 
-#ifndef TARGET_ELCAPITAN
-#define USBCOMPLETION IOUSBCompletion
-#define USBCONFIGURATIONDESCRIPTOR IOUSBConfigurationDescriptor
-#define USBENDPOINTDESCRIPTOR IOUSBEndpointDescriptor
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
 #define USBCOMPLETION IOUSBHostCompletion
 #define USBCONFIGURATIONDESCRIPTOR StandardUSB::ConfigurationDescriptor
 #define USBENDPOINTDESCRIPTOR StandardUSB::EndpointDescriptor
 #define USBStatus uint16_t
+#else
+#define USBCOMPLETION IOUSBCompletion
+#define USBCONFIGURATIONDESCRIPTOR IOUSBConfigurationDescriptor
+#define USBENDPOINTDESCRIPTOR IOUSBEndpointDescriptor
 #endif
 
 class USBPipeShim;
@@ -43,10 +43,10 @@ class USBInterfaceShim;
 class USBDeviceShim
 {
 private:
-#ifndef TARGET_ELCAPITAN
-    IOUSBDevice* m_pDevice;
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
     IOUSBHostDevice* m_pDevice;  // 10.11+
+#else
+    IOUSBDevice* m_pDevice;
 #endif
     
 public:
@@ -78,10 +78,10 @@ public:
 class USBInterfaceShim
 {
 private:
-#ifndef TARGET_ELCAPITAN
-    IOUSBInterface* m_pInterface;
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
     IOUSBHostInterface* m_pInterface;  // 10.11+
+#else
+    IOUSBInterface* m_pInterface;
 #endif
     
 public:
@@ -107,10 +107,10 @@ public:
 class USBPipeShim
 {
 private:
-#ifndef TARGET_ELCAPITAN
-    IOUSBPipe* m_pPipe;
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
     IOUSBHostPipe* m_pPipe;  // 10.11+
+#else
+    IOUSBPipe* m_pPipe;
 #endif
     
 public:

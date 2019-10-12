@@ -17,9 +17,13 @@
  *
  */
 
+#ifndef TARGET_CATALINA
+
 #ifndef TARGET_ELCAPITAN
 #include <IOKit/usb/IOUSBInterface.h>
 #else
+// Silence warning about deprecated USB header files.
+#define __IOUSBFAMILY__
 #include <IOKit/usb/USB.h>
 #endif
 #include <IOKit/IOCatalogue.h>
@@ -33,15 +37,44 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef NON_RESIDENT
+
 enum { kMyOffPowerState = 0, kMyOnPowerState = 1 };
 
-#ifndef NON_RESIDENT
 static IOPMPowerState myTwoStates[2] =
 {
     { kIOPMPowerStateVersion1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     { kIOPMPowerStateVersion1, kIOPMPowerOn, kIOPMPowerOn, kIOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
-#endif
+
+#endif // NON_RESIDENT
+
+/*
+ * Examining the log files I discovered that mPreResetDelay is obsolete
+ * for the Dell DW1560 because the device implements some kind of
+ * handshake mechanism to signal when it has finished processing
+ * the downloaded firmware patches and is ready for the HCI reset
+ * command by sending a Vendor Specific Event (event code 0xff).
+ *
+ * The corresponding log entry looks like this:
+ *
+ * BrcmPatchRAM2: [0a5c:216f]: Vendor specific event. Ready to reset device.
+ *
+ * hskSupport contains a list of all devices which have been verified to
+ * support this mechanism. It must be terminated with a zero entry.
+ *
+ * I assume that more devices (all?) also work this way so that
+ * they should be added to the list. It might be ossible that this
+ * is a common feature among Broadcom BT controllers making the list
+ * obsolete, but for now, we still need it.
+ */
+static DeviceHskSupport hskSupport[] =
+{
+    { 0x0a5c, 0x216f },
+    { 0x0a5c, 0x21ec },
+    { 0x0a5c, 0x6412 },
+    { 0x0,    0x0    }
+};
 
 #ifndef TARGET_ELCAPITAN
 OSDefineMetaClassAndStructors(BrcmPatchRAM, IOService)
@@ -117,20 +150,16 @@ void BrcmPatchRAM::initBrcmStrings()
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
         }
         // OS X - El Capitan
-		// macOS - Sierra
-		// macOS - High Sierra
-		// macOS - Mojave
-		// macOS - Catalina
-        else if (version_major == 15 || version_major == 16 || version_major == 17 || version_major == 18)
+        else if (version_major == 15)
         {
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
             providerclass = kIOUSBHostDeviceClassName;
         }
         // OS X - Future releases....
-        else if (version_major > 18)
+        else if (version_major > 15)
         {
-            AlwaysLog("Unknown new Darwin version %d.%d, using possible compatible personality.\n", version_major, version_minor);
+            DebugLog("Unknown new Darwin version %d.%d, using possible compatible personality.\n", version_major, version_minor);
             bundle = "com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport";
             ioclass = "BroadcomBluetoothHostControllerUSBTransport";
             providerclass = kIOUSBHostDeviceClassName;
@@ -232,6 +261,15 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mVendorId = mDevice.getVendorID();
     mProductId = mDevice.getProductID();
 
+    // Check if device supports handshake.
+    if (mPreResetDelay == 0) {
+        /* Force handshake mode */
+        mSupportsHandshake = true;
+    } else {
+        mSupportsHandshake = supportsHandshake(mVendorId, mProductId);
+    }
+    DebugLog("Device %s handshake.\n", mSupportsHandshake ? "supports" : "doesn't support");
+
     // get firmware here to pre-cache for eventual use on wakeup or now
     if (OSString* firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey)))
     {
@@ -242,9 +280,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     IOSleep(mProbeDelay);
 
     uploadFirmware();
-#ifndef TARGET_CATALINA
     publishPersonality();
-#endif
 
     clock_get_uptime(&end_time);
     absolutetime_to_nanoseconds(end_time - start_time, &nano_secs);
@@ -556,7 +592,6 @@ IOReturn BrcmPatchRAM::setPowerState(unsigned long which, IOService *whom)
 }
 #endif // #ifndef NON_RESIDENT
 
-#ifndef NON_RESIDENT
 static void setStringInDict(OSDictionary* dict, const char* key, const char* value)
 {
     OSString* str = OSString::withCStringNoCopy(value);
@@ -566,9 +601,7 @@ static void setStringInDict(OSDictionary* dict, const char* key, const char* val
         str->release();
     }
 }
-#endif
 
-#if !defined(NON_RESIDENT) || defined(DEBUG)
 static void setNumberInDict(OSDictionary* dict, const char* key, UInt16 value)
 {
     OSNumber* num = OSNumber::withNumber(value, 16);
@@ -578,7 +611,6 @@ static void setNumberInDict(OSDictionary* dict, const char* key, UInt16 value)
         num->release();
     }
 }
-#endif
 
 #ifdef DEBUG
 void BrcmPatchRAM::printPersonalities()
@@ -646,7 +678,6 @@ void BrcmPatchRAM::removePersonality()
 #endif // #ifndef TARGET_ELCAPITAN
 #endif // #ifndef NON_RESIDENT
 
-#ifndef TARGET_CATALINA
 void BrcmPatchRAM::publishPersonality()
 {
     // Matching dictionary for the current device
@@ -696,7 +727,8 @@ void BrcmPatchRAM::publishPersonality()
             if (gIOCatalogue->addDrivers(array, false))
             {
                 AlwaysLog("[%04x:%04x]: Published new IOKit personality.\n", mVendorId, mProductId);
-                if (OSDictionary* dict1 = OSDynamicCast(OSDictionary, dict->copyCollection()))
+				auto coll1 = dict->copyCollection();
+                if (OSDictionary* dict1 = OSDynamicCast(OSDictionary, coll1))
                 {
                     //dict1->removeObject(kIOClassKey);
                     //dict1->removeObject(kIOProviderClassKey);
@@ -707,6 +739,10 @@ void BrcmPatchRAM::publishPersonality()
                         AlwaysLog("[%04x:%04x]: startMatching failed.\n", mVendorId, mProductId);
                     dict1->release();
                 }
+				else if (coll1 != NULL)
+				{
+					coll1->release();
+				}
             }
             else
                 AlwaysLog("[%04x:%04x]: ERROR in addDrivers for new IOKit personality.\n", mVendorId, mProductId);
@@ -753,9 +789,15 @@ bool BrcmPatchRAM::publishResourcePersonality(const char* classname)
         return false;
     }
     // make copy of personality *before* removing from IOcatalog
-    personality = OSDynamicCast(OSDictionary, personality->copyCollection());
+	auto coll = personality->copyCollection();
+    personality = OSDynamicCast(OSDictionary, coll);
     if (!personality)
     {
+		if (coll)
+		{
+			coll->release();
+		}
+		dict->release();
         AlwaysLog("copyCollection failed.");
         return false;
     }
@@ -780,7 +822,6 @@ bool BrcmPatchRAM::publishResourcePersonality(const char* classname)
 
     return true;
 }
-#endif
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
@@ -794,9 +835,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
             if (tmpStore)
                 tmpStore->release();
             // not loaded, so publish personality...
-#ifndef TARGET_CATALINA
             publishResourcePersonality(kBrcmFirmwareStoreService);
-#endif
             // and wait...
             tmpStore = waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL);
             mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
@@ -813,9 +852,7 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
             if (tmpResidency)
                 tmpResidency->release();
             // not loaded, so publish personality...
-#ifndef TARGET_CATALINA
             publishResourcePersonality(kBrcmPatchRAMResidency);
-#endif
             // and wait...
             tmpResidency = waitForMatchingService(serviceMatching(kBrcmPatchRAMResidency), 2000UL*1000UL*1000UL);
             residency = OSDynamicCast(BrcmPatchRAMResidency, tmpResidency);
@@ -984,7 +1021,7 @@ bool BrcmPatchRAM::continuousRead()
 {
     if (!mReadBuffer)
     {
-        mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, kIODirectionIn, 0x200);
+        mReadBuffer = IOBufferMemoryDescriptor::inTaskWithOptions(kernel_task, 0, 0x200);
         if (!mReadBuffer)
         {
             AlwaysLog("[%04x:%04x]: continuousRead - failed to allocate read buffer.\n", mVendorId, mProductId);
@@ -999,7 +1036,7 @@ bool BrcmPatchRAM::continuousRead()
         mInterruptCompletion.parameter = NULL;
     }
 
-    IOReturn result = mReadBuffer->prepare(kIODirectionIn);
+    IOReturn result = mReadBuffer->prepare();
     if (result != kIOReturnSuccess)
     {
         AlwaysLog("[%04x:%04x]: continuousRead - failed to prepare buffer (0x%08x)\n", mVendorId, mProductId, result);
@@ -1036,7 +1073,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
 
     IOLockLock(me->mCompletionLock);
 
-    IOReturn result = me->mReadBuffer->complete(kIODirectionIn);
+    IOReturn result = me->mReadBuffer->complete();
     if (result != kIOReturnSuccess)
         DebugLog("[%04x:%04x]: ReadCompletion failed to complete read buffer (\"%s\" 0x%08x).\n", me->mVendorId, me->mProductId, me->stringFromReturn(result), result);
 
@@ -1063,6 +1100,7 @@ void BrcmPatchRAM::readCompletion(void* target, void* parameter, IOReturn status
         case kIOReturnNotResponding:
             AlwaysLog("[%04x:%04x]: Not responding - Delaying next read.\n", me->mVendorId, me->mProductId);
             me->mInterruptPipe.clearStall();
+            me->mDeviceState = kUpdateAborted;
             break;
         default:
             AlwaysLog("[%04x:%04x]: readCompletion - Unknown error (0x%08x)\n", me->mVendorId, me->mProductId, status);
@@ -1179,6 +1217,13 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
         case HCI_EVENT_LE_META:
             DebugLog("[%04x:%04x]: Low-Energy meta event.\n", mVendorId, mProductId);
             break;
+        case HCI_EVENT_VENDOR:
+            DebugLog("[%04x:%04x]: Vendor specific event.\n", mVendorId, mProductId);
+            if (mSupportsHandshake) {
+                // Device is ready for reset.
+                mDeviceState = kResetWrite;
+            }
+            break;
         default:
             DebugLog("[%04x:%04x]: Unknown event code (0x%02x).\n", mVendorId, mProductId, header->eventCode);
             break;
@@ -1191,9 +1236,9 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
 {
     IOReturn result;
     
-    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress((void*)data, length, kIODirectionOut))
+    if (IOMemoryDescriptor* buffer = IOMemoryDescriptor::withAddress((void*)data, length, kIODirectionIn))
     {
-        if ((result = buffer->prepare(kIODirectionOut)) == kIOReturnSuccess)
+        if ((result = buffer->prepare()) == kIOReturnSuccess)
         {
             if ((result = mBulkPipe.write(buffer, 0, 0, buffer->getLength(), NULL)) == kIOReturnSuccess)
             {
@@ -1205,7 +1250,7 @@ IOReturn BrcmPatchRAM::bulkWrite(const void* data, UInt16 length)
         else
             AlwaysLog("[%04x:%04x]: Failed to prepare bulk write memory buffer (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         
-        if ((result = buffer->complete(kIODirectionOut)) != kIOReturnSuccess)
+        if ((result = buffer->complete()) != kIOReturnSuccess)
             AlwaysLog("[%04x:%04x]: Failed to complete bulk write memory buffer (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
         
         buffer->release();
@@ -1314,13 +1359,14 @@ bool BrcmPatchRAM::performUpgrade()
                 continue;
 
             case kFirmwareWritten:
-                IOSleep(mPreResetDelay);
-				if (hciCommand(&HCI_RESET, sizeof(HCI_RESET)) != kIOReturnSuccess)
-				{
-					DebugLog("HCI_RESET failed, aborting.");
-					mDeviceState = kUpdateAborted;
-					continue;
-				}
+                if (!mSupportsHandshake) {
+                    IOSleep(mPreResetDelay);
+                    hciCommand(&HCI_RESET, sizeof(HCI_RESET));
+                }
+                break;
+                
+            case kResetWrite:
+                hciCommand(&HCI_RESET, sizeof(HCI_RESET));
                 break;
 
             case kResetComplete:
@@ -1353,6 +1399,17 @@ bool BrcmPatchRAM::performUpgrade()
     return mDeviceState == kUpdateComplete || mDeviceState == kUpdateNotNeeded;
 }
 
+bool BrcmPatchRAM::supportsHandshake(UInt16 vid, UInt16 did)
+{
+    UInt32 i;
+    
+    for (i = 0; hskSupport[i].vid != 0; i++) {
+        if ((hskSupport[i].vid == vid) && (hskSupport[i].did == did))
+            return true;
+    }
+    return false;
+}
+
 #ifdef DEBUG
 const char* BrcmPatchRAM::getState(DeviceState deviceState)
 {
@@ -1364,6 +1421,7 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
         {kInstructionWrite,   "Instruction write"    },
         {kInstructionWritten, "Instruction written"  },
         {kFirmwareWritten,    "Firmware written"     },
+        {kResetWrite,         "Perform reset"        },
         {kResetComplete,      "Reset complete"       },
         {kUpdateComplete,     "Update complete"      },
         {kUpdateNotNeeded,    "Update not needed"    },
@@ -1449,3 +1507,5 @@ bool BrcmPatchRAMResidency::start(IOService *provider)
 }
 
 #endif
+
+#endif //TARGET_CATALINA

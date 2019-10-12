@@ -19,9 +19,7 @@
 #ifndef __BrcmPatchRAM__
 #define __BrcmPatchRAM__
 
-#define TARGET_CATALINA	1
-
-#ifdef TARGET_ELCAPITAN
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
 // 10.11 works better if probe simply exits after updating firmware
 #define NON_RESIDENT 1
 #endif
@@ -51,13 +49,22 @@ enum DeviceState
     kInstructionWrite,
     kInstructionWritten,
     kFirmwareWritten,
+    kResetWrite,
     kResetComplete,
     kUpdateComplete,
     kUpdateNotNeeded,
     kUpdateAborted,
 };
 
-#ifdef TARGET_ELCAPITAN
+typedef struct DeviceHskSupport
+{
+    UInt16 vid;
+    UInt16 did;
+} DeviceHskSupport;
+
+#if defined(TARGET_CATALINA)
+#define BrcmPatchRAM BrcmPatchRAM3
+#elif defined(TARGET_ELCAPITAN)
 #define BrcmPatchRAM BrcmPatchRAM2
 #endif
 
@@ -71,15 +78,19 @@ class BrcmPatchRAM : public IOService
 {
 private:
     typedef IOService super;
-#ifndef TARGET_ELCAPITAN
-    OSDeclareDefaultStructors(BrcmPatchRAM);
-#else
+#if defined(TARGET_CATALINA)
+    OSDeclareDefaultStructors(BrcmPatchRAM3);
+#elif defined(TARGET_ELCAPITAN)
     OSDeclareDefaultStructors(BrcmPatchRAM2);
+#else
+    OSDeclareDefaultStructors(BrcmPatchRAM);
 #endif
     
     UInt16 mVendorId;
     UInt16 mProductId;
+#ifndef TARGET_CATALINA
     UInt32 mProbeDelay;
+#endif
     UInt32 mPreResetDelay;
     UInt32 mPostResetDelay;
     UInt32 mInitialDelay;
@@ -92,7 +103,8 @@ private:
 #ifndef NON_RESIDENT
     bool mStopping = false;
 #endif
-    
+    bool mSupportsHandshake;
+
     USBCOMPLETION mInterruptCompletion;
     IOBufferMemoryDescriptor* mReadBuffer;
     
@@ -103,11 +115,14 @@ private:
 #ifdef DEBUG
     static const char* getState(DeviceState deviceState);
 #endif
+
+#ifndef TARGET_CATALINA
     static OSString* brcmBundleIdentifier;
     static OSString* brcmIOClass;
     static OSString* brcmProviderClass;
     static void initBrcmStrings();
-
+#endif
+    
 #ifdef DEBUG
     void printPersonalities();
 #endif
@@ -141,7 +156,7 @@ private:
 #endif
 
 #ifndef NON_RESIDENT
-#ifndef TARGET_ELCAPITAN
+#if (!defined(TARGET_ELCAPITAN)) && (!defined(TARGET_CATALINA))
     void removePersonality();
 #endif
 #endif
@@ -161,10 +176,10 @@ private:
     bool findPipe(USBPipeShim* pipe, uint8_t type, uint8_t direction);
     
     bool continuousRead();
-#ifndef TARGET_ELCAPITAN
-    static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
-#else
+#if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
     static void readCompletion(void* target, void* parameter, IOReturn status, uint32_t bytesTransferred);
+#else
+    static void readCompletion(void* target, void* parameter, IOReturn status, UInt32 bufferSizeRemaining);
 #endif
     
     IOReturn hciCommand(void * command, uint16_t length);
@@ -175,17 +190,28 @@ private:
     uint16_t getFirmwareVersion();
     
     bool performUpgrade();
+    bool supportsHandshake(UInt16 vid, UInt16 did);
 public:
     virtual IOService* probe(IOService *provider, SInt32 *probeScore);
-#ifndef NON_RESIDENT
+#if defined(TARGET_CATALINA) || (!defined(NON_RESIDENT))
     virtual bool start(IOService* provider);
     virtual void stop(IOService* provider);
     virtual IOReturn setPowerState(unsigned long which, IOService *whom);
 #endif
+    
+#ifndef NON_RESIDENT
+    virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+#endif
+    
     virtual const char* stringFromReturn(IOReturn rtn);
+    
+#ifdef TARGET_CATALINA
+    virtual bool init(OSDictionary *properties);
+    virtual void free();
+#endif
 };
 
-#ifdef NON_RESIDENT
+#if defined(NON_RESIDENT) && (!defined(TARGET_CATALINA))
 
 #define kBrcmPatchRAMResidency "BrcmPatchRAMResidency"
 class BrcmPatchRAMResidency : public IOService
@@ -198,6 +224,6 @@ public:
     virtual bool start(IOService *provider);
 };
 
-#endif //NON_RESIDENT
+#endif //defined(NON_RESIDENT) && (!defined(TARGET_CATALINA))
 
 #endif //__BrcmPatchRAM__

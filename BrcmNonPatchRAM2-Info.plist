@@ -68,7 +68,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Foxconn AW-NB290</string>
 			<key>IOClass</key>

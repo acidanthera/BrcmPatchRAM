@@ -36,7 +36,8 @@ typedef enum
     HCI_EVENT_HARDWARE_ERROR = 0x10,
     HCI_EVENT_NUM_COMPLETED_PACKETS = 0x13,
     HCI_EVENT_MODE_CHANGE = 0x14,
-    HCI_EVENT_LE_META = 0x3e
+    HCI_EVENT_LE_META = 0x3e,
+    HCI_EVENT_VENDOR = 0xff
 } HCI_EVENT_TYPE;
 
 typedef struct __attribute__((packed))
