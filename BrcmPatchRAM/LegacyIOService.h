@@ -409,8 +409,8 @@ public:
 
 private:
 #if __LP64__
-    OSMetaClassDeclareReservedUnused(IOService, 0);
-    OSMetaClassDeclareReservedUnused(IOService, 1);
+    OSMetaClassDeclareReservedUsed(IOService, 0);
+    OSMetaClassDeclareReservedUsed(IOService, 1);
     OSMetaClassDeclareReservedUnused(IOService, 2);
     OSMetaClassDeclareReservedUnused(IOService, 3);
     OSMetaClassDeclareReservedUnused(IOService, 4);
