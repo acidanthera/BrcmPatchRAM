@@ -37,7 +37,6 @@
 		CE8DA7122352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA7132352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
-		CE8DA717235248C300BCE180 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
 		CE8DA718235248C300BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
 		CE8DA71A235248C300BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
@@ -48,6 +47,7 @@
 		CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		CE8DA722235248C300BCE180 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		CE8DA72C2352496A00BCE180 /* BrcmPatchRAM-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */; };
+		CE8DA72D23524E4500BCE180 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; };
 		D346F7BB23475DF60073A60D /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
 		D346F7BE23475DF60073A60D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D346F7BF23475DF60073A60D /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
@@ -1209,8 +1209,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE8DA72D23524E4500BCE180 /* USBDeviceShim.cpp in Sources */,
 				CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */,
-				CE8DA717235248C300BCE180 /* USBHostDeviceShim.cpp in Sources */,
 				CE8DA718235248C300BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -199,10 +199,6 @@ public:
     IOReturn setPowerState(unsigned long which, IOService *whom) override;
 #endif
     
-#ifndef NON_RESIDENT
-    IOReturn setPowerState(unsigned long which, IOService *whom) override;
-#endif
-    
     const char* stringFromReturn(IOReturn rtn) override;
     
 #ifdef TARGET_CATALINA
