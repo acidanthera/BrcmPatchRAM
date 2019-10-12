@@ -192,22 +192,22 @@ private:
     bool performUpgrade();
     bool supportsHandshake(UInt16 vid, UInt16 did);
 public:
-    virtual IOService* probe(IOService *provider, SInt32 *probeScore);
+    IOService* probe(IOService *provider, SInt32 *probeScore) override;
 #if defined(TARGET_CATALINA) || (!defined(NON_RESIDENT))
-    virtual bool start(IOService* provider);
-    virtual void stop(IOService* provider);
-    virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+    bool start(IOService* provider) override;
+    void stop(IOService* provider) override;
+    IOReturn setPowerState(unsigned long which, IOService *whom) override;
 #endif
     
 #ifndef NON_RESIDENT
-    virtual IOReturn setPowerState(unsigned long which, IOService *whom);
+    IOReturn setPowerState(unsigned long which, IOService *whom) override;
 #endif
     
-    virtual const char* stringFromReturn(IOReturn rtn);
+    const char* stringFromReturn(IOReturn rtn) override;
     
 #ifdef TARGET_CATALINA
-    virtual bool init(OSDictionary *properties);
-    virtual void free();
+    bool init(OSDictionary *properties) override;
+    void free() override;
 #endif
 };
 
@@ -221,7 +221,7 @@ private:
     OSDeclareDefaultStructors(BrcmPatchRAMResidency);
 
 public:
-    virtual bool start(IOService *provider);
+    bool start(IOService *provider) override;
 };
 
 #endif //defined(NON_RESIDENT) && (!defined(TARGET_CATALINA))

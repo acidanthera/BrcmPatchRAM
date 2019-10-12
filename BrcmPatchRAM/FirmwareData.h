@@ -20,7 +20,7 @@
 #ifndef _FIRMWAREDATA_H
 #define _FIRMWAREDATA_H
 
-#include <IOKit/IOService.h>
+#include "LegacyIOService.h"
 
 struct FirmwareEntry
 {

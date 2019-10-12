@@ -64,7 +64,7 @@ static IOPMPowerState myTwoStates[2] =
  * support this mechanism. It must be terminated with a zero entry.
  *
  * I assume that more devices (all?) also work this way so that
- * they should be added to the list. It might be ossible that this
+ * they should be added to the list. It might be possible that this
  * is a common feature among Broadcom BT controllers making the list
  * obsolete, but for now, we still need it.
  */

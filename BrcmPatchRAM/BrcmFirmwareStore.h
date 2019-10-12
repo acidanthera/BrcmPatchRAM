@@ -20,8 +20,8 @@
 #ifndef __BrcmPatchRAM__BrcmFirmwareStore__
 #define __BrcmPatchRAM__BrcmFirmwareStore__
 
+#include "LegacyIOService.h"
 #include <IOKit/IOLib.h>
-#include <IOKit/IOService.h>
 #include <libkern/OSKextLib.h>
 
 #define kBrcmFirmwareCompressed     "zhx"
@@ -53,8 +53,8 @@ private:
     OSArray* loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
 
 public:
-    virtual bool start(IOService *provider);
-    virtual void stop(IOService *provider);
+    bool start(IOService *provider) override;
+    void stop(IOService *provider) override;
 
     virtual OSArray* getFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareIdentifier);
 };
