@@ -1,7 +1,7 @@
 <plist version='1.0'>
   <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.no-one.BrcmInjector.050d.065a</string>
+    <string>as.acidanthera.BrcmInjector.050d.065a</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -19,7 +19,7 @@
       <key>050d_065a</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM2</string>
+        <string>as.acidanthera.BrcmPatchRAM2</string>
         <key>DisplayName</key>
         <string>Belkin Bluetooth 4.0 USB Adapter</string>
         <key>FirmwareKey</key>
@@ -40,7 +40,7 @@
       <key>BrcmFirmwareStore</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmFirmwareStore</string>
+        <string>as.acidanthera.BrcmFirmwareStore</string>
         <key>Firmwares</key>
         <dict>
           <key>050d_065a_v5578</key>

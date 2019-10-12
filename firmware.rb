@@ -143,7 +143,7 @@ def create_injector(device, for_usbhost, compressed_data, output_path)
   xml = Document.new('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"/>');
   
   root_dict = Element.new("dict", xml.root)
-  add_key_value(root_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmInjector.%04x.%04x" % [ device.vendorId, device.productId ])
+  add_key_value(root_dict, "CFBundleIdentifier", "string", "as.acidanthera.BrcmInjector.%04x.%04x" % [ device.vendorId, device.productId ])
   add_key_value(root_dict, "CFBundleInfoDictionaryVersion", "string", "6.0")
   add_key_value(root_dict, "CFBundleName", "string", "BrcmInjector.%04x.%04x" % [ device.vendorId, device.productId ])
   add_key_value(root_dict, "CFBundlePackageType", "string", "KEXT")
@@ -157,7 +157,7 @@ def create_injector(device, for_usbhost, compressed_data, output_path)
   add_element(iokit_dict, "key", "%04x_%04x" % [ device.vendorId, device.productId ])
   
   device_dict = Element.new("dict", iokit_dict);
-  add_key_value(device_dict, "CFBundleIdentifier", "string", for_usbhost ? "com.no-one.BrcmPatchRAM2" : "com.no-one.BrcmPatchRAM")
+  add_key_value(device_dict, "CFBundleIdentifier", "string", for_usbhost ? "as.acidanthera.BrcmPatchRAM2" : "as.acidanthera.BrcmPatchRAM")
   add_key_value(device_dict, "DisplayName", "string", device.description)
   add_key_value(device_dict, "FirmwareKey", "string", "%04x_%04x_v%4d" % [ device.vendorId, device.productId, device.firmwareVersion ])
   add_key_value(device_dict, "IOClass", "string", for_usbhost ? "BrcmPatchRAM2" : "BrcmPatchRAM" )
@@ -170,7 +170,7 @@ def create_injector(device, for_usbhost, compressed_data, output_path)
   add_element(iokit_dict, "key", "BrcmFirmwareStore")
   
   firmware_dict = Element.new("dict", iokit_dict)
-  add_key_value(firmware_dict, "CFBundleIdentifier", "string", "com.no-one.BrcmFirmwareStore")
+  add_key_value(firmware_dict, "CFBundleIdentifier", "string", "as.acidanthera.BrcmFirmwareStore")
   add_element(firmware_dict, "key", "Firmwares")
   
   firmwares_dict = Element.new("dict", firmware_dict)
@@ -204,7 +204,7 @@ def create_plist(devices, output_path)
   
     device_xml = Element.new("dict", xml.root)
   
-    add_key_value(device_xml, "CFBundleIdentifier", "string", "com.no-one.$(PRODUCT_NAME:rfc1034identifier)")
+    add_key_value(device_xml, "CFBundleIdentifier", "string", "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)")
     add_key_value(device_xml, "DisplayName", "string", device.description)
     add_key_value(device_xml, "FirmwareKey", "string", "#{device.firmware.chomp(".hex")}_v#{device.firmwareVersion}")
     add_key_value(device_xml, "IOClass", "string", "BrcmPatchRAM")

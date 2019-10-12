@@ -1,7 +1,7 @@
 <plist version='1.0'>
   <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.no-one.BrcmInjector.0930.021f</string>
+    <string>as.acidanthera.BrcmInjector.0930.021f</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -19,7 +19,7 @@
       <key>0930_021f</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM</string>
+        <string>as.acidanthera.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>Bluetooth USB module</string>
         <key>FirmwareKey</key>
@@ -40,7 +40,7 @@
       <key>BrcmFirmwareStore</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmFirmwareStore</string>
+        <string>as.acidanthera.BrcmFirmwareStore</string>
         <key>Firmwares</key>
         <dict>
           <key>0930_021f_v4431</key>

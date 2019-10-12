@@ -163,6 +163,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "ED5817BB1B7A6AEF006C5522"
+            BuildableName = "BrcmPatchRAM2.kext"
+            BlueprintName = "BrcmPatchRAM2"
+            ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

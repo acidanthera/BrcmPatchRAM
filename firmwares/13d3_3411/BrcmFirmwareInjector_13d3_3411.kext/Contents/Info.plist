@@ -1,7 +1,7 @@
 <plist version='1.0'>
   <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.no-one.BrcmInjector.13d3.3411</string>
+    <string>as.acidanthera.BrcmInjector.13d3.3411</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -19,7 +19,7 @@
       <key>13d3_3411</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmPatchRAM</string>
+        <string>as.acidanthera.BrcmPatchRAM</string>
         <key>DisplayName</key>
         <string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
         <key>FirmwareKey</key>
@@ -40,7 +40,7 @@
       <key>BrcmFirmwareStore</key>
       <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.no-one.BrcmFirmwareStore</string>
+        <string>as.acidanthera.BrcmFirmwareStore</string>
         <key>Firmwares</key>
         <dict>
           <key>13d3_3411_v5546</key>

@@ -23,7 +23,7 @@
 		<key>0489_e032</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -44,7 +44,7 @@
 		<key>0489_e042</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -65,7 +65,7 @@
 		<key>0489_e046</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -86,7 +86,7 @@
 		<key>0489_e04f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -107,7 +107,7 @@
 		<key>0489_e052</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
@@ -128,7 +128,7 @@
 		<key>0489_e055</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -149,7 +149,7 @@
 		<key>0489_e059</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -170,7 +170,7 @@
 		<key>0489_e079</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -191,7 +191,7 @@
 		<key>0489_e07a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -212,7 +212,7 @@
 		<key>0489_e087</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -233,7 +233,7 @@
 		<key>0489_e096</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -254,7 +254,7 @@
 		<key>0489_e0a1</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.1 USB</string>
 			<key>FirmwareKey</key>
@@ -275,7 +275,7 @@
 		<key>04ca_2003</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -296,7 +296,7 @@
 		<key>04ca_2004</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -317,7 +317,7 @@
 		<key>04ca_2005</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
@@ -338,7 +338,7 @@
 		<key>04ca_2006</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
@@ -359,7 +359,7 @@
 		<key>04ca_2009</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -380,7 +380,7 @@
 		<key>04ca_200a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -401,7 +401,7 @@
 		<key>04ca_200b</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -422,7 +422,7 @@
 		<key>04ca_200c</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -443,7 +443,7 @@
 		<key>04ca_200e</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -464,7 +464,7 @@
 		<key>04ca_200f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -485,7 +485,7 @@
 		<key>04ca_2012</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -506,7 +506,7 @@
 		<key>04ca_2016</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -527,7 +527,7 @@
 		<key>04f2_b4a1</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -548,7 +548,7 @@
 		<key>050d_065a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Belkin Bluetooth 4.0 USB Adapter</string>
 			<key>FirmwareKey</key>
@@ -569,7 +569,7 @@
 		<key>0930_021e</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
@@ -590,7 +590,7 @@
 		<key>0930_021f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -611,7 +611,7 @@
 		<key>0930_0221</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -632,7 +632,7 @@
 		<key>0930_0223</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -653,7 +653,7 @@
 		<key>0930_0225</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -674,7 +674,7 @@
 		<key>0930_0226</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -695,7 +695,7 @@
 		<key>0930_0229</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -716,7 +716,7 @@
 		<key>0a5c_2168</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>BCM43162 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -737,7 +737,7 @@
 		<key>0a5c_2169</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
@@ -758,7 +758,7 @@
 		<key>0a5c_216a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Dell Wireless 1708 Bluetooth 4.0 LE Device</string>
 			<key>FirmwareKey</key>
@@ -779,7 +779,7 @@
 		<key>0a5c_216b</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -800,7 +800,7 @@
 		<key>0a5c_216c</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 43142 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -821,7 +821,7 @@
 		<key>0a5c_216d</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 43142 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -842,7 +842,7 @@
 		<key>0a5c_216e</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 43162 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -863,7 +863,7 @@
 		<key>0a5c_216f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>DW1560 Bluetooth 4.0 LE</string>
 			<key>FirmwareKey</key>
@@ -884,7 +884,7 @@
 		<key>0a5c_21d7</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Dell Wireless 1704 Bluetooth v4.0+HS</string>
 			<key>FirmwareKey</key>
@@ -905,7 +905,7 @@
 		<key>0a5c_21de</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -926,7 +926,7 @@
 		<key>0a5c_21e1</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -947,7 +947,7 @@
 		<key>0a5c_21e3</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -989,7 +989,7 @@
 		<key>0a5c_21e8</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -1010,7 +1010,7 @@
 		<key>0a5c_21ec</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -1031,7 +1031,7 @@
 		<key>0a5c_21f1</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -1052,7 +1052,7 @@
 		<key>0a5c_21f3</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
@@ -1073,7 +1073,7 @@
 		<key>0a5c_21f4</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
@@ -1094,7 +1094,7 @@
 		<key>0a5c_21fb</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -1115,7 +1115,7 @@
 		<key>0a5c_21fd</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -1136,7 +1136,7 @@
 		<key>0a5c_640b</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -1157,7 +1157,7 @@
 		<key>0a5c_6410</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Dell Wireless 1830 Bluetooth 4.1 LE</string>
 			<key>FirmwareKey</key>
@@ -1178,7 +1178,7 @@
 		<key>0a5c_6412</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Dell Wireless 1820A Bluetooth 4.1 LE</string>
 			<key>FirmwareKey</key>
@@ -1199,7 +1199,7 @@
 		<key>0a5c_6413</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -1220,7 +1220,7 @@
 		<key>0a5c_6414</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.1 USB</string>
 			<key>FirmwareKey</key>
@@ -1241,7 +1241,7 @@
 		<key>0a5c_6417</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 20702 Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
@@ -1262,7 +1262,7 @@
 		<key>0a5c_6418</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom 4371 Bluetooth 4.1 Adapter</string>
 			<key>FirmwareKey</key>
@@ -1283,7 +1283,7 @@
 		<key>0a5c_7460</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20703 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
@@ -1304,7 +1304,7 @@
 		<key>0b05_17b5</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
@@ -1325,7 +1325,7 @@
 		<key>0b05_17cb</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>ASUS USB-BT400</string>
 			<key>FirmwareKey</key>
@@ -1346,7 +1346,7 @@
 		<key>0b05_17cf</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1367,7 +1367,7 @@
 		<key>0b05_180a</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1388,7 +1388,7 @@
 		<key>0bb4_0306</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20703 Bluetooth USB Device</string>
 			<key>FirmwareKey</key>
@@ -1409,7 +1409,7 @@
 		<key>105b_e065</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0</string>
 			<key>FirmwareKey</key>
@@ -1430,7 +1430,7 @@
 		<key>105b_e066</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB</string>
 			<key>FirmwareKey</key>
@@ -1451,7 +1451,7 @@
 		<key>13d3_3384</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1472,7 +1472,7 @@
 		<key>13d3_3388</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>BCM43142 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -1493,7 +1493,7 @@
 		<key>13d3_3389</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>BCM43142 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -1514,7 +1514,7 @@
 		<key>13d3_3392</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
@@ -1535,7 +1535,7 @@
 		<key>13d3_3404</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth Module</string>
 			<key>FirmwareKey</key>
@@ -1556,7 +1556,7 @@
 		<key>13d3_3411</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM20702 Bluetooth 4.0 +HS USB Device</string>
 			<key>FirmwareKey</key>
@@ -1577,7 +1577,7 @@
 		<key>13d3_3413</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1598,7 +1598,7 @@
 		<key>13d3_3418</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1619,7 +1619,7 @@
 		<key>13d3_3427</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom Bluetooth 4.0 USB Device</string>
 			<key>FirmwareKey</key>
@@ -1640,7 +1640,7 @@
 		<key>13d3_3435</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1661,7 +1661,7 @@
 		<key>13d3_3456</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1682,7 +1682,7 @@
 		<key>13d3_3482</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1703,7 +1703,7 @@
 		<key>13d3_3484</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1724,7 +1724,7 @@
 		<key>13d3_3504</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1745,7 +1745,7 @@
 		<key>13d3_3508</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1766,7 +1766,7 @@
 		<key>13d3_3517</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Bluetooth USB module</string>
 			<key>FirmwareKey</key>
@@ -1787,7 +1787,7 @@
 		<key>145f_01a3</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Trust Bluetooth 4.0 Adapter</string>
 			<key>FirmwareKey</key>
@@ -1808,7 +1808,7 @@
 		<key>413c_8143</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>DW1550 Bluetooth 4.0 LE</string>
 			<key>FirmwareKey</key>
@@ -1829,7 +1829,7 @@
 		<key>413c_8197</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Dell Wireless 380 Bluetooth 4.0 Module</string>
 			<key>FirmwareKey</key>
@@ -1850,7 +1850,7 @@
 		<key>BrcmPatchRAMResidency</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>IOClass</key>
 			<string>BrcmPatchRAMResidency</string>
 			<key>IOMatchCategory</key>
@@ -1871,7 +1871,7 @@
 		<string>8.0</string>
 		<key>com.apple.kpi.mach</key>
 		<string>8.0</string>
-		<key>com.no-one.BrcmFirmwareStore</key>
+		<key>as.acidanthera.BrcmFirmwareStore - 2</key>
 		<string>${CURRENT_PROJECT_VERSION}</string>
 	</dict>
 </dict>

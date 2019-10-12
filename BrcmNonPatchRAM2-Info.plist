@@ -36,7 +36,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>HP 231d (ProBook BT built-in firmware)</string>
 			<key>IOClass</key>
@@ -100,7 +100,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Broadcom BCM2070 0a5c_219a (BT on BCM43225HMB)</string>
 			<key>IOClass</key>
@@ -132,7 +132,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Asus BT-270(20702A built-in firmware)</string>
 			<key>IOClass</key>
@@ -164,7 +164,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>HP EliteBook NB-290 (built-in firmware)</string>
 			<key>IOClass</key>
@@ -196,7 +196,7 @@
 			<key>#FirmwareKey</key>
 			<string>only load and unload native bluetooth</string>
 			<key>CFBundleIdentifier</key>
-			<string>com.no-one.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
 			<key>DisplayName</key>
 			<string>Azurewave BCM943225 (20702A built-in firmware)</string>
 			<key>IOClass</key>

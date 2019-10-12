@@ -36,6 +36,18 @@
 		CE8DA7112352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA7122352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA7132352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
+		CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
+		CE8DA717235248C300BCE180 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
+		CE8DA718235248C300BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
+		CE8DA71A235248C300BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
+		CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
+		CE8DA71D235248C300BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
+		CE8DA71E235248C300BCE180 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
+		CE8DA71F235248C300BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
+		CE8DA720235248C300BCE180 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
+		CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		CE8DA722235248C300BCE180 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
+		CE8DA72C2352496A00BCE180 /* BrcmPatchRAM-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */; };
 		D346F7BB23475DF60073A60D /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
 		D346F7BE23475DF60073A60D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D346F7BF23475DF60073A60D /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
@@ -166,6 +178,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE8DA724235248C300BCE180 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D346F7C423475DF60073A60D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -226,6 +247,9 @@
 		CE8DA7052352449100BCE180 /* LegacyIOService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyIOService.h; sourceTree = "<group>"; };
 		CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyLibkernMacros.h; sourceTree = "<group>"; };
 		CE8DA7072352449100BCE180 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkmod.a; sourceTree = "<group>"; };
+		CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE8DA72A235248C300BCE180 /* BrcmPatchRAM2 copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BrcmPatchRAM2 copy-Info.plist"; path = "/Users/user/Documents/Xcode/BrcmPatchRAM/BrcmPatchRAM2 copy-Info.plist"; sourceTree = "<absolute>"; };
+		CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM-Info.plist"; sourceTree = "<group>"; };
 		D346F7C923475DF60073A60D /* BrcmPatchRAM3.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM3.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		D346F7CA23475DF70073A60D /* BrcmPatchRAM3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM3-Info.plist"; sourceTree = "<group>"; };
 		D3DDE0872349F788004B3498 /* BrcmPatchRAM3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM3.cpp; sourceTree = "<group>"; };
@@ -349,6 +373,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE8DA7132352449100BCE180 /* libkmod.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8DA719235248C300BCE180 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8DA71A235248C300BCE180 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +534,7 @@
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
+				CE8DA72A235248C300BCE180 /* BrcmPatchRAM2 copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -515,6 +548,7 @@
 				ED7470F71D184C5D005F75F1 /* BrcmNonPatchRAM.kext */,
 				EDC9E2BC1D185240007E69B6 /* BrcmNonPatchRAM2.kext */,
 				D346F7C923475DF60073A60D /* BrcmPatchRAM3.kext */,
+				CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -549,6 +583,7 @@
 		D4F91B011A2998CE0030D10D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */,
 				ED5817CB1B7A6BDF006C5522 /* BrcmPatchRAM2-Info.plist */,
 				D346F7CA23475DF70073A60D /* BrcmPatchRAM3-Info.plist */,
 				841AD88E1BB3C0F40082B7B0 /* BrcmFirmwareData-Info.plist */,
@@ -604,6 +639,20 @@
 				842B20BF1BB2F0D900D3C468 /* Common.h in Headers */,
 				842B20C01BB2F0D900D3C468 /* USBDeviceShim.h in Headers */,
 				842B20C11BB2F0D900D3C468 /* hci.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8DA71B235248C300BCE180 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */,
+				CE8DA71D235248C300BCE180 /* LegacyIOService.h in Headers */,
+				CE8DA71E235248C300BCE180 /* BrcmFirmwareStore.h in Headers */,
+				CE8DA71F235248C300BCE180 /* LegacyLibkernMacros.h in Headers */,
+				CE8DA720235248C300BCE180 /* Common.h in Headers */,
+				CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */,
+				CE8DA722235248C300BCE180 /* hci.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,6 +764,26 @@
 			name = BrcmFirmwareRepo;
 			productName = BrcmPatchRAM;
 			productReference = 842B20C91BB2F0D900D3C468 /* BrcmFirmwareRepo.kext */;
+			productType = "com.apple.product-type.kernel-extension";
+		};
+		CE8DA714235248C300BCE180 /* BrcmPatchRAM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE8DA726235248C300BCE180 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */;
+			buildPhases = (
+				CE8DA715235248C300BCE180 /* Sources */,
+				CE8DA719235248C300BCE180 /* Frameworks */,
+				CE8DA71B235248C300BCE180 /* Headers */,
+				CE8DA723235248C300BCE180 /* Resources */,
+				CE8DA724235248C300BCE180 /* CopyFiles */,
+				CE8DA725235248C300BCE180 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrcmPatchRAM;
+			productName = BrcmPatchRAM;
+			productReference = CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
 		D346F7B823475DF60073A60D /* BrcmPatchRAM3 */ = {
@@ -844,6 +913,7 @@
 			projectRoot = "";
 			targets = (
 				84CDEE051BB3CA2200238DD1 /* Prebuild */,
+				CE8DA714235248C300BCE180 /* BrcmPatchRAM */,
 				ED5817BB1B7A6AEF006C5522 /* BrcmPatchRAM2 */,
 				D346F7B823475DF60073A60D /* BrcmPatchRAM3 */,
 				841AD87C1BB3C0350082B7B0 /* BrcmFirmwareData */,
@@ -955,6 +1025,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE8DA723235248C300BCE180 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8DA72C2352496A00BCE180 /* BrcmPatchRAM-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D346F7C323475DF60073A60D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1019,6 +1097,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi";
+			showEnvVarsInLog = 0;
+		};
+		CE8DA725235248C300BCE180 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -e Build/Debug ] && [ -e Build/Release ]; then tar -czf Build/BrcmPatchRAM.tar.gz Build/Debug Build/Release; fi\n";
 			showEnvVarsInLog = 0;
 		};
 		D346F7C523475DF60073A60D /* ShellScript */ = {
@@ -1110,6 +1202,16 @@
 			files = (
 				CE8DA701235243E100BCE180 /* Common.cpp in Sources */,
 				842B20CC1BB2F0F800D3C468 /* BrcmFirmwareStore.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE8DA715235248C300BCE180 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */,
+				CE8DA717235248C300BCE180 /* USBHostDeviceShim.cpp in Sources */,
+				CE8DA718235248C300BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1323,6 +1425,55 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CE8DA727235248C300BCE180 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_MAVERICKS=1",
+					"DEBUG=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+				);
+				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BrcmPatchRAM",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
+				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Debug;
+		};
+		CE8DA728235248C300BCE180 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"TARGET_MAVERICKS=1",
+					"LOGNAME=\\\"${LOGNAME}\\\"",
+				);
+				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BrcmPatchRAM",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
+				MODULE_START = BrcmPatchRAM_Start;
+				MODULE_STOP = BrcmPatchRAM_Stop;
+				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
 		};
@@ -1612,6 +1763,15 @@
 			buildConfigurations = (
 				84CDEE061BB3CA2200238DD1 /* Debug */,
 				84CDEE071BB3CA2200238DD1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE8DA726235248C300BCE180 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE8DA727235248C300BCE180 /* Debug */,
+				CE8DA728235248C300BCE180 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
