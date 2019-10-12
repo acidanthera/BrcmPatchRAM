@@ -17,7 +17,7 @@
 *
 */
 
-#include <AvailabilityVersions.h>
+#include <Availability.h>
 #include <libkern/c++/OSObject.h>
 
 #ifdef __MAC_10_15
