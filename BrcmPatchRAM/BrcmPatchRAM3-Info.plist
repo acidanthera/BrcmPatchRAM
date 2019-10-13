@@ -1871,7 +1871,7 @@
 		<string>8.0</string>
 		<key>com.apple.kpi.mach</key>
 		<string>8.0</string>
-		<key>as.acidanthera.BrcmFirmwareStore - 2</key>
+		<key>as.acidanthera.BrcmFirmwareStore</key>
 		<string>${CURRENT_PROJECT_VERSION}</string>
 	</dict>
 </dict>
