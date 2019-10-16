@@ -13,11 +13,13 @@ Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, 
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/acidanthera/BrcmPatchRAM/blob/master/README-Mac.md)__
 
-Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext depending on macOS version, never both.
+Install one of BrcmPatchRAM.kext, BrcmPatchRAM2.kext or BrcmPatchRAM3.kext depending on macOS version. It is crucial that you install only one of them!
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
   * BrcmPatchRAM2.kext: for 10.11 or later.
+  
+  * BrcmPatchRAM3.kext: for 10.14 or later (to be used in combination with BrcmBluetoothInjector.kext).
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
@@ -26,6 +28,8 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
   * BrcmFirmwareRepo.kext: Install to /System/Library/Extensions (/Library/Extensions on 10.11 and later). This kext is slightly more memory efficient than BrcmFirmwareData.kext, but cannot be injected by a bootloader.
 
   * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or through bootloader injection.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector through the bootloader, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".
+
+Keep in mind that BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext to be installed. Starting with macOS 10.15, this is the only supported configuration because due to framework changes BrcmPatchRAM.kext and BrcmPatchRAM2.kext are incompatible with macOS 10.15. In case you forget to install BrcmBluetoothInjector.kext, Bluetooth will appear to be available but it won't work at all. 
 
 Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on macOS version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
 
@@ -36,13 +40,103 @@ Also, if you have a non-PatchRAM device (or you're not sure), install one of Brc
 
 ### BrcmBluetoothInjector.kext
 
-To be used for macOS 10.11 or newer.
+To be used for macOS 10.11 or newer. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS 10.15 require the use of a separate injector kext.
 
-This kext is a simple injector, it does not contain a firmware uploader.  Try this kext if you wish to see if your device will work without a firmware uploader.
+This kext is a simple injector, it does not contain a firmware uploader. You might also want to try this kext if you wish to see if your device will work without a firmware uploader.
 
-Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareData) with this kext.
+Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
 
-This kext is not provided in the distribution ZIP.  You can build it if you wish to try it.  It was removed as it presense was causing confusion for those that don't read carefully and didn't install the preferred kexts correctly.  It is not currently being updated with new devices.  If yours is not present, edit the Info.plist as needed.
+BrcmBluetoothInjector supported devices:
+
+  * ``[0489:e032]``
+  * ``[0489:e042]``
+  * ``[0489:e046]``
+  * ``[0489:e04f]``
+  * ``[0489:e052]``
+  * ``[0489:e055]``
+  * ``[0489:e059]``
+  * ``[0489:e079]``
+  * ``[0489:e07a]``
+  * ``[0489:e087]``
+  * ``[0489:e096]``
+  * ``[0489:e0a1]``
+  * ``[04ca:2003]``
+  * ``[04ca:2004]``
+  * ``[04ca:2005]``
+  * ``[04ca:2006]``
+  * ``[04ca:2009]``
+  * ``[04ca:200a]``
+  * ``[04ca:200b]``
+  * ``[04ca:200c]``
+  * ``[04ca:200e]``
+  * ``[04ca:200f]``
+  * ``[04ca:2012]``
+  * ``[04ca:2016]``
+  * ``[04f2:b4a1]``
+  * ``[050d:065a]``
+  * ``[0930:021e]``
+  * ``[0930:021f]``
+  * ``[0930:0221]``
+  * ``[0930:0223]``
+  * ``[0930:0225]``
+  * ``[0930:0226]``
+  * ``[0930:0229]``
+  * ``[0a5c:2168]``
+  * ``[0a5c:2169]``
+  * ``[0a5c:216a]``
+  * ``[0a5c:216b]``
+  * ``[0a5c:216c]``
+  * ``[0a5c:216d]``
+  * ``[0a5c:216e]``
+  * ``[0a5c:216f]``
+  * ``[0a5c:21d7]``
+  * ``[0a5c:21de]``
+  * ``[0a5c:21e1]``
+  * ``[0a5c:21e3]``
+  * ``[0a5c:21e6]``
+  * ``[0a5c:21e8]``
+  * ``[0a5c:21ec]``
+  * ``[0a5c:21f1]``
+  * ``[0a5c:21f3]``
+  * ``[0a5c:21f4]``
+  * ``[0a5c:21fb]``
+  * ``[0a5c:21fd]``
+  * ``[0a5c:640b]``
+  * ``[0a5c:6410]``
+  * ``[0a5c:6412]``
+  * ``[0a5c:6413]``
+  * ``[0a5c:6414]``
+  * ``[0a5c:6417]``
+  * ``[0a5c:6418]``
+  * ``[0a5c:7460]``
+  * ``[0b05:17b5]``
+  * ``[0b05:17cb]``
+  * ``[0b05:17cf]``
+  * ``[0b05:180a]``
+  * ``[0bb4:0306]``
+  * ``[105b:e065]``
+  * ``[105b:e066]``
+  * ``[13d3:3384]``
+  * ``[13d3:3388]``
+  * ``[13d3:3389]``
+  * ``[13d3:3392]``
+  * ``[13d3:3404]``
+  * ``[13d3:3411]``
+  * ``[13d3:3413]``
+  * ``[13d3:3418]``
+  * ``[13d3:3427]``
+  * ``[13d3:3435]``
+  * ``[13d3:3456]``
+  * ``[13d3:3482]``
+  * ``[13d3:3484]``
+  * ``[13d3:3504]``
+  * ``[13d3:3508]``
+  * ``[13d3:3517]``
+  * ``[145f:01a3]``
+  * ``[413c:8143]``
+  * ``[413c:8197]``
+
+If yours is not present, edit the Info.plist as needed.
 
 
 #### Supported Devices
@@ -94,13 +188,13 @@ Tested PatchRAM devices:
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
 
-All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github.
+All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github. The firmwares have been updated to version 12.0.1.1105.
 
 
 #### More Installation Details
 
-BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
-Install only one, not both, depending on system version.
+BrcmPatchRAM.kext, BrcmPatchRAM2.kext and BrcmPatchRAM3.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
+Make sure to install only one of them, depending on system version.
 
 BrcmFirmwareRepo.kext does not work with bootloader kext injection, unless using a device specific firmware injector.
 BrcmFirmwareData.kext can work with bootloader kext injection.
@@ -114,7 +208,7 @@ You will find device specfic injectors in the 'firmwares' directory of the git r
 
 There are a number of delays which can be changed with the following kernel flags. You might change these values if you find BrcmPatchRAM is hanging during firmware load.
 
-bpr_probedelay: Changes mProbeDelay.  Default value is 0.
+bpr_probedelay: Changes mProbeDelay (obsolete with BrcmPatchRAM3).  Default value is 0. 
 
 bpr_initialdelay: Changes mInitialDelay.  Default value is 100.
 
