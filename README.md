@@ -17,7 +17,7 @@ Install one of BrcmPatchRAM.kext, BrcmPatchRAM2.kext or BrcmPatchRAM3.kext depen
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
-  * BrcmPatchRAM2.kext: for 10.11 or later.
+  * BrcmPatchRAM2.kext: for 10.11 - 10.14.
   
   * BrcmPatchRAM3.kext: for 10.14 or later (to be used in combination with BrcmBluetoothInjector.kext).
 
