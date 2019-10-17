@@ -34,15 +34,17 @@ Keep in mind that BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext to
 Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on macOS version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
 
   * BrcmNonPatchRAM.kext: for 10.10 or earlier
-
   * BrcmNonPatchRAM2.kext: for 10.11 or later.
-
 
 ### BrcmBluetoothInjector.kext
 
-To be used for macOS 10.11 or newer. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS 10.15 require the use of a separate injector kext.
+To be used for macOS 10.11 or newer. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS Catalina (10.15) requires the use of a separate injector kext. This is due to the removal of the following IOCatalogue methods:
 
-This kext is a simple injector, it does not contain a firmware uploader. You might also want to try this kext if you wish to see if your device will work without a firmware uploader.
+    IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatching
+
+Consequently to have the native BT driver load for the device (BroadcomBluetoothHostControllerUSBTransport) we inject using a plist with a slightly lower IOProbeScore than BrcmPatchRAM3 so it doesn't probe before the firmware upload.
+
+The BrcmBluetoothInjector.kext is a [codeless kernel extension](https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/KEXTConcept/KEXTConceptAnatomy/kext_anatomy.html) which injects the BT hardware data using a plist; it does not contain a firmware uploader. You might also want to try this kext if you wish to see if your device will work without a firmware uploader.
 
 Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
 
