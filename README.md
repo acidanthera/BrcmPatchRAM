@@ -48,93 +48,107 @@ Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
 
 BrcmBluetoothInjector supported devices:
 
-  * ``[0489:e032]``
-  * ``[0489:e042]``
-  * ``[0489:e046]``
-  * ``[0489:e04f]``
-  * ``[0489:e052]``
-  * ``[0489:e055]``
-  * ``[0489:e059]``
-  * ``[0489:e079]``
-  * ``[0489:e07a]``
-  * ``[0489:e087]``
-  * ``[0489:e096]``
-  * ``[0489:e0a1]``
-  * ``[04ca:2003]``
-  * ``[04ca:2004]``
-  * ``[04ca:2005]``
-  * ``[04ca:2006]``
-  * ``[04ca:2009]``
-  * ``[04ca:200a]``
-  * ``[04ca:200b]``
-  * ``[04ca:200c]``
-  * ``[04ca:200e]``
-  * ``[04ca:200f]``
-  * ``[04ca:2012]``
-  * ``[04ca:2016]``
-  * ``[04f2:b4a1]``
-  * ``[050d:065a]``
-  * ``[0930:021e]``
-  * ``[0930:021f]``
-  * ``[0930:0221]``
-  * ``[0930:0223]``
-  * ``[0930:0225]``
-  * ``[0930:0226]``
-  * ``[0930:0229]``
-  * ``[0a5c:2168]``
-  * ``[0a5c:2169]``
-  * ``[0a5c:216a]``
-  * ``[0a5c:216b]``
-  * ``[0a5c:216c]``
-  * ``[0a5c:216d]``
-  * ``[0a5c:216e]``
-  * ``[0a5c:216f]``
-  * ``[0a5c:21d7]``
-  * ``[0a5c:21de]``
-  * ``[0a5c:21e1]``
-  * ``[0a5c:21e3]``
-  * ``[0a5c:21e6]``
-  * ``[0a5c:21e8]``
-  * ``[0a5c:21ec]``
-  * ``[0a5c:21f1]``
-  * ``[0a5c:21f3]``
-  * ``[0a5c:21f4]``
-  * ``[0a5c:21fb]``
-  * ``[0a5c:21fd]``
-  * ``[0a5c:640b]``
-  * ``[0a5c:6410]``
-  * ``[0a5c:6412]``
-  * ``[0a5c:6413]``
-  * ``[0a5c:6414]``
-  * ``[0a5c:6417]``
-  * ``[0a5c:6418]``
-  * ``[0a5c:7460]``
-  * ``[0b05:17b5]``
-  * ``[0b05:17cb]``
-  * ``[0b05:17cf]``
-  * ``[0b05:180a]``
-  * ``[0bb4:0306]``
-  * ``[105b:e065]``
-  * ``[105b:e066]``
-  * ``[13d3:3384]``
-  * ``[13d3:3388]``
-  * ``[13d3:3389]``
-  * ``[13d3:3392]``
-  * ``[13d3:3404]``
-  * ``[13d3:3411]``
-  * ``[13d3:3413]``
-  * ``[13d3:3418]``
-  * ``[13d3:3427]``
-  * ``[13d3:3435]``
-  * ``[13d3:3456]``
-  * ``[13d3:3482]``
-  * ``[13d3:3484]``
-  * ``[13d3:3504]``
-  * ``[13d3:3508]``
-  * ``[13d3:3517]``
-  * ``[145f:01a3]``
-  * ``[413c:8143]``
-  * ``[413c:8197]``
+  * ``[0489:e032]`` 20702 E032 Combo
+  * ``[0489:e042]`` 20702A1 Lenovo China standalone
+  * ``[0489:e046]`` 20702A1 Acer 43228+20702 combo card
+  * ``[0489:e04f]`` 20702A1 Lenovo China 43227 WLAN + 20702A1 Combo card
+  * ``[0489:e052]`` 20702 non-UHE Generic
+  * ``[0489:e055]`` 43142A0 Acer combo
+  * ``[0489:e059]`` Acer 43228 + 20702A1 combo
+  * ``[0489:e079]`` Lenovo China 43162 NGFF
+  * ``[0489:e07a]`` Lenovo China 4352+20702 NGFF
+  * ``[0489:e087]`` Acer 43228 NGFF combo module
+  * ``[0489:e096]`` BCM43142A0
+  * ``[0489:e097]`` Acer Foxconn BCM4356A2 NGFF
+  * ``[0489:e0a1]`` 20703A1 Lenovo 43602 NGFF combo
+  * ``[04ca:2003]`` 20702A1 Lenovo China standalone
+  * ``[04ca:2004]`` LiteOn 43228+20702 combo
+  * ``[04ca:2005]`` LiteOn 43228+20702 combo
+  * ``[04ca:2006]`` LiteOn 43142 combo
+  * ``[04ca:2009]`` LiteOn 43142 combo
+  * ``[04ca:200a]`` LiteOn 4352 combo
+  * ``[04ca:200b]`` LiteOn 4352 combo
+  * ``[04ca:200c]`` LiteOn 4352 combo
+  * ``[04ca:200e]`` Liteon 43228 NGFF combo
+  * ``[04ca:200f]`` Acer_LiteOn BCM20702A1_4352
+  * ``[04ca:2012]`` Acer BCM943142Y NGFF
+  * ``[04ca:2013]`` Acer LiteOn BCM4356A2 NGFF
+  * ``[04ca:2014]`` Asus LiteOn BCM4356A2 NGFF
+  * ``[04ca:2016]`` Lenovo 43162 NGFF combo module
+  * ``[04f2:b4a1]`` ASUS Chicony BCM43142A0 NGFF
+  * ``[04f2:b4a2]`` BCM4356A2
+  * ``[050d:065a]`` 20702 standalone
+  * ``[0930:021e]`` 20702A1 Toshiba standalone
+  * ``[0930:021f]`` Toshiba 43142
+  * ``[0930:0221]`` 20702A1 Toshiba 4352
+  * ``[0930:0223]`` 20702A1 Toshiba 4352
+  * ``[0930:0225]`` Toshiba 43142 combo NGFF
+  * ``[0930:0226]`` Toshiba 43142 combo NGFF
+  * ``[0930:0229]`` 43162 combo NGFF
+  * ``[0a5c:2168]`` BRCM Generic 43162Z
+  * ``[0a5c:2169]`` BRCM Generic 43228z
+  * ``[0a5c:216a]`` Dell DW1708 43142Y combo
+  * ``[0a5c:216b]`` HP Rapture 4352z ngff combo
+  * ``[0a5c:216c]`` HP Harrier 43142
+  * ``[0a5c:216d]`` HP Hornet 43142Y ngff combo
+  * ``[0a5c:216e]`` HP Blackbird 43162 NGFF
+  * ``[0a5c:216f]`` Dell DW1560 4352+20702 M.2
+  * ``[0a5c:21d7]`` BRCM Generic 43142A0 RAMUSB
+  * ``[0a5c:21de]`` 4352+20702A1 combo
+  * ``[0a5c:21e1]`` 20702A1 non-UHE HP SoftSailing
+  * ``[0a5c:21e3]`` 20702A1 non-UHE 4313 combo HP Valentine
+  * ``[0a5c:21e6]`` 20702 non-UHE Lenovo Japan
+  * ``[0a5c:21e8]`` 20702A1 dongles
+  * ``[0a5c:21ec]`` 20702A1 REF6 OTP module standalone
+  * ``[0a5c:21f1]`` 43228 combo
+  * ``[0a5c:21f3]`` Lenovo Edge 43228 + 20702A1 combo
+  * ``[0a5c:21f4]`` Lenovo Edge 4313 + 20702A1 combo
+  * ``[0a5c:21fb]`` HP Supra 4352 20702A1 combo
+  * ``[0a5c:21fd]`` BRCM Generic 4352z RAMUSB
+  * ``[0a5c:640a]`` BRCM Generic Reference 4356
+  * ``[0a5c:640b]`` HP Luffy 43228 + 20702 M.2
+  * ``[0a5c:640e]`` Lenovo 4356 NGFF combo
+  * ``[0a5c:6410]`` 20703A1 RAM download - DW1830 43602
+  * ``[0a5c:6412]`` Dell 4350C5
+  * ``[0a5c:6413]`` Broadcom Generic 4350C5
+  * ``[0a5c:6414]`` Lenovo 4350C5
+  * ``[0a5c:6417]`` Zebra 4352
+  * ``[0a5c:6418]`` HP Brook 2x2ac
+  * ``[0a5c:7460]`` 20703A1 RAM download
+  * ``[0b05:17b5]`` Asus 43228+20702A1 combo
+  * ``[0b05:17cb]`` 20702 standalone
+  * ``[0b05:17cf]`` Asus 4352_20702A1 combo
+  * ``[0b05:180a]`` Azurewave 4360+20702 combo
+  * ``[0b05:181d]`` Asus AZUREWAVE MB BCM4356A2
+  * ``[0bb4:0306]`` 20703A1 HTC runtime RAM dongle
+  * ``[105b:e065]`` LenovoChina 43142A0 combo
+  * ``[105b:e066]`` LenovoChina 43228+20702 combo
+  * ``[13d3:3384]`` 20702A1 Azurewave standalone
+  * ``[13d3:3388]`` BRCM Generic 43142A0 RAMUSB
+  * ``[13d3:3389]`` BRCM Generic 43142A0 RAMUSB
+  * ``[13d3:3392]`` Azurewave 43228+20702
+  * ``[13d3:3404]`` 4352HMB Azurewave Module
+  * ``[13d3:3411]`` Dell Alienware 4352 20702A1 combo
+  * ``[13d3:3413]`` Azurewave 4360+20702 combo
+  * ``[13d3:3418]`` Azurewave 4352+20702 combo module
+  * ``[13d3:3427]`` Toshiba 43142 combo NGFF
+  * ``[13d3:3435]`` AZUREWAVE BCM20702A1_4352
+  * ``[13d3:3456]`` AZUREWAVE BCM20702A1_4352
+  * ``[13d3:3473]`` Asus AZUREWAVE BCM4356A2 NGFF
+  * ``[13d3:3482]`` AZUREWAVE BCM43142A0 NGFF
+  * ``[13d3:3484]`` Acer AZUREWAVE BCM43142A0 NGFF
+  * ``[13d3:3485]`` Asus AZUREWAVE BCM4356A2 NB 2217NF
+  * ``[13d3:3488]`` Asus AZUREWAVE BCM4356A2 NB 2210
+  * ``[13d3:3492]`` Asus AZUREWAVE BCM4356A2 NGFF
+  * ``[13d3:3504]`` AW CM217NF BCM4371C2
+  * ``[13d3:3508]`` AW ASUS CM217NF BCM4371C2
+  * ``[13d3:3517]`` AW CE160H BCM20702
+  * ``[145f:01a3]`` 20702A1 Asus Trust standalone
+  * ``[2b54:5600]`` Emdoor AP6356SD BCM4356A2
+  * ``[2b54:5601]`` Asus AP6356SDP1A BCM4356A2
+  * ``[2b54:5602]`` AMPAK AP6356SDP2A BCM4356A2
+  * ``[413c:8143]`` DW1550 4352+20702 combo
+  * ``[413c:8197]`` Dell DW380 Nancy Blakes standalone
 
 If yours is not present, edit the Info.plist as needed.
 
