@@ -155,7 +155,7 @@ BrcmBluetoothInjector supported devices:
 If yours is not present, edit the Info.plist as needed.
 
 
-#### Supported Devices
+### Supported Devices
 
 BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
 
@@ -207,7 +207,7 @@ Tested PatchRAM devices:
 All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github. The firmwares have been updated to version 12.0.1.1105.
 
 
-#### More Installation Details
+### More Installation Details
 
 BrcmPatchRAM.kext, BrcmPatchRAM2.kext and BrcmPatchRAM3.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
 Make sure to install only one of them, depending on system version.
@@ -220,7 +220,7 @@ You can also use a device specific firmware injector (in conjunction with BrcmFi
 You will find device specfic injectors in the 'firmwares' directory of the git repository.  They are not included in the distribution ZIP.
 
 
-#### Configuration
+### Configuration
 
 There are a number of delays which can be changed with the following kernel flags. You might change these values if you find BrcmPatchRAM is hanging during firmware load.
 
@@ -239,7 +239,7 @@ Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetde
 Note: Some with the typical "wake from sleep" problems are reporting success with: bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300.  Or slightly longer delays: bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400.
 
 
-#### Details
+### Details
 
 BrcmPatchRAM consists of 2 parts:
 
@@ -293,7 +293,7 @@ The patch for 10.11 is:
 ```
 
 
-#### Troubleshooting
+### Troubleshooting
 
 After installing BrcmPatchRAM, even though your Bluetooth icon may show up, it could be that the firmware has not been properly updated.
 
@@ -320,7 +320,7 @@ In order to report an error log an issue on github with the following informatio
  * Dump of BrcmPatchRAM debug output from /var/log/system.log showing the firmware upload failure
 
 
-#### Firmware Compatibility
+### Firmware Compatibility
 
 Some USB devices are very firmware specific and trying to upload any other firmware for the same chipset into them will fail.
 
@@ -340,7 +340,7 @@ The errors in between mean the firmware was not uploaded successfully, and the d
 For other devices the newest firmware available (even though not specified specifically in the Windows drivers) works fine.
 
 
-#### New devices
+### New devices
 
 In order to support a new device, the firmware for the device needs to be extracted from existing Windows drivers.
 
@@ -392,6 +392,6 @@ Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resour
  Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
 
-#### Support and discussion
+### Support and discussion
 [InsanelyMac topic](https://www.insanelymac.com/forum/topic/339175-brcmpatchram2-for-1015-catalina-broadcom-bluetooth-firmware-upload/) in English  
 [AppleLife topic](https://applelife.ru/threads/broadcom-bcm94352hmb-novyj-flagman-sredi-kombomodulej-s-podderzhkoj-802-11ac.41855/) in Russian
