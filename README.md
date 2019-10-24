@@ -392,6 +392,6 @@ Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resour
  Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
 
-### Support and discussion
-[InsanelyMac topic](https://www.insanelymac.com/forum/topic/339175-brcmpatchram2-for-1015-catalina-broadcom-bluetooth-firmware-upload/) in English  
-[AppleLife topic](https://applelife.ru/threads/broadcom-bcm94352hmb-novyj-flagman-sredi-kombomodulej-s-podderzhkoj-802-11ac.41855/) in Russian
+### Support and discussion  
+[InsanelyMac topic](https://www.insanelymac.com/forum/topic/340846-brcmpatchram-thread/) in English  
+[AppleLife topic](https://applelife.ru/threads/broadcom-bcm94352hmb-novyj-flagman-sredi-kombomodulej-s-podderzhkoj-802-11ac.41855/) in Russian  
