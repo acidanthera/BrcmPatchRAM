@@ -18,13 +18,15 @@ Note that the original Apple Broadcom bluetooth devices are not RAMUSB devices, 
 
 __Note if you have an Apple MacBook/iMac/Mac Pro etc, follow the [Mac instructions](https://github.com/acidanthera/BrcmPatchRAM/blob/master/README-Mac.md)__
 
+
 Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext or BrcmPatchRAM3.kext depending on macOS version, never both.
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
   * BrcmPatchRAM2.kext: for 10.11 or later.
   
-* BrcmPatchRAM3.kext: for 10.15.
+  * BrcmPatchRAM3.kext: for 10.15.
+
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
 
@@ -34,25 +36,133 @@ Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, 
 
   * Advanced users: For custom firmware injectors, install the injector plus BrcmFirmwareRepo.kext.  This works from either /S/L/E or through bootloader injection.  Optionally, you may remove all the firmwares from BrcmFirmwareRepo.kext/Contents/Resources.  If you're using the injector through the bootloader, the IOProviderClass in the Info.plist for BrcmFirmwareRepo.kext must be changed from "disabled_IOResources" to "IOResources".
 
+Keep in mind that BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext to be installed. Starting with macOS 10.15, this is the only supported configuration because due to framework changes BrcmPatchRAM.kext and BrcmPatchRAM2.kext are incompatible with macOS 10.15. In case you forget to install BrcmBluetoothInjector.kext, Bluetooth will appear to be available but it won't work at all. 
+
 Also, if you have a non-PatchRAM device (or you're not sure), install one of BrcmNonPatchRAM.kext or BrcmNonPatchRAM2.kext, depending on macOS version, never both.  Although these kexts do not install any firmware (these devices have firmware built-in), they still depend on BrcmPatchRAM/BrcmPatchRAM2.kext.
 
   * BrcmNonPatchRAM.kext: for 10.10 or earlier
-
   * BrcmNonPatchRAM2.kext: for 10.11 or later.
-
 
 ### BrcmBluetoothInjector.kext
 
-To be used for macOS 10.11 or newer.
+To be used for macOS 10.11 or newer. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS Catalina (10.15) requires the use of a separate injector kext. This is due to the removal of the following IOCatalogue methods:
 
-This kext is a simple injector, it does not contain a firmware uploader.  Try this kext if you wish to see if your device will work without a firmware uploader.
+    IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatching
 
-Do not use any of the other kexts (BrcmPatchRAM, BrcmPatchRAM2, BrcmFirmwareRepo, or BrcmFirmwareData) with this kext.
+Consequently to have the native BT driver load for the device (BroadcomBluetoothHostControllerUSBTransport) we inject using a plist with a slightly lower IOProbeScore than BrcmPatchRAM3 so it doesn't probe before the firmware upload.
 
-This kext is not provided in the distribution ZIP.  You can build it if you wish to try it.  It was removed as it presense was causing confusion for those that don't read carefully and didn't install the preferred kexts correctly.  It is not currently being updated with new devices.  If yours is not present, edit the Info.plist as needed.
+The BrcmBluetoothInjector.kext is a [codeless kernel extension](https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/KEXTConcept/KEXTConceptAnatomy/kext_anatomy.html) which injects the BT hardware data using a plist; it does not contain a firmware uploader. You might also want to try this kext if you wish to see if your device will work without a firmware uploader.
+
+Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
+
+BrcmBluetoothInjector supported devices:
+
+  * ``[0489:e032]`` 20702 E032 Combo
+  * ``[0489:e042]`` 20702A1 Lenovo China standalone
+  * ``[0489:e046]`` 20702A1 Acer 43228+20702 combo card
+  * ``[0489:e04f]`` 20702A1 Lenovo China 43227 WLAN + 20702A1 Combo card
+  * ``[0489:e052]`` 20702 non-UHE Generic
+  * ``[0489:e055]`` 43142A0 Acer combo
+  * ``[0489:e059]`` Acer 43228 + 20702A1 combo
+  * ``[0489:e079]`` Lenovo China 43162 NGFF
+  * ``[0489:e07a]`` Lenovo China 4352+20702 NGFF
+  * ``[0489:e087]`` Acer 43228 NGFF combo module
+  * ``[0489:e096]`` BCM43142A0
+  * ``[0489:e097]`` Acer Foxconn BCM4356A2 NGFF
+  * ``[0489:e0a1]`` 20703A1 Lenovo 43602 NGFF combo
+  * ``[04ca:2003]`` 20702A1 Lenovo China standalone
+  * ``[04ca:2004]`` LiteOn 43228+20702 combo
+  * ``[04ca:2005]`` LiteOn 43228+20702 combo
+  * ``[04ca:2006]`` LiteOn 43142 combo
+  * ``[04ca:2009]`` LiteOn 43142 combo
+  * ``[04ca:200a]`` LiteOn 4352 combo
+  * ``[04ca:200b]`` LiteOn 4352 combo
+  * ``[04ca:200c]`` LiteOn 4352 combo
+  * ``[04ca:200e]`` Liteon 43228 NGFF combo
+  * ``[04ca:200f]`` Acer_LiteOn BCM20702A1_4352
+  * ``[04ca:2012]`` Acer BCM943142Y NGFF
+  * ``[04ca:2013]`` Acer LiteOn BCM4356A2 NGFF
+  * ``[04ca:2014]`` Asus LiteOn BCM4356A2 NGFF
+  * ``[04ca:2016]`` Lenovo 43162 NGFF combo module
+  * ``[04f2:b4a1]`` ASUS Chicony BCM43142A0 NGFF
+  * ``[04f2:b4a2]`` BCM4356A2
+  * ``[050d:065a]`` 20702 standalone
+  * ``[0930:021e]`` 20702A1 Toshiba standalone
+  * ``[0930:021f]`` Toshiba 43142
+  * ``[0930:0221]`` 20702A1 Toshiba 4352
+  * ``[0930:0223]`` 20702A1 Toshiba 4352
+  * ``[0930:0225]`` Toshiba 43142 combo NGFF
+  * ``[0930:0226]`` Toshiba 43142 combo NGFF
+  * ``[0930:0229]`` 43162 combo NGFF
+  * ``[0a5c:2168]`` BRCM Generic 43162Z
+  * ``[0a5c:2169]`` BRCM Generic 43228z
+  * ``[0a5c:216a]`` Dell DW1708 43142Y combo
+  * ``[0a5c:216b]`` HP Rapture 4352z ngff combo
+  * ``[0a5c:216c]`` HP Harrier 43142
+  * ``[0a5c:216d]`` HP Hornet 43142Y ngff combo
+  * ``[0a5c:216e]`` HP Blackbird 43162 NGFF
+  * ``[0a5c:216f]`` Dell DW1560 4352+20702 M.2
+  * ``[0a5c:21d7]`` BRCM Generic 43142A0 RAMUSB
+  * ``[0a5c:21de]`` 4352+20702A1 combo
+  * ``[0a5c:21e1]`` 20702A1 non-UHE HP SoftSailing
+  * ``[0a5c:21e3]`` 20702A1 non-UHE 4313 combo HP Valentine
+  * ``[0a5c:21e6]`` 20702 non-UHE Lenovo Japan
+  * ``[0a5c:21e8]`` 20702A1 dongles
+  * ``[0a5c:21ec]`` 20702A1 REF6 OTP module standalone
+  * ``[0a5c:21f1]`` 43228 combo
+  * ``[0a5c:21f3]`` Lenovo Edge 43228 + 20702A1 combo
+  * ``[0a5c:21f4]`` Lenovo Edge 4313 + 20702A1 combo
+  * ``[0a5c:21fb]`` HP Supra 4352 20702A1 combo
+  * ``[0a5c:21fd]`` BRCM Generic 4352z RAMUSB
+  * ``[0a5c:640a]`` BRCM Generic Reference 4356
+  * ``[0a5c:640b]`` HP Luffy 43228 + 20702 M.2
+  * ``[0a5c:640e]`` Lenovo 4356 NGFF combo
+  * ``[0a5c:6410]`` 20703A1 RAM download - DW1830 43602
+  * ``[0a5c:6412]`` Dell 4350C5
+  * ``[0a5c:6413]`` Broadcom Generic 4350C5
+  * ``[0a5c:6414]`` Lenovo 4350C5
+  * ``[0a5c:6417]`` Zebra 4352
+  * ``[0a5c:6418]`` HP Brook 2x2ac
+  * ``[0a5c:7460]`` 20703A1 RAM download
+  * ``[0b05:17b5]`` Asus 43228+20702A1 combo
+  * ``[0b05:17cb]`` 20702 standalone
+  * ``[0b05:17cf]`` Asus 4352_20702A1 combo
+  * ``[0b05:180a]`` Azurewave 4360+20702 combo
+  * ``[0b05:181d]`` Asus AZUREWAVE MB BCM4356A2
+  * ``[0bb4:0306]`` 20703A1 HTC runtime RAM dongle
+  * ``[105b:e065]`` LenovoChina 43142A0 combo
+  * ``[105b:e066]`` LenovoChina 43228+20702 combo
+  * ``[13d3:3384]`` 20702A1 Azurewave standalone
+  * ``[13d3:3388]`` BRCM Generic 43142A0 RAMUSB
+  * ``[13d3:3389]`` BRCM Generic 43142A0 RAMUSB
+  * ``[13d3:3392]`` Azurewave 43228+20702
+  * ``[13d3:3404]`` 4352HMB Azurewave Module
+  * ``[13d3:3411]`` Dell Alienware 4352 20702A1 combo
+  * ``[13d3:3413]`` Azurewave 4360+20702 combo
+  * ``[13d3:3418]`` Azurewave 4352+20702 combo module
+  * ``[13d3:3427]`` Toshiba 43142 combo NGFF
+  * ``[13d3:3435]`` AZUREWAVE BCM20702A1_4352
+  * ``[13d3:3456]`` AZUREWAVE BCM20702A1_4352
+  * ``[13d3:3473]`` Asus AZUREWAVE BCM4356A2 NGFF
+  * ``[13d3:3482]`` AZUREWAVE BCM43142A0 NGFF
+  * ``[13d3:3484]`` Acer AZUREWAVE BCM43142A0 NGFF
+  * ``[13d3:3485]`` Asus AZUREWAVE BCM4356A2 NB 2217NF
+  * ``[13d3:3488]`` Asus AZUREWAVE BCM4356A2 NB 2210
+  * ``[13d3:3492]`` Asus AZUREWAVE BCM4356A2 NGFF
+  * ``[13d3:3504]`` AW CM217NF BCM4371C2
+  * ``[13d3:3508]`` AW ASUS CM217NF BCM4371C2
+  * ``[13d3:3517]`` AW CE160H BCM20702
+  * ``[145f:01a3]`` 20702A1 Asus Trust standalone
+  * ``[2b54:5600]`` Emdoor AP6356SD BCM4356A2
+  * ``[2b54:5601]`` Asus AP6356SDP1A BCM4356A2
+  * ``[2b54:5602]`` AMPAK AP6356SDP2A BCM4356A2
+  * ``[413c:8143]`` DW1550 4352+20702 combo
+  * ``[413c:8197]`` Dell DW380 Nancy Blakes standalone
+
+If yours is not present, edit the Info.plist as needed.
 
 
-#### Supported Devices
+### Supported Devices
 
 BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
 
@@ -102,13 +212,13 @@ Tested PatchRAM devices:
   * ``[13d3:3456]`` Azurewave (4352/20702 combo)
   * ``[413c:8143]`` Dell DW1550 (4352/20702 combo)
 
-All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github.
+All of the firmwares from the Windows package are present in the kext and automatically associated with their vendor/device-ids.  They are expected to work, but have not been confirmed.  If you can confirm a working device not listed above, please notify via the "issues" database on github. The firmwares have been updated to version 12.0.1.1105.
 
 
-#### More Installation Details
+### More Installation Details
 
-BrcmPatchRAM.kext and BrcmPatchRAM2.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
-Install only one, not both, depending on system version.
+BrcmPatchRAM.kext, BrcmPatchRAM2.kext and BrcmPatchRAM3.kext can be installed either through bootloader kext injection or placed in /System/Library/Extensions (/Library/Extensions on 10.11 and later).
+Make sure to install only one of them, depending on system version.
 
 BrcmFirmwareRepo.kext does not work with bootloader kext injection, unless using a device specific firmware injector.
 BrcmFirmwareData.kext can work with bootloader kext injection.
@@ -118,11 +228,11 @@ You can also use a device specific firmware injector (in conjunction with BrcmFi
 You will find device specfic injectors in the 'firmwares' directory of the git repository.  They are not included in the distribution ZIP.
 
 
-#### Configuration
+### Configuration
 
 There are a number of delays which can be changed with the following kernel flags. You might change these values if you find BrcmPatchRAM is hanging during firmware load.
 
-bpr_probedelay: Changes mProbeDelay.  Default value is 0.
+bpr_probedelay: Changes mProbeDelay (obsolete with BrcmPatchRAM3).  Default value is 0. 
 
 bpr_initialdelay: Changes mInitialDelay.  Default value is 100.
 
@@ -137,7 +247,7 @@ Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetde
 Note: Some with the typical "wake from sleep" problems are reporting success with: bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300.  Or slightly longer delays: bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400.
 
 
-#### Details
+### Details
 
 BrcmPatchRAM consists of 2 parts:
 
@@ -192,7 +302,7 @@ The patch for 10.11 is:
 ```
 
 
-#### Troubleshooting
+### Troubleshooting
 
 After installing BrcmPatchRAM, even though your Bluetooth icon may show up, it could be that the firmware has not been properly updated.
 
@@ -219,7 +329,7 @@ In order to report an error log an issue on github with the following informatio
  * Dump of BrcmPatchRAM debug output from /var/log/system.log showing the firmware upload failure
 
 
-#### Firmware Compatibility
+### Firmware Compatibility
 
 Some USB devices are very firmware specific and trying to upload any other firmware for the same chipset into them will fail.
 
@@ -239,7 +349,7 @@ The errors in between mean the firmware was not uploaded successfully, and the d
 For other devices the newest firmware available (even though not specified specifically in the Windows drivers) works fine.
 
 
-#### New devices
+### New devices
 
 In order to support a new device, the firmware for the device needs to be extracted from existing Windows drivers.
 
@@ -289,3 +399,7 @@ Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resour
 
  Copying an existing IOKit personality and modifying its properties is the easiest way to do this. 
  Configure the earlier firmware using its unique firmware key.
+
+### Support and discussion  
+[InsanelyMac topic](https://www.insanelymac.com/forum/topic/340846-brcmpatchram-thread/) in English  
+[AppleLife topic](https://applelife.ru/threads/broadcom-bcm94352hmb-novyj-flagman-sredi-kombomodulej-s-podderzhkoj-802-11ac.41855/) in Russian  

@@ -531,21 +531,15 @@ bool BrcmPatchRAM::continuousRead()
     
     if ((result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion)) != kIOReturnSuccess) {
         AlwaysLog("[%04x:%04x]: continuousRead - Failed to queue read (0x%08x)\n", mVendorId, mProductId, result);
-        
-        /* Try again in case of a pipe stall. */
-        if (result == kIOUSBPipeStalled) {
+        /*
+         * As a retry of the read operation has never been successful
+         * in case of an error during my tests, it's better to give up
+         * immediately, so that the next attempt can start all over.
+         */
+        if (result == kIOUSBPipeStalled)
             mInterruptPipe.clearStall();
-            result = mInterruptPipe.read(mReadBuffer, 0, 0, mReadBuffer->getLength(), &mInterruptCompletion);
-            
-            if (result != kIOReturnSuccess) {
-                AlwaysLog("[%04x:%04x]: continuousRead - Failed, read dead (0x%08x)\n", mVendorId, mProductId, result);
-                return false;
-            }
-        } else {
-            /* Don't forget to take care of other errors. */
-            AlwaysLog("[%04x:%04x]: continuousRead - Failed with error (0x%08x)\n", mVendorId, mProductId, result);
-            return false;
-        }
+        
+        return false;
     }
     return true;
 }
