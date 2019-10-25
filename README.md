@@ -3,6 +3,11 @@ BrcmPatchRAM
 
 [![Build Status](https://travis-ci.com/acidanthera/BrcmPatchRAM.svg?branch=master)](https://travis-ci.com/acidanthera/BrcmPatchRAM)
 
+### Translate Language
+
+- [简体中文](./README_CN.md)
+- English
+
 Most Broadcom USB Bluetooth devices make use of a system called RAMUSB. RAMUSB allows the firmware for the device to be updated on-the-fly, however any updates previously applied are lost when shutting down the machine.
 
 The Broadcom Windows driver will upload firmware into the Broadcom Bluetooth device on every startup, however for macOS this functionality is not supported out of the box. BrcmPatchRAM kext is a macOS driver which applies PatchRAM updates for Broadcom RAMUSB based devices. It will apply the firmware update to your Broadcom Bluetooth device on every startup / wakeup, identical to the Windows drivers. The firmware applied is extracted from the Windows drivers and the functionality should be equal to Windows.
