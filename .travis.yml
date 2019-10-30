@@ -9,7 +9,13 @@ matrix:
 
     script:
       - xcodebuild -configuration Debug -scheme BrcmPatchRAM
+      - cd build/Products/Debug
+      - zip -qry BrcmPatchRAM-$(cat ../../../BrcmPatchRAM.xcodeproj/project.pbxproj | grep -i 'CURRENT_PROJECT_VERSION' | head -1 | grep -oE '\d\.\d\.\d')-DEBUG.zip *.kext
+      - cd -
       - xcodebuild -configuration Release -scheme BrcmPatchRAM
+      - cd build/Products/Release
+      - zip -qry BrcmPatchRAM-$(cat ../../../BrcmPatchRAM.xcodeproj/project.pbxproj | grep -i 'CURRENT_PROJECT_VERSION' | head -1 | grep -oE '\d\.\d\.\d')-RELEASE.zip *.kext
+      - cd -
 
     deploy:
       provider: releases
