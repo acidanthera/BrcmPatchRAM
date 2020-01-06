@@ -713,7 +713,7 @@
 			buildConfigurationList = 84CDEE081BB3CA2200238DD1 /* Build configuration list for PBXLegacyTarget "Prebuild" */;
 			buildPhases = (
 			);
-			buildToolPath = ./generate_firmware_data.sh;
+			buildToolPath = "$(PROJECT_DIR)/generate_firmware_data.sh";
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
