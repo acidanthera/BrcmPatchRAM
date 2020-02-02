@@ -402,4 +402,4 @@ Firmwares can also be loaded directly from BrcmFirmwareRepo.kext/Contents/Resour
 
 ### Support and discussion  
 [InsanelyMac topic](https://www.insanelymac.com/forum/topic/339175-brcmpatchram2-for-1015-catalina-broadcom-bluetooth-firmware-upload/) in English  
-[AppleLife topic](https://applelife.ru/threads/broadcom-bcm94352hmb-novyj-flagman-sredi-kombomodulej-s-podderzhkoj-802-11ac.41855/) in Russian  
+[AppleLife topic](https://applelife.ru/threads/bluetooth.2944352/) in Russian  
