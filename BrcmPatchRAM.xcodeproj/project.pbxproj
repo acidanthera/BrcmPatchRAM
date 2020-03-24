@@ -258,7 +258,6 @@
 		CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyLibkernMacros.h; sourceTree = "<group>"; };
 		CE8DA7072352449100BCE180 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkmod.a; sourceTree = "<group>"; };
 		CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE8DA72A235248C300BCE180 /* BrcmPatchRAM2 copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BrcmPatchRAM2 copy-Info.plist"; path = "/Users/user/Documents/Xcode/BrcmPatchRAM/BrcmPatchRAM2 copy-Info.plist"; sourceTree = "<absolute>"; };
 		CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM-Info.plist"; sourceTree = "<group>"; };
 		CEE855FF242AA4E0008B3B3D /* BCM43142A0_001.001.011.0311.0334_v4430.zhx */ = {isa = PBXFileReference; lastKnownFileType = file; name = BCM43142A0_001.001.011.0311.0334_v4430.zhx; path = firmwares/BCM43142A0_001.001.011.0311.0334_v4430.zhx; sourceTree = "<group>"; };
 		CEE85600242AA4E0008B3B3D /* BCM43142A0_001.001.011.0311.0312_v4408.zhx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BCM43142A0_001.001.011.0311.0312_v4408.zhx; path = firmwares/BCM43142A0_001.001.011.0311.0312_v4408.zhx; sourceTree = "<group>"; };
@@ -566,7 +565,6 @@
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
-				CE8DA72A235248C300BCE180 /* BrcmPatchRAM2 copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
