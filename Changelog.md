@@ -1,6 +1,10 @@
 BrcmPatchRAM Changelog
 ======================
 
+#### v2.5.2
+- Revert DW1820A from 8785 to 5799 [0a5c:6412]
+- Add older firmwares from 12.0.1.1012
+
 #### v2.5.1
 - Add Lenovo 00JT494 [0a5c:6414]
 
