@@ -42,7 +42,12 @@ def parse_inf(inf_path)
       device.productId = $4.hex
       device.comment   = $5
     
-      devices << device
+      new_device = devices.find { |f| f.deviceKey.casecmp(device.deviceKey) == 0 }
+
+      # Skip drivers from Windows 8 when we have drivers from Windows 10.
+      if new_device == nil
+        devices << device
+      end
     
       device = nil
     end
@@ -60,9 +65,10 @@ def parse_inf(inf_path)
     end
   
     # Determine the firmware filename for each device
-    if line =~ /^\[(RAMUSB[0-9A-F]{4})\.CopyList\]/
-      # Example match: [RAMUSB21E8.CopyList]
-      #/^\[(RAMUSB[0-9A-F]{4})\.CopyList\]$/
+    if line =~ /^\[(RAMUSB[0-9A-F_]{4,})\.CopyList\]/
+      # Example matches:
+      #   [RAMUSB21E8.CopyList]
+      #   [RAMUSB185F_2167.CopyList]
 
       # Locate the device information for this RAMUSB device in the firmware array
       device = devices.find { |f| f.deviceKey.casecmp($1) == 0 }
@@ -82,8 +88,8 @@ def parse_inf(inf_path)
       in_device_block = 1
     end
     
-    # Found end of Windows 10 drivers block
-    if line =~ /^\[Broadcom\.NT\w*\.6\.3\]/
+    # Found end of all drivers blocks
+    if line =~ /^\[DestinationDirs\]/
       in_device_block = 0
     end
   end
