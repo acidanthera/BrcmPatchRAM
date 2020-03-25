@@ -196,9 +196,12 @@ def create_injector(device, for_usbhost, compressed_data, output_path)
   File.open(File.join(injector_path, "Info.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
 end
 
-def create_plist(devices, output_path)
+def create_plist(devices, output_path, version)
   # Generate plist XML snippet
   xml = Document.new "<dict />"
+
+  Element.new("key", xml.root).text = "IOKitPersonalities"
+  fws_xml = Element.new("dict", xml.root)
 
   devices.sort_by{|d| [d.vendorId, d.productId]}.each do |device|
     if device.firmware == nil
@@ -206,23 +209,45 @@ def create_plist(devices, output_path)
       next
     end
 
-    Element.new("key", xml.root).text = "%04x_%04x" % [ device.vendorId, device.productId ]
+    Element.new("key", fws_xml).text = "%04x_%04x" % [ device.vendorId, device.productId ]
   
-    device_xml = Element.new("dict", xml.root)
+    device_xml = Element.new("dict", fws_xml)
   
     add_key_value(device_xml, "CFBundleIdentifier", "string", "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)")
     add_key_value(device_xml, "DisplayName", "string", device.description)
     add_key_value(device_xml, "FirmwareKey", "string", "#{device.firmware.chomp(".hex")}_v#{device.firmwareVersion}")
-    add_key_value(device_xml, "IOClass", "string", "BrcmPatchRAM")
-    add_key_value(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM")
-    add_key_value(device_xml, "IOProviderClass", "string", "IOUSBDevice")
+    if version >= 2
+      add_key_value(device_xml, "IOClass", "string", "BrcmPatchRAM%d" % version)
+      add_key_value(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM%d" % version)
+      add_key_value(device_xml, "IOProbeScore", "integer", 4000)
+      add_key_value(device_xml, "IOProviderClass", "string", "IOUSBHostDevice")
+    else
+      add_key_value(device_xml, "IOClass", "string", "BrcmPatchRAM")
+      add_key_value(device_xml, "IOMatchCategory", "string", "BrcmPatchRAM")
+      add_key_value(device_xml, "IOProbeScore", "integer", 4000)
+      add_key_value(device_xml, "IOProviderClass", "string", "IOUSBDevice")
+    end
     add_key_value(device_xml, "idProduct", "integer", device.productId)
     add_key_value(device_xml, "idVendor", "integer", device.vendorId)
   end
 
+  if version >= 2
+    Element.new("key", fws_xml).text = "BrcmPatchRAMResidency"
+    residency_xml = Element.new("dict", fws_xml)
+    add_key_value(residency_xml, "CFBundleIdentifier", "string", "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)")
+    add_key_value(residency_xml, "IOClass", "string", "BrcmPatchRAMResidency")
+    add_key_value(residency_xml, "IOMatchCategory", "string", "BrcmPatchRAMResidency")
+    add_key_value(residency_xml, "IOProviderClass", "string", "disabled_IOResources")
+  end
+
   formatter = REXML::Formatters::Pretty.new
   formatter.compact = true
-  File.open(File.join(output_path, "firmwares.plist"), "w") { |file| file.puts formatter.write(xml.root, "") }
+  if version >= 2
+    firmwares = "firmwares%d.plist" % version
+  else
+    firmwares = "firmwares.plist"
+  end
+  File.open(File.join(output_path, firmwares), "w") { |file| file.puts formatter.write(xml.root, "") }
 end
 
 def create_readme(devices, output_path)
@@ -260,7 +285,9 @@ devices = parse_inf(File.join(input, "bcbtums.inf"))
 create_firmwares(devices, input, output)
 
 # Generate plist extract
-create_plist(devices, output)
+create_plist(devices, output, 1)
+create_plist(devices, output, 2)
+create_plist(devices, output, 3)
 
 # Generate markdown readme with device / firmware information
 create_readme(devices, output)
