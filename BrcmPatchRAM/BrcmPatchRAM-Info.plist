@@ -2081,6 +2081,8 @@
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
+		<key>as.acidanthera.BrcmFirmwareStore</key>
+		<string>${CURRENT_PROJECT_VERSION}</string>
 		<key>com.apple.iokit.IOUSBFamily</key>
 		<string>1.8</string>
 		<key>com.apple.kpi.iokit</key>
@@ -2089,8 +2091,6 @@
 		<string>9.0</string>
 		<key>com.apple.kpi.mach</key>
 		<string>9.0</string>
-		<key>as.acidanthera.BrcmFirmwareStore</key>
-		<string>${CURRENT_PROJECT_VERSION}</string>
 	</dict>
 </dict>
 </plist>
