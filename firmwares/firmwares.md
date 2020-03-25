@@ -125,7 +125,7 @@
 * [`0a5c:6410`] 20703A1 RAM download - DW1830 43602 (Dell Wireless 1830 Bluetooth 4.1 LE)
   * BCM20703A1_001.001.005.0214.0422 (v4518)
 * [`0a5c:6412`] Dell 4350C5 (Dell Wireless 1820A Bluetooth 4.1 LE)
-  * BCM4350C5_003.006.007.0095.1703 (v5799)
+  * BCM4350C5_003.006.007.0221.4688 (v8784)
 * [`0a5c:6413`] Broadcom Generic 4350C5 (Broadcom Bluetooth 4.0 USB Device)
   * BCM4350C5_003.006.007.0120.2118 (v6214)
 * [`0a5c:6414`] Lenovo 4350C5 (Broadcom Bluetooth 4.1 USB)
