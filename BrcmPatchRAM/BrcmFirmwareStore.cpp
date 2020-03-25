@@ -413,21 +413,14 @@ OSData* BrcmFirmwareStore::loadFirmwareFiles(UInt16 vendorId, UInt16 productId, 
 
 OSArray* BrcmFirmwareStore::loadFirmware(UInt16 vendorId, UInt16 productId, OSString* firmwareKey)
 {
-    DebugLog("loadFirmware\n");
-    
-    // First try to load firmware from disk
-    OSData* configuredData = loadFirmwareFiles(vendorId, productId, firmwareKey);
-
 #ifdef FIRMWAREDATA
     char filename[PATH_MAX];
-    // Next try to load from internal binary data
-    if (!configuredData)
-    {
-        snprintf(filename, PATH_MAX, "%s.%s", firmwareKey->getCStringNoCopy(), kBrcmFirmwareCompressed);
-        configuredData = lookupFirmware(filename);
-        if (configuredData)
-            AlwaysLog("Loaded compressed embedded firmware for key \"%s\".\n", firmwareKey->getCStringNoCopy());
-    }
+    // Try to load from internal binary data
+    DebugLog("loadFirmware from internal binary data %s\n", firmwareKey->getCStringNoCopy());
+    snprintf(filename, PATH_MAX, "%s.%s", firmwareKey->getCStringNoCopy(), kBrcmFirmwareCompressed);
+    OSData* configuredData = lookupFirmware(filename);
+    if (configuredData)
+        AlwaysLog("Loaded compressed embedded firmware for key \"%s\".\n", firmwareKey->getCStringNoCopy());
     if (!configuredData)
     {
         snprintf(filename, PATH_MAX, "%s.%s", firmwareKey->getCStringNoCopy(), kBrmcmFirwareUncompressed);
@@ -435,6 +428,10 @@ OSArray* BrcmFirmwareStore::loadFirmware(UInt16 vendorId, UInt16 productId, OSSt
         if (configuredData)
             AlwaysLog("Loaded compressed embedded firmware for key \"%s\".\n", firmwareKey->getCStringNoCopy());
     }
+#else
+    // Try to load firmware from disk
+    DebugLog("loadFirmware from disk data %s\n", firmwareKey->getCStringNoCopy());
+    OSData* configuredData = loadFirmwareFiles(vendorId, productId, firmwareKey);
 #endif
 
     // Next try to load firmware from configuration
