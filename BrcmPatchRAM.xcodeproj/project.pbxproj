@@ -567,6 +567,7 @@
 				D4F91AFF1A2998CE0030D10D /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		D4F91AFF1A2998CE0030D10D /* Products */ = {
 			isa = PBXGroup;
