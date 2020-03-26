@@ -4,6 +4,8 @@ BrcmPatchRAM Changelog
 #### v2.5.2
 - Revert DW1820A from 8785 to 8784 [0a5c:6412]
 - Add older firmwares from 12.0.1.1012
+- Add `bpr_handshake` boot argument to override handshake support mode
+- Change `bpr_preresetdelay=0` behaviour to no longer imply `bpr_handshake=1`
 
 #### v2.5.1
 - Add Lenovo 00JT494 [0a5c:6414]

@@ -160,12 +160,12 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
     mProductId = mDevice.getProductID();
     
     // Check if device supports handshake.
-    if (mPreResetDelay == 0) {
-        /* Force handshake mode */
-        mSupportsHandshake = true;
-    } else {
+    int handshake;
+    if (PE_parse_boot_argn("bpr_handshake", &handshake, sizeof handshake))
+        mSupportsHandshake = handshake != 0;
+    else
         mSupportsHandshake = supportsHandshake(mVendorId, mProductId);
-    }
+
     DebugLog("Device %s handshake.\n", mSupportsHandshake ? "supports" : "doesn't support");
     
     /* Get firmware for device. */

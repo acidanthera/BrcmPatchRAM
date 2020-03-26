@@ -230,21 +230,17 @@ You will find device specfic injectors in the 'firmwares' directory of the git r
 
 ### Configuration
 
-There are a number of delays which can be changed with the following kernel flags. You might change these values if you find BrcmPatchRAM is hanging during firmware load.
+There are a number of delays which can be changed with the following kernel boot arguments. You might change these values if you find BrcmPatchRAM is hanging during firmware load. Refer to the source for futher details on these delays.
 
-bpr_probedelay: Changes mProbeDelay (obsolete with BrcmPatchRAM3).  Default value is 0. 
+- `bpr_initialdelay`: Changes `mInitialDelay`, the delay in ms before any communication happens with the device. Default value is `100`.
+- `bpr_handshake`: Overrides `mSupportsHandshake`, firmware uploaded handshake support status. `0` means wait `bpr_preresetdelay` ms after uploading firmware, and then reset the device. `1` means wait for a specific response from the device and then reset the device. Default value depends on the device identifier.
+- `bpr_preresetdelay`: Changes `mPreResetDelay`, the delay in ms assumed to be needed for the device to accept the firmware. The value is unused when `bpr_handshake` is `1` (passed manually or applied automatically based on the device identifier). Default value is `20`.
+- `bpr_postresetdelay`: Changes `mPostResetDelay`, the delay in ms assumed to be needed for the firmware to initialise after reseting the device upon firmware upload. Default value is `100`.
+- `bpr_probedelay`: Changes `mProbeDelay` (removed in BrcmPatchRAM3), the delay in ms before probing the device. Default value is `0`.
 
-bpr_initialdelay: Changes mInitialDelay.  Default value is 100.
+For example, to change `mPostResetDelay` to 400 ms, use the kernel boot argument: `bpr_postresetdelay=400`.
 
-bpr_preresetdelay: Changes mPreResetDelay.  Default value is 20.
-
-bpr_postresetdelay: Changes mPostResetDelay.  Default value is 100.
-
-Refer to the source for futher details on these delays.
-
-Example,... to change mPostResetDelay to 400ms, use kernel flag: bpr_postresetdelay=400.
-
-Note: Some with the typical "wake from sleep" problems are reporting success with: bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300.  Or slightly longer delays: bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400.
+Note: Some with the typical "wake from sleep" problems are reporting success with: `bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300`.  Or slightly longer delays: `bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400`.
 
 
 ### Details

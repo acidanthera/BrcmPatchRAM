@@ -163,6 +163,7 @@
 		CE8DA7072352449100BCE180 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkmod.a; sourceTree = "<group>"; };
 		CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM-Info.plist"; sourceTree = "<group>"; };
+		CEBB57BF242D458200614D73 /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		D346F7C923475DF60073A60D /* BrcmPatchRAM3.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM3.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		D346F7CA23475DF70073A60D /* BrcmPatchRAM3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM3-Info.plist"; sourceTree = "<group>"; };
 		D3DDE0872349F788004B3498 /* BrcmPatchRAM3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM3.cpp; sourceTree = "<group>"; };
@@ -265,6 +266,7 @@
 			children = (
 				8480E9531BB4312200FF61B0 /* README.md */,
 				ED4CFCEE1CE8BCB300A285B2 /* README-Mac.md */,
+				CEBB57BF242D458200614D73 /* Changelog.md */,
 				841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */,
 				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
