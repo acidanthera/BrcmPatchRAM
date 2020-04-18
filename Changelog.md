@@ -1,8 +1,9 @@
 BrcmPatchRAM Changelog
 ======================
 #### v2.5.3
-- Fixed parsing firmware versions (e.g. 8785 is 4689)
+- Fix parsing firmware versions (e.g. 8785 is 4689)
 - Use 4689 firmware for DW1820A [0a5c:6412]
+- Log uncompressed firmware SHA-1 in DEBUG builds
 
 #### v2.5.2
 - Revert DW1820A from 8785 to 8784 [0a5c:6412]
