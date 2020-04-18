@@ -55,7 +55,11 @@ def parse_inf(inf_path)
     # Extract the firmware file name from the current device block
     if device and line =~ /^(BCM.*\.hex)/
       device.firmware = $1
-      device.firmwareVersion = $1[-8..-1].chomp(".hex").to_i + 4096
+      device.firmwareVersion = $1[-8..-1].chomp(".hex").to_i
+
+      if device.firmwareVersion < 4096
+        device.firmwareVersion += 4096
+      end
       
       if device.firmware.start_with?("BCM4356A2")
         devices.delete(device)
