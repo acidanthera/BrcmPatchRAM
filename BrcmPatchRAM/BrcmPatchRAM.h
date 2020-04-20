@@ -43,6 +43,7 @@
 enum DeviceState
 {
     kUnknown,
+    kPreInitialize,
     kInitialize,
     kFirmwareVersion,
     kMiniDriverComplete,
@@ -169,7 +170,6 @@ private:
     void printDeviceInfo();
     int getDeviceStatus();
     
-    bool resetDevice();
     bool setConfiguration(int configurationIndex);
     
     bool findInterface(USBInterfaceShim* interface);

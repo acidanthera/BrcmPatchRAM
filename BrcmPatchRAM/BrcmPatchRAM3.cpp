@@ -108,7 +108,7 @@ bool BrcmPatchRAM::init(OSDictionary *properties)
         if (PE_parse_boot_argn("bpr_postresetdelay", &delay, sizeof delay))
             mPostResetDelay = delay;
         
-        mPreResetDelay = 20;
+        mPreResetDelay = 250;
         
         if (OSNumber* preResetDelay = OSDynamicCast(OSNumber, getProperty("PreResetDelay")))
             mPreResetDelay = preResetDelay->unsigned32BitValue();
@@ -233,11 +233,7 @@ bool BrcmPatchRAM::start(IOService *provider)
 
     /* Reset the device to put it in a defined state. */
     mDevice.setDevice(provider);
-    mDevice.resetDevice();
-    
-    /* Wait for device to become ready after reset. */
-    IOSleep(mPostResetDelay);
-    
+
     uploadFirmware();
     
     success = true;
@@ -423,19 +419,6 @@ int BrcmPatchRAM::getDeviceStatus()
         DebugLog("[%04x:%04x]: Device status 0x%08x.\n", mVendorId, mProductId, (int)status);
     }
     return (int)status;
-}
-
-bool BrcmPatchRAM::resetDevice()
-{
-    IOReturn result;
-    
-    if ((result = mDevice.resetDevice()) != kIOReturnSuccess) {
-        AlwaysLog("[%04x:%04x]: Failed to reset the device (\"%s\" 0x%08x).\n", mVendorId, mProductId, stringFromReturn(result), result);
-        return false;
-    } else {
-        DebugLog("[%04x:%04x]: Device reset.\n", mVendorId, mProductId);
-    }
-    return true;
 }
 
 bool BrcmPatchRAM::setConfiguration(int configurationIndex)
@@ -648,8 +631,8 @@ IOReturn BrcmPatchRAM::hciParseResponse(void* response, UInt16 length, void* out
                 case HCI_OPCODE_RESET:
                     DebugLog("[%04x:%04x]: RESET complete (status: 0x%02x, length: %d bytes).\n",
                              mVendorId, mProductId, event->status, header->length);
-                    
-                    mDeviceState = kResetComplete;
+
+                    mDeviceState = mDeviceState == kPreInitialize ? kInitialize : kResetComplete;
                     break;
                     
                 default:
@@ -756,7 +739,7 @@ bool BrcmPatchRAM::performUpgrade()
 #endif
     
     IOLockLock(mCompletionLock);
-    mDeviceState = kInitialize;
+    mDeviceState = kPreInitialize;
     
     while (true)
     {
@@ -777,7 +760,19 @@ bool BrcmPatchRAM::performUpgrade()
         
         switch (mDeviceState)
         {
+            case kPreInitialize:
+                /* Reset the device to put it in a defined state. */
+                if (hciCommand(&HCI_RESET, sizeof(HCI_RESET)) != kIOReturnSuccess) {
+                    DebugLog("HCI_RESET failed, aborting.");
+                    mDeviceState = kUpdateAborted;
+                    continue;
+                }
+                break;
+
             case kInitialize:
+                /* Wait for device to become ready after reset. */
+                IOSleep(mPostResetDelay);
+
                 if (hciCommand(&HCI_VSC_READ_VERBOSE_CONFIG, sizeof(HCI_VSC_READ_VERBOSE_CONFIG)) != kIOReturnSuccess) {
                     DebugLog("HCI_VSC_READ_VERBOSE_CONFIG failed, aborting.");
                     mDeviceState = kUpdateAborted;
@@ -853,7 +848,7 @@ bool BrcmPatchRAM::performUpgrade()
             case kFirmwareWritten:
                 if (!mSupportsHandshake) {
                     IOSleep(mPreResetDelay);
-                    
+
                     if (hciCommand(&HCI_RESET, sizeof(HCI_RESET)) != kIOReturnSuccess) {
                         DebugLog("HCI_RESET failed, aborting.");
                         mDeviceState = kUpdateAborted;
@@ -861,7 +856,7 @@ bool BrcmPatchRAM::performUpgrade()
                     }
                 }
                 break;
-                
+
             case kResetWrite:
                 if (hciCommand(&HCI_RESET, sizeof(HCI_RESET)) != kIOReturnSuccess) {
                     DebugLog("HCI_RESET failed, aborting.");
@@ -871,7 +866,8 @@ bool BrcmPatchRAM::performUpgrade()
                 break;
                 
             case kResetComplete:
-                resetDevice();
+                IOSleep(mPostResetDelay);
+
                 getDeviceStatus();
                 mDeviceState = kUpdateComplete;
                 continue;
@@ -915,6 +911,7 @@ const char* BrcmPatchRAM::getState(DeviceState deviceState)
 {
     static const IONamedValue state_values[] = {
         {kUnknown,            "Unknown"              },
+        {kPreInitialize,      "PreInitialize"        },
         {kInitialize,         "Initialize"           },
         {kFirmwareVersion,    "Firmware version"     },
         {kMiniDriverComplete, "Mini-driver complete" },
