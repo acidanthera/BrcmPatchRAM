@@ -234,7 +234,7 @@ There are a number of delays which can be changed with the following kernel boot
 
 - `bpr_initialdelay`: Changes `mInitialDelay`, the delay in ms before any communication happens with the device. Default value is `100`.
 - `bpr_handshake`: Overrides `mSupportsHandshake`, firmware uploaded handshake support status. `0` means wait `bpr_preresetdelay` ms after uploading firmware, and then reset the device. `1` means wait for a specific response from the device and then reset the device. Default value depends on the device identifier.
-- `bpr_preresetdelay`: Changes `mPreResetDelay`, the delay in ms assumed to be needed for the device to accept the firmware. The value is unused when `bpr_handshake` is `1` (passed manually or applied automatically based on the device identifier). Default value is `20`.
+- `bpr_preresetdelay`: Changes `mPreResetDelay`, the delay in ms assumed to be needed for the device to accept the firmware. The value is unused when `bpr_handshake` is `1` (passed manually or applied automatically based on the device identifier). Default value is `250`.
 - `bpr_postresetdelay`: Changes `mPostResetDelay`, the delay in ms assumed to be needed for the firmware to initialise after reseting the device upon firmware upload. Default value is `100`.
 - `bpr_probedelay`: Changes `mProbeDelay` (removed in BrcmPatchRAM3), the delay in ms before probing the device. Default value is `0`.
 
