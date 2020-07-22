@@ -383,12 +383,16 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
             break;
         }
         
-        const OSMetaClass * meta_class = OSMetaClass::getMetaClassWithName(OSSymbol::withCStringNoCopy(kBrcmFirmwareStoreService));
-        if (!meta_class) {
+        auto metaClassName = OSSymbol::withCStringNoCopy(kBrcmFirmwareStoreService);
+        auto metaClass = OSMetaClass::getMetaClassWithName(metaClassName);
+        if (!metaClass) {
             DebugLog("BrcmPatchRAM: metaclass %s is not available", kBrcmFirmwareStoreService);
             tmpStore->release();
+            metaClassName->release();
             break;
         }
+        
+        metaClassName->release();
         
         mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
         if (!mFirmwareStore) {
