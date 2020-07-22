@@ -128,9 +128,6 @@ void BrcmPatchRAM::free()
 
 IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 {
-    BrcmFirmwareStore *firmwareStore;
-    OSString *firmwareKey;
-
     DebugLog("probe\n");
     
     AlwaysLog("Version %s starting on OS X Darwin %d.%d.\n", OSKextGetCurrentVersionString(), version_major, version_minor);
@@ -167,16 +164,7 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
         mSupportsHandshake = supportsHandshake(mVendorId, mProductId);
 
     DebugLog("Device %s handshake.\n", mSupportsHandshake ? "supports" : "doesn't support");
-    
-    /* Get firmware for device. */
-    firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey));
-    
-    if (firmwareKey) {
-        firmwareStore = getFirmwareStore();
         
-        if (firmwareStore)
-            firmwareStore->getFirmware(mVendorId, mProductId, firmwareKey);
-    }
     /* Release device again as probe() shouldn't alter it's state. */
     mDevice.setDevice(NULL);
     
@@ -185,11 +173,23 @@ IOService* BrcmPatchRAM::probe(IOService *provider, SInt32 *probeScore)
 
 bool BrcmPatchRAM::start(IOService *provider)
 {
+    BrcmFirmwareStore *firmwareStore;
+    OSString *firmwareKey;
     uint64_t start_time, end_time, nano_secs;
     IOReturn result;
     bool success = false;
     
     DebugLog("start\n");
+    
+    /* Get firmware for device. */
+    firmwareKey = OSDynamicCast(OSString, getProperty(kFirmwareKey));
+    if (firmwareKey) {
+        firmwareStore = getFirmwareStore();
+        
+        if (!firmwareStore)
+            return false;
+        firmwareStore->getFirmware(mVendorId, mProductId, firmwareKey);
+    }
     
     clock_get_uptime(&start_time);
 
@@ -366,20 +366,39 @@ void BrcmPatchRAM::uploadFirmware()
 
 BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
 {
-    if (!mFirmwareStore) {
+    while (!mFirmwareStore) {
         // check to see if it already loaded
-        IOService* tmpStore = waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 0);
-        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
-        if (!mFirmwareStore)
-        {
-            // not loaded, so wait...
-            if (tmpStore)
-                tmpStore->release();
-            tmpStore = waitForMatchingService(serviceMatching(kBrcmFirmwareStoreService), 2000UL*1000UL*1000UL);
-            mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
-            if (!mFirmwareStore && tmpStore)
-                tmpStore->release();
+        // BrcmFirmwareStore presence is a requirement, wait for it.
+        auto dict = IOService::nameMatching(kBrcmFirmwareStoreService);
+        if (!dict) {
+            DebugLog("BrcmPatchRAM: failed to create %s matching dictionary", kBrcmFirmwareStoreService);
+            break;
         }
+
+        auto tmpStore = IOService::waitForMatchingService(dict, 100000000);
+        dict->release();
+
+        if (!tmpStore) {
+            DebugLog("BrcmPatchRAM: Timeout in waiting for %s, will try during next start attempt", kBrcmFirmwareStoreService);
+            break;
+        }
+        
+        const OSMetaClass * meta_class = OSMetaClass::getMetaClassWithName(OSSymbol::withCStringNoCopy(kBrcmFirmwareStoreService));
+        if (!meta_class) {
+            DebugLog("BrcmPatchRAM: metaclass %s is not available", kBrcmFirmwareStoreService);
+            tmpStore->release();
+            break;
+        }
+        
+        mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
+        if (!mFirmwareStore) {
+            DebugLog("BrcmPatchRAM: dynamic cast to %s has failed", kBrcmFirmwareStoreService);
+            tmpStore->release();
+            break;
+        }
+        
+        DebugLog("BrcmPatchRAM: %s is available now", kBrcmFirmwareStoreService);
+        break;
     }
     if (!mFirmwareStore)
         AlwaysLog("[%04x:%04x]: BrcmFirmwareStore does not appear to be available.\n", mVendorId, mProductId);
