@@ -385,14 +385,12 @@ BrcmFirmwareStore* BrcmPatchRAM::getFirmwareStore()
         
         auto metaClassName = OSSymbol::withCStringNoCopy(kBrcmFirmwareStoreService);
         auto metaClass = OSMetaClass::getMetaClassWithName(metaClassName);
+        metaClassName->release();
         if (!metaClass) {
             DebugLog("BrcmPatchRAM: metaclass %s is not available", kBrcmFirmwareStoreService);
             tmpStore->release();
-            metaClassName->release();
             break;
         }
-        
-        metaClassName->release();
         
         mFirmwareStore = OSDynamicCast(BrcmFirmwareStore, tmpStore);
         if (!mFirmwareStore) {
