@@ -1,5 +1,9 @@
 BrcmPatchRAM Changelog
 ======================
+
+#### v2.5.4
+- Added inject BCM2070 - BCM943224HMB, BCM943225HMB Combo
+
 #### v2.5.3
 - Fix parsing firmware versions (e.g. 8785 is 4689)
 - Use 4689 firmware for DW1820A [0a5c:6412]

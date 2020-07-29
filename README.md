@@ -57,6 +57,7 @@ Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
 
 BrcmBluetoothInjector supported devices:
 
+  * ``[0489:e030]`` BCM2070 - BCM943224HMB, BCM943225HMB Combo
   * ``[0489:e032]`` 20702 E032 Combo
   * ``[0489:e042]`` 20702A1 Lenovo China standalone
   * ``[0489:e046]`` 20702A1 Acer 43228+20702 combo card
@@ -102,6 +103,7 @@ BrcmBluetoothInjector supported devices:
   * ``[0a5c:216d]`` HP Hornet 43142Y ngff combo
   * ``[0a5c:216e]`` HP Blackbird 43162 NGFF
   * ``[0a5c:216f]`` Dell DW1560 4352+20702 M.2
+  * ``[0a5c:217d]`` BCM2070 - BCM943224HMB, BCM943225HMB Combo
   * ``[0a5c:21d7]`` BRCM Generic 43142A0 RAMUSB
   * ``[0a5c:21de]`` 4352+20702A1 combo
   * ``[0a5c:21e1]`` 20702A1 non-UHE HP SoftSailing
@@ -124,6 +126,7 @@ BrcmBluetoothInjector supported devices:
   * ``[0a5c:6417]`` Zebra 4352
   * ``[0a5c:6418]`` HP Brook 2x2ac
   * ``[0a5c:7460]`` 20703A1 RAM download
+  * ``[0b05:178a]`` BCM2070 - BCM943224HMB, BCM943225HMB Combo
   * ``[0b05:17b5]`` Asus 43228+20702A1 combo
   * ``[0b05:17cb]`` 20702 standalone
   * ``[0b05:17cf]`` Asus 4352_20702A1 combo
