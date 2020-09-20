@@ -23,9 +23,9 @@ Install one of BrcmPatchRAM.kext or BrcmPatchRAM2.kext or BrcmPatchRAM3.kext dep
 
   * BrcmPatchRAM.kext: for 10.10 or earlier.
 
-  * BrcmPatchRAM2.kext: for 10.11 or later.
+  * BrcmPatchRAM2.kext: for 10.11 - 10.14.
   
-  * BrcmPatchRAM3.kext: for 10.15.
+  * BrcmPatchRAM3.kext: for 10.15 or later.
 
 
 Also, install one firmware kext BrcmFirmwareData.kext or BrcmFirmwareRepo.kext, depending on installation location, never both.
