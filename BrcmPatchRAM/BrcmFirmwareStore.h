@@ -20,7 +20,7 @@
 #ifndef __BrcmPatchRAM__BrcmFirmwareStore__
 #define __BrcmPatchRAM__BrcmFirmwareStore__
 
-#include "LegacyIOService.h"
+#include <IOKit/IOService.h>
 #include <IOKit/IOLib.h>
 #include <libkern/OSKextLib.h>
 

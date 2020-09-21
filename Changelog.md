@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.5.5
+- Initial MacKernelSDK and Xcode 12 compatibility
+- Added bundled BrcmPatchRAM.kext to the binaries
 
 #### v2.5.4
 - Added inject BCM2070 - BCM943224HMB, BCM943225HMB Combo

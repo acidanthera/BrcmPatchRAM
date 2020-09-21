@@ -20,10 +20,7 @@
 #include "USBDeviceShim.h"
 #include "Common.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #include <IOKit/usb/IOUSBHostInterface.h>
-#pragma clang diagnostic pop
 
 #include <sys/utfconv.h>
 

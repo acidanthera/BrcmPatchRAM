@@ -20,14 +20,11 @@
 #ifndef __USBDeviceShim__
 #define __USBDeviceShim__
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
 #include <IOKit/usb/IOUSBHostDevice.h>
 #else
 #include <IOKit/usb/IOUSBDevice.h>
 #endif
-#pragma clang diagnostic pop
 
 #if defined(TARGET_ELCAPITAN) || defined(TARGET_CATALINA)
 #define USBCOMPLETION IOUSBHostCompletion

@@ -20,29 +20,14 @@
 		842B20C01BB2F0D900D3C468 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		842B20C11BB2F0D900D3C468 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		842B20CC1BB2F0F800D3C468 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
-		CE8DA6FE235243E100BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
-		CE8DA6FF235243E100BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
-		CE8DA700235243E100BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
-		CE8DA701235243E100BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
-		CE8DA7082352449100BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
-		CE8DA7092352449100BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
-		CE8DA70A2352449100BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
-		CE8DA70B2352449100BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
-		CE8DA70C2352449100BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
-		CE8DA70D2352449100BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
-		CE8DA70E2352449100BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
-		CE8DA70F2352449100BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
-		CE8DA7102352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
-		CE8DA7112352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
-		CE8DA7122352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
-		CE8DA7132352449100BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
+		CE8DA13325182BB2008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
+		CE8DA13425182BB6008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
+		CE8DA13525182BB8008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
+		CE8DA13625182BBA008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
+		CE8DA13725182BBD008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
 		CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
-		CE8DA718235248C300BCE180 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8DA6FD235243E100BCE180 /* Common.cpp */; };
-		CE8DA71A235248C300BCE180 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA7072352449100BCE180 /* libkmod.a */; };
 		CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
-		CE8DA71D235248C300BCE180 /* LegacyIOService.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7052352449100BCE180 /* LegacyIOService.h */; };
 		CE8DA71E235248C300BCE180 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
-		CE8DA71F235248C300BCE180 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */; };
 		CE8DA720235248C300BCE180 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
 		CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		CE8DA722235248C300BCE180 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
@@ -157,10 +142,7 @@
 		842B20A11BB2EFA200D3C468 /* BrcmFirmwareRepo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmFirmwareRepo-Info.plist"; sourceTree = "<group>"; };
 		842B20C91BB2F0D900D3C468 /* BrcmFirmwareRepo.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmFirmwareRepo.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		8480E9531BB4312200FF61B0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		CE8DA6FD235243E100BCE180 /* Common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cpp; sourceTree = "<group>"; };
-		CE8DA7052352449100BCE180 /* LegacyIOService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyIOService.h; sourceTree = "<group>"; };
-		CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LegacyLibkernMacros.h; sourceTree = "<group>"; };
-		CE8DA7072352449100BCE180 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libkmod.a; sourceTree = "<group>"; };
+		CE8DA13225182BB2008C44E8 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = ../Lilu/MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		CE8DA729235248C300BCE180 /* BrcmPatchRAM.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmPatchRAM.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8DA72B2352496A00BCE180 /* BrcmPatchRAM-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BrcmPatchRAM-Info.plist"; sourceTree = "<group>"; };
 		CEBB57BF242D458200614D73 /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
@@ -176,7 +158,6 @@
 		D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBDeviceShim.h; sourceTree = "<group>"; };
 		D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrcmPatchRAM.h; sourceTree = "<group>"; };
 		D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BrcmPatchRAM.cpp; sourceTree = "<group>"; };
-		D4F91B121A299C210030D10D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED2A7DD61B37DE6E00DC200F /* BrcmBluetoothInjector.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrcmBluetoothInjector.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2A7DD71B37DE6F00DC200F /* BrcmBluetoothInjector-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrcmBluetoothInjector-Info.plist"; sourceTree = SOURCE_ROOT; };
 		ED4CFCEE1CE8BCB300A285B2 /* README-Mac.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "README-Mac.md"; sourceTree = "<group>"; };
@@ -193,7 +174,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA7122352449100BCE180 /* libkmod.a in Frameworks */,
+				CE8DA13425182BB6008C44E8 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA7132352449100BCE180 /* libkmod.a in Frameworks */,
+				CE8DA13325182BB2008C44E8 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA71A235248C300BCE180 /* libkmod.a in Frameworks */,
+				CE8DA13725182BBD008C44E8 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA7112352449100BCE180 /* libkmod.a in Frameworks */,
+				CE8DA13525182BB8008C44E8 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,7 +213,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA7102352449100BCE180 /* libkmod.a in Frameworks */,
+				CE8DA13625182BBA008C44E8 /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,10 +234,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D406C2F61A43C6E200AEFA2D /* Frameworks */ = {
+		CE8DA13125182BB2008C44E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D4F91B121A299C210030D10D /* IOKit.framework */,
+				CE8DA13225182BB2008C44E8 /* libkmod.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -268,9 +249,9 @@
 				ED4CFCEE1CE8BCB300A285B2 /* README-Mac.md */,
 				CEBB57BF242D458200614D73 /* Changelog.md */,
 				841AD8941BB3C27E0082B7B0 /* generate_firmware_data.sh */,
-				D406C2F61A43C6E200AEFA2D /* Frameworks */,
 				D4F91B001A2998CE0030D10D /* BrcmPatchRAM */,
 				D4F91AFF1A2998CE0030D10D /* Products */,
+				CE8DA13125182BB2008C44E8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 0;
@@ -293,9 +274,6 @@
 		D4F91B001A2998CE0030D10D /* BrcmPatchRAM */ = {
 			isa = PBXGroup;
 			children = (
-				CE8DA7052352449100BCE180 /* LegacyIOService.h */,
-				CE8DA7062352449100BCE180 /* LegacyLibkernMacros.h */,
-				CE8DA7072352449100BCE180 /* libkmod.a */,
 				D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */,
 				D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */,
 				841AD8921BB3C1960082B7B0 /* FirmwareData.h */,
@@ -306,7 +284,6 @@
 				D4F91B011A2998CE0030D10D /* Supporting Files */,
 				D45427691A2A045E000B0964 /* hci.h */,
 				D454276C1A2A07A7000B0964 /* Common.h */,
-				CE8DA6FD235243E100BCE180 /* Common.cpp */,
 				D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */,
 				D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */,
 				D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */,
@@ -355,9 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				841AD8811BB3C0350082B7B0 /* BrcmPatchRAM.h in Headers */,
-				CE8DA70A2352449100BCE180 /* LegacyIOService.h in Headers */,
 				841AD8821BB3C0350082B7B0 /* BrcmFirmwareStore.h in Headers */,
-				CE8DA70E2352449100BCE180 /* LegacyLibkernMacros.h in Headers */,
 				841AD8831BB3C0350082B7B0 /* Common.h in Headers */,
 				841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */,
 				841AD8851BB3C0350082B7B0 /* hci.h in Headers */,
@@ -369,9 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				842B20BD1BB2F0D900D3C468 /* BrcmPatchRAM.h in Headers */,
-				CE8DA70B2352449100BCE180 /* LegacyIOService.h in Headers */,
 				842B20BE1BB2F0D900D3C468 /* BrcmFirmwareStore.h in Headers */,
-				CE8DA70F2352449100BCE180 /* LegacyLibkernMacros.h in Headers */,
 				842B20BF1BB2F0D900D3C468 /* Common.h in Headers */,
 				842B20C01BB2F0D900D3C468 /* USBDeviceShim.h in Headers */,
 				842B20C11BB2F0D900D3C468 /* hci.h in Headers */,
@@ -383,9 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */,
-				CE8DA71D235248C300BCE180 /* LegacyIOService.h in Headers */,
 				CE8DA71E235248C300BCE180 /* BrcmFirmwareStore.h in Headers */,
-				CE8DA71F235248C300BCE180 /* LegacyLibkernMacros.h in Headers */,
 				CE8DA720235248C300BCE180 /* Common.h in Headers */,
 				CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */,
 				CE8DA722235248C300BCE180 /* hci.h in Headers */,
@@ -397,9 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D346F7BE23475DF60073A60D /* BrcmPatchRAM.h in Headers */,
-				CE8DA7092352449100BCE180 /* LegacyIOService.h in Headers */,
 				D346F7BF23475DF60073A60D /* BrcmFirmwareStore.h in Headers */,
-				CE8DA70D2352449100BCE180 /* LegacyLibkernMacros.h in Headers */,
 				D346F7C023475DF60073A60D /* Common.h in Headers */,
 				D346F7C123475DF60073A60D /* USBDeviceShim.h in Headers */,
 				D346F7C223475DF60073A60D /* hci.h in Headers */,
@@ -418,9 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */,
-				CE8DA7082352449100BCE180 /* LegacyIOService.h in Headers */,
 				ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */,
-				CE8DA70C2352449100BCE180 /* LegacyLibkernMacros.h in Headers */,
 				EDA03B7A1BA47A12005BDCA2 /* Common.h in Headers */,
 				D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */,
 				EDA03B781BA47A0E005BDCA2 /* hci.h in Headers */,
@@ -629,7 +596,7 @@
 		D4F91AF51A2998CE0030D10D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					84CDEE051BB3CA2200238DD1 = {
 						CreatedOnToolsVersion = 7.0;
@@ -861,7 +828,6 @@
 			files = (
 				841AD8911BB3C12F0082B7B0 /* FirmwareData.cpp in Sources */,
 				841AD87E1BB3C0350082B7B0 /* BrcmFirmwareStore.cpp in Sources */,
-				CE8DA700235243E100BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,7 +835,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE8DA701235243E100BCE180 /* Common.cpp in Sources */,
 				842B20CC1BB2F0F800D3C468 /* BrcmFirmwareStore.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -880,7 +845,6 @@
 			files = (
 				CE8DA72D23524E4500BCE180 /* USBDeviceShim.cpp in Sources */,
 				CE8DA716235248C300BCE180 /* BrcmPatchRAM.cpp in Sources */,
-				CE8DA718235248C300BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,7 +854,6 @@
 			files = (
 				D3DDE0882349F788004B3498 /* BrcmPatchRAM3.cpp in Sources */,
 				D346F7BB23475DF60073A60D /* USBHostDeviceShim.cpp in Sources */,
-				CE8DA6FF235243E100BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,7 +870,6 @@
 			files = (
 				ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */,
 				D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */,
-				CE8DA6FE235243E100BCE180 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -948,9 +910,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -969,9 +931,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareData-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -990,9 +952,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1008,9 +970,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1109,9 +1071,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1133,9 +1095,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1158,9 +1120,9 @@
 				INFOPLIST_FILE = "$(SRCROOT)/BrcmPatchRAM/BrcmPatchRAM3-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = 0;
 				MODULE_STOP = 0;
@@ -1182,9 +1144,9 @@
 				INFOPLIST_FILE = "$(SRCROOT)/BrcmPatchRAM/BrcmPatchRAM3-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = 0;
 				MODULE_STOP = 0;
@@ -1223,14 +1185,16 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
+				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-Wno-stdlibcxx-not-found";
 				SDKROOT = macosx;
 				SYMROOT = build/Products;
 			};
@@ -1263,13 +1227,15 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
+				KERNEL_FRAMEWORK_HEADERS = "$(PROJECT_DIR)/MacKernelSDK/Headers";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "-Wno-stdlibcxx-not-found";
 				SDKROOT = macosx;
 				SYMROOT = build/Products;
 			};
@@ -1281,7 +1247,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmBluetoothInjector-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1295,7 +1262,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmBluetoothInjector-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1315,9 +1283,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1339,9 +1307,9 @@
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/BrcmPatchRAM",
+					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1358,7 +1326,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1372,7 +1341,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1386,7 +1356,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1400,7 +1371,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

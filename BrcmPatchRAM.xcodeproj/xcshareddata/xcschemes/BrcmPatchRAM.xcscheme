@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1140"
+   LastUpgradeVersion = "1200"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ED5817BB1B7A6AEF006C5522"
-               BuildableName = "BrcmPatchRAM2.kext"
-               BlueprintName = "BrcmPatchRAM2"
+               BlueprintIdentifier = "CE8DA714235248C300BCE180"
+               BuildableName = "BrcmPatchRAM.kext"
+               BlueprintName = "BrcmPatchRAM"
                ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -115,6 +115,20 @@
                BlueprintIdentifier = "841AD87C1BB3C0350082B7B0"
                BuildableName = "BrcmFirmwareData.kext"
                BlueprintName = "BrcmFirmwareData"
+               ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ED5817BB1B7A6AEF006C5522"
+               BuildableName = "BrcmPatchRAM2.kext"
+               BlueprintName = "BrcmPatchRAM2"
                ReferencedContainer = "container:BrcmPatchRAM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
