@@ -17,8 +17,6 @@ if [ "$1" != "" ]; then
   exit 0
 fi
 
-cd "${TARGET_BUILD_DIR}"
-
 dist=()
 if [ -d "$DWARF_DSYM_FILE_NAME" ]; then dist+=("$DWARF_DSYM_FILE_NAME"); fi
 
