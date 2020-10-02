@@ -5,8 +5,9 @@ Distribute
 Index
 Logs
 TextIndex
-BrcmPatchRAM.xcodeproj/project.xcworkspace/xcuserdata
-BrcmPatchRAM.xcodeproj/xcuserdata
+xcuserdata
+xcshareddata
+project.xcworkspace
 scm.plist
 *.xccheckout
 .DS_Store

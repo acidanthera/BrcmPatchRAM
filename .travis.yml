@@ -9,14 +9,8 @@ matrix:
 
     script:
       - git clone https://github.com/acidanthera/MacKernelSDK
-      - xcodebuild -jobs 1 -configuration Debug -scheme BrcmPatchRAM
-      - cd build/Products/Debug
-      - zip -qry BrcmPatchRAM-$(cat ../../../BrcmPatchRAM.xcodeproj/project.pbxproj | grep -i 'CURRENT_PROJECT_VERSION' | head -1 | grep -oE '\d\.\d\.\d')-DEBUG.zip *.kext
-      - cd -
-      - xcodebuild -jobs 1 -configuration Release -scheme BrcmPatchRAM
-      - cd build/Products/Release
-      - zip -qry BrcmPatchRAM-$(cat ../../../BrcmPatchRAM.xcodeproj/project.pbxproj | grep -i 'CURRENT_PROJECT_VERSION' | head -1 | grep -oE '\d\.\d\.\d')-RELEASE.zip *.kext
-      - cd -
+      - xcodebuild -jobs 1 -target Package -configuration Debug
+      - xcodebuild -jobs 1 -target Package -configuration Release
 
     deploy:
       provider: releases
@@ -35,5 +29,5 @@ matrix:
 
     script:
       - git clone https://github.com/acidanthera/MacKernelSDK
-      - xcodebuild analyze -quiet -scheme BrcmPatchRAM -configuration Debug CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
-      - xcodebuild analyze -quiet -scheme BrcmPatchRAM -configuration Release CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
+      - xcodebuild analyze -quiet -scheme Package -target Package -configuration Debug CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
+      - xcodebuild analyze -quiet -scheme Package -target Package -configuration Release CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" && [ "$(find clang-analyze -name "*.html")" = "" ]
