@@ -87,14 +87,14 @@ private:
     OSDeclareDefaultStructors(BrcmPatchRAM);
 #endif
     
-    UInt16 mVendorId;
-    UInt16 mProductId;
+    UInt16 mVendorId = 0xFFFF;
+    UInt16 mProductId = 0xFFFF;
 #ifndef TARGET_CATALINA
-    UInt32 mProbeDelay;
+    UInt32 mProbeDelay = 0;
 #endif
-    UInt32 mPreResetDelay;
-    UInt32 mPostResetDelay;
-    UInt32 mInitialDelay;
+    UInt32 mPreResetDelay = 0;
+    UInt32 mPostResetDelay = 0;
+    UInt32 mInitialDelay = 0;
 
     USBDeviceShim mDevice;
     USBInterfaceShim mInterface;
@@ -104,10 +104,10 @@ private:
 #ifndef NON_RESIDENT
     bool mStopping = false;
 #endif
-    bool mSupportsHandshake;
+    bool mSupportsHandshake = false;
 
-    USBCOMPLETION mInterruptCompletion;
-    IOBufferMemoryDescriptor* mReadBuffer;
+    USBCOMPLETION mInterruptCompletion {};
+    IOBufferMemoryDescriptor* mReadBuffer = NULL;
     
     volatile DeviceState mDeviceState = kInitialize;
     volatile uint16_t mFirmwareVersion = 0xFFFF;
@@ -129,7 +129,7 @@ private:
 #endif
 
 #ifndef NON_RESIDENT
-    UInt32 mBlurpWait;
+    UInt32 mBlurpWait = 0;
     IOTimerEventSource* mTimer = NULL;
     IOReturn onTimerEvent(void);
 
