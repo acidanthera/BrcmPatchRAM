@@ -267,39 +267,7 @@ BrcmPatchRAM consists of 2 parts:
 After the device firmware is uploaded, the device control is handed over to Apple's BroadcomBluetoothHostControllerUSBTransport.
 This means that for all intents and purposes your device will be native on macOS and support all functionalities fully.
 
-It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through the bootloader, or through [BT4LEContinuityFixup](https://github.com/acidanthera/BT4LEContinuityFixup), or through dokterdok's script [Continuity-Activation-Tool](https://github.com/dokterdok/Continuity-Activation-Tool)  
-
-OpenCore users can patch using Kernel patches in config.plist.
-
-The patch for 10.10 is:
-```XML
-<dict>
-    <key>Comment</key>
-    <string>10.10.2+ BT4LE-Handoff-Hotspot, Dokterdok</string>
-    <key>Find</key>
-    <data>SIXAdFwPt0g=</data>
-    <key>Identifier</key>
-    <string>com.apple.iokit.IOBluetoothFamily</string>
-    <key>Replace</key>
-    <data>Qb4PAAAA61k=</data>
-    <!-- Rest of the fields -->
-</dict>
-```
-
-The patch for 10.11 is:
-```XML
-<dict>
-    <key>Comment</key>
-    <string>10.11.dp1+ BT4LE-Handoff-Hotspot, credit RehabMan based on Dokterdok original</string>
-    <key>Find</key>
-    <data>SIX/dEdIiwc=</data>
-    <key>Identifier</key>
-    <string>com.apple.iokit.IOBluetoothFamily</string>
-    <key>Replace</key>
-    <data>Qb4PAAAA60Q=</data>
-    <!-- Rest of the fields -->
-</dict>
-```
+It is possible to use the Continuity Activation Patch in combination with BrcmPatchRAM through [BT4LEContinuityFixup](https://github.com/acidanthera/BT4LEContinuityFixup), or through dokterdok's script [Continuity-Activation-Tool](https://github.com/dokterdok/Continuity-Activation-Tool), or through [OpenCore](https://github.com/acidanthera/OpenCorePkg) quirk `ExtendBTFeatureFlags`.  
 
 
 ### Troubleshooting
