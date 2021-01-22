@@ -71,6 +71,7 @@ BrcmBluetoothInjector supported devices:
   * ``[0489:e096]`` BCM43142A0
   * ``[0489:e097]`` Acer Foxconn BCM4356A2 NGFF
   * ``[0489:e0a1]`` 20703A1 Lenovo 43602 NGFF combo
+  * ``[04b4:f901]`` Laird BT851 Bluetooth 5.0 USB dongle
   * ``[04ca:2003]`` 20702A1 Lenovo China standalone
   * ``[04ca:2004]`` LiteOn 43228+20702 combo
   * ``[04ca:2005]`` LiteOn 43228+20702 combo
