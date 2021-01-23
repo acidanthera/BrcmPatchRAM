@@ -17,6 +17,11 @@ if [ "$1" != "" ]; then
   exit 0
 fi
 
+for kext in BrcmBluetoothInjector.kext BrcmBluetoothInjectorLegacy.kext; do
+  rm -rf "$kext"
+  cp -a "$PROJECT_DIR/$kext" "$kext" || exit 1
+done
+
 dist=()
 if [ -d "$DWARF_DSYM_FILE_NAME" ]; then dist+=("$DWARF_DSYM_FILE_NAME"); fi
 

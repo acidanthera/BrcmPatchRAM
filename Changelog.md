@@ -2,6 +2,7 @@ BrcmPatchRAM Changelog
 ======================
 #### v2.5.6
 - Added inject Laird BT851 Bluetooth 5.0 USB dongle
+- Added legacy Bluetooth injection kext
 
 #### v2.5.5
 - Initial MacKernelSDK and Xcode 12 compatibility
