@@ -1,7 +1,7 @@
 BrcmPatchRAM
 ============
 
-[![Build Status](https://travis-ci.com/acidanthera/BrcmPatchRAM.svg?branch=master)](https://travis-ci.com/acidanthera/BrcmPatchRAM)
+[![Build Status](https://github.com/acidanthera/BrcmPatchRAM/workflows/CI/badge.svg?branch=master)](https://github.com/acidanthera/BrcmPatchRAM/actions) [![Scan Status](https://scan.coverity.com/projects/22191/badge.svg?flat=1)](https://scan.coverity.com/projects/22191)
 
 #### 翻译语言
 
