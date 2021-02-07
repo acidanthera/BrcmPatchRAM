@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.5.7
+- Added BCM94360Z4 identifiers for injection
+
 #### v2.5.6
 - Added inject Laird BT851 Bluetooth 5.0 USB dongle
 - Added legacy Bluetooth injection kext
