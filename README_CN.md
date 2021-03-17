@@ -157,6 +157,7 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
   * ``[2b54:5601]`` Asus AP6356SDP1A BCM4356A2
   * ``[2b54:5602]`` AMPAK AP6356SDP2A BCM4356A2
   * ``[33ba:03e8]`` TOULINEUA BCM94360Z4 4360+20702 combo
+  * ``[33ba:03e9]`` TOULINEUA BCM94360Z3 4360+20702 combo
   * ``[413c:8143]`` DW1550 4352+20702 combo
   * ``[413c:8197]`` Dell DW380 Nancy Blakes standalone
 
