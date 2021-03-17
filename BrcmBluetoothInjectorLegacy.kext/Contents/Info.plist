@@ -1464,7 +1464,7 @@
 			<integer>1001</integer>
 			<key>idVendor</key>
 			<integer>13242</integer>
-		</dict>			
+		</dict>
 		<key>413c_8143</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
@@ -1497,7 +1497,7 @@
 		</dict>
 	</dict>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.8</string>
+	<string>10.9</string>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
 </dict>
