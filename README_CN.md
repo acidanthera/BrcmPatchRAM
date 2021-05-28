@@ -54,7 +54,7 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
 
 请勿在此kext上使用`BrcmPatchRAM`或`BrcmPatchRAM2`。
 
-`BrcmBluetoothInjector` supported devices:
+`BrcmBluetoothInjector` 支持的设备:
 
   * ``[0489:e032]`` 20702 E032 Combo
   * ``[0489:e042]`` 20702A1 Lenovo China standalone
@@ -124,6 +124,7 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
   * ``[0a5c:6417]`` Zebra 4352
   * ``[0a5c:6418]`` HP Brook 2x2ac
   * ``[0a5c:7460]`` 20703A1 RAM download
+  * ``[0a5c:828d]`` Fenvi BCM94352Z
   * ``[0b05:17b5]`` Asus 43228+20702A1 combo
   * ``[0b05:17cb]`` 20702 standalone
   * ``[0b05:17cf]`` Asus 4352_20702A1 combo
@@ -200,6 +201,7 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
   * ``[0a5c:22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
   * ``[0a5c:6410]`` Dell Wireless 1830 Bluetooth 4.1 LE
   * ``[0a5c:6412]`` Dell Wireless 1820 Bluetooth 4.1 LE
+  * ``[0a5c:828d]`` Fenvi BCM94352Z
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
   * ``[0b05:180a]`` Azurewave (4360/20702 combo)
