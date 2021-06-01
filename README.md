@@ -127,6 +127,7 @@ BrcmBluetoothInjector supported devices:
   * ``[0a5c:6417]`` Zebra 4352
   * ``[0a5c:6418]`` HP Brook 2x2ac
   * ``[0a5c:7460]`` 20703A1 RAM download
+  * ``[0a5c:828d]`` Fenvi BCM94352Z
   * ``[0b05:178a]`` BCM2070 - BCM943224HMB, BCM943225HMB Combo
   * ``[0b05:17b5]`` Asus 43228+20702A1 combo
   * ``[0b05:17cb]`` 20702 standalone
@@ -207,6 +208,7 @@ Tested PatchRAM devices:
   * ``[0a5c:22be]`` Broadcom BCM20702 Bluetooth 4.0 USB Device
   * ``[0a5c:6410]`` Dell Wireless 1830 Bluetooth 4.1 LE
   * ``[0a5c:6412]`` Dell Wireless 1820 Bluetooth 4.1 LE
+  * ``[0a5c:828d]`` Fenvi BCM94352Z
   * ``[0b05:17cb]`` Asus BT-400 (20702 stand-alone) *
   * ``[0b05:17cf]`` Asus (4352/20702A1 combo) *
   * ``[0b05:180a]`` Azurewave (4360/20702 combo)
