@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.5.9
+- Added BCM94352Z identifiers for injection
+
 #### v2.5.8
 - Added BCM94360Z3 identifiers for injection
 
