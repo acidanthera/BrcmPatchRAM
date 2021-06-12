@@ -21,15 +21,13 @@ class EXPORT BlueToolFixup : public IOService {
 public:
     IOService *probe(IOService *provider, SInt32 *score) override;
     bool start(IOService *provider) override;
-    void stop(IOService *provider) override;
 };
 
 OSDefineMetaClassAndStructors(BlueToolFixup, IOService)
 
-PRODUCT_NAME *ADDPR(selfInstance) = nullptr;
 
 IOService *BlueToolFixup::probe(IOService *provider, SInt32 *score) {
-    ADDPR(selfInstance) = this;
+    setProperty("VersionInfo", kextVersion);
     setName("bluetooth");
     uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
     setProperty("transport-encoding", bytes, sizeof(bytes));
@@ -38,22 +36,14 @@ IOService *BlueToolFixup::probe(IOService *provider, SInt32 *score) {
 }
 
 bool BlueToolFixup::start(IOService *provider) {
-    ADDPR(selfInstance) = this;
     if (!IOService::start(provider)) {
         SYSLOG("init", "failed to start the parent");
         return false;
     }
     
-    if (ADDPR(startSuccess)) {
-        registerService();
-    }
+    registerService();
     
-    return ADDPR(startSuccess);
-}
-
-void BlueToolFixup::stop(IOService *provider) {
-    ADDPR(selfInstance) = nullptr;
-    IOService::stop(provider);
+    return true;
 }
 
 
@@ -118,7 +108,7 @@ static const char *bootargBeta[] {
 PluginConfiguration ADDPR(config) {
     xStringify(PRODUCT_NAME),
     parseModuleVersion(xStringify(MODULE_VERSION)),
-    LiluAPI::AllowNormal,
+    LiluAPI::AllowNormal | LiluAPI::AllowInstallerRecovery | LiluAPI::AllowSafeMode,
     bootargOff,
     arrsize(bootargOff),
     bootargDebug,
