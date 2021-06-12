@@ -27,12 +27,7 @@ OSDefineMetaClassAndStructors(BlueToolFixup, IOService)
 
 
 IOService *BlueToolFixup::probe(IOService *provider, SInt32 *score) {
-    setProperty("VersionInfo", kextVersion);
-    setName("bluetooth");
-    uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
-    setProperty("transport-encoding", bytes, sizeof(bytes));
-    auto service = IOService::probe(provider, score);
-    return ADDPR(startSuccess) ? service : nullptr;
+    return ADDPR(startSuccess) ? IOService::probe(provider, score) : nullptr;
 }
 
 bool BlueToolFixup::start(IOService *provider) {
@@ -40,7 +35,10 @@ bool BlueToolFixup::start(IOService *provider) {
         SYSLOG("init", "failed to start the parent");
         return false;
     }
-    
+    setProperty("VersionInfo", kextVersion);
+    setName("bluetooth");
+    uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
+    setProperty("transport-encoding", bytes, sizeof(bytes));
     registerService();
     
     return true;
