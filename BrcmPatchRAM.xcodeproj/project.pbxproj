@@ -983,7 +983,6 @@
 					"MODULE_VERSION=$(CURRENT_PROJECT_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
 					"LILU_CUSTOM_IOKIT_INIT=1",
-					"LILU_USE_KEXT_VERSION=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Lilu.kext/Contents/Resources";
@@ -1011,7 +1010,6 @@
 					"MODULE_VERSION=$(CURRENT_PROJECT_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
 					"LILU_CUSTOM_IOKIT_INIT=1",
-					"LILU_CUSTOM_KMOD_INIT=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Lilu.kext/Contents/Resources";
