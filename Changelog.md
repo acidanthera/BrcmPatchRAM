@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.0
+- Added BlueToolFixup for macOS 12 compatibility
+
 #### v2.5.9
 - Added BCM94352Z identifiers for injection
 
