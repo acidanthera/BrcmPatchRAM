@@ -57,7 +57,7 @@ Do not use BrcmPatchRAM or BrcmPatchRAM2 with this kext.
 
 ### BlueToolFixup.kext
 
-Required for macOS 12 or newer, as in macOS 12 Apple has changed parts of the Bluetooth stack from kernel-space to user-space as detailed in https://github.com/acidanthera/bugtracker/issues/1669.
+Required for macOS 12 or newer, as in macOS 12 Apple has changed parts of the Bluetooth stack from kernel-space to user-space as detailed in [acidanthera/bugtracker#1669](https://github.com/acidanthera/bugtracker/issues/1669).
 
 Do not use it with BrcmBluetoothInjector for macOS 12 or newer.
 
