@@ -162,6 +162,14 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
   * ``[413c:8143]`` DW1550 4352+20702 combo
   * ``[413c:8197]`` Dell DW380 Nancy Blakes standalone
 
+如果你的设备不在支持设备中，请根据需要修改 Info.plist 。
+
+### BlueToolFixup.kext
+
+需要 macOS 12 或者更新的版本，在 macOS 12 中，Apple 已经将部分蓝牙堆栈从内核空间改为用户空间，更多详情请看 [acidanthera/bugtracker#1669](https://github.com/acidanthera/bugtracker/issues/1669)。
+
+请不要在 macOS 12 或者更新的版本上将它和 `BrcmBluetoothInjector` 一起使用。
+
 ### 支持的设备
 
 `BrcmPatchRAM`支持任何基于BCM20702芯片组的Broadcom USB蓝牙设备（可能也支持其他芯片组，但是尚未经过测试）。
@@ -283,7 +291,7 @@ Windows软件包中的所有固件都存在于kext中，并自动与其供应商
 ```
 确保只检查最新的引导消息，因为`system.log`可能会追溯几天。
 
-如果固件上传失败并显示错误，请尝试安装`BrcmPatchRAM`的``debug`版本，以便在日志中获取更多详细信息。
+如果固件上传失败并显示错误，请尝试安装`BrcmPatchRAM`的`debug`版本，以便在日志中获取更多详细信息。
 
 为了报告错误，请在github上用以下信息记录问题：
 
