@@ -168,7 +168,7 @@ IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatchi
 
 需要 macOS 12 或者更新的版本，在 macOS 12 中，Apple 已经将部分蓝牙堆栈从内核空间改为用户空间，更多详情请看 [acidanthera/bugtracker#1669](https://github.com/acidanthera/bugtracker/issues/1669)。
 
-请不要在 macOS 12 或者 更新的版本上将它和 BrcmBluetoothInjector 一起使用。
+请不要在 macOS 12 或者 更新的版本上将它和 `BrcmBluetoothInjector` 一起使用。
 
 ### 支持的设备
 
