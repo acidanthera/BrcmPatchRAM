@@ -10,7 +10,6 @@
 		51E2E7F52674FA4F00BBD815 /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E2E7F42674FA4F00BBD815 /* plugin_start.cpp */; };
 		51E67F002673C86300FB6051 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
 		51E67F062673CA2B00FB6051 /* BlueToolFixup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E67F042673CA2B00FB6051 /* BlueToolFixup.cpp */; };
-		51E67F082673CC4800FB6051 /* BlueToolFixup-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51E67F072673CC4800FB6051 /* BlueToolFixup-Info.plist */; };
 		841AD87E1BB3C0350082B7B0 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		841AD8811BB3C0350082B7B0 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		841AD8821BB3C0350082B7B0 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
@@ -589,7 +588,6 @@
 				51E67EF22673C7FB00FB6051 /* Sources */,
 				51E67EF32673C7FB00FB6051 /* Frameworks */,
 				51E67EF12673C7FB00FB6051 /* Headers */,
-				51E67EF42673C7FB00FB6051 /* Resources */,
 				51E67F032673C95000FB6051 /* CopyFiles */,
 			);
 			buildRules = (
@@ -784,14 +782,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		51E67EF42673C7FB00FB6051 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				51E67F082673CC4800FB6051 /* BlueToolFixup-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		841AD8861BB3C0350082B7B0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1052,6 +1042,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
@@ -1080,6 +1071,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LILU_CUSTOM_IOKIT_INIT=1",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
@@ -1107,6 +1099,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1129,6 +1122,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LOGNAME=\\\"${LOGNAME}\\\"",
 					"FIRMWAREDATA=1",
@@ -1150,6 +1144,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1171,6 +1166,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "LOGNAME=\\\"${LOGNAME}\\\"";
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -1268,6 +1264,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_MAVERICKS=1",
 					"DEBUG=1",
@@ -1293,6 +1290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_MAVERICKS=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1317,6 +1315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_CATALINA=1",
 					"DEBUG=1",
@@ -1342,6 +1341,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_CATALINA=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1452,6 +1452,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_ELCAPITAN=1",
 					"DEBUG=1",
@@ -1477,6 +1478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_ELCAPITAN=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1501,6 +1503,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
@@ -1516,6 +1519,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
@@ -1531,6 +1535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
@@ -1546,6 +1551,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
