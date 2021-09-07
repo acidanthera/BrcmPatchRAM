@@ -36,9 +36,9 @@ bool BlueToolFixup::start(IOService *provider) {
         return false;
     }
     setProperty("VersionInfo", kextVersion);
-    setName("bluetooth");
-    uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
-    setProperty("transport-encoding", bytes, sizeof(bytes));
+    setName("Bluetooth USB Host Controller");
+    // uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
+    // setProperty("transport-encoding", bytes, sizeof(bytes));
     registerService();
     
     return true;
