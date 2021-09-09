@@ -36,7 +36,7 @@ bool BlueToolFixup::start(IOService *provider) {
         return false;
     }
     setProperty("VersionInfo", kextVersion);
-    setName("Bluetooth USB Host Controller");
+    setName("Broadcom Bluetooth Download Device");
     // uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
     // setProperty("transport-encoding", bytes, sizeof(bytes));
     registerService();
