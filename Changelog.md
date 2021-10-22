@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.1
+- Improved BlueToolFixup compatibility with macOS 12b10 (thx @dhinakg, @williambj1)
+
 #### v2.6.0
 - Added BlueToolFixup for macOS 12 compatibility
 
