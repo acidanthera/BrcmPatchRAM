@@ -66,10 +66,26 @@ static const uint8_t kVendorCheckPatched[] =
 };
 
 static bool shouldPatchBoardId = false;
-static const char kBoardIdMacBookAir7_2[]  = "Mac-937CB26E2E02BB01";
-static const char kBoardIdInvalid[] =        "WrongBoardIdentifier";
-static const size_t kBoardIdSize = sizeof(kBoardIdMacBookAir7_2);
-static_assert(sizeof(kBoardIdInvalid) == kBoardIdSize, "Size mismatch");
+
+static const size_t kBoardIdSize = sizeof(
+    "Mac-F60DEB81FF30ACF6");
+
+static const char boardIdsWithUSBBluetooth[][kBoardIdSize] = {
+    "Mac-F60DEB81FF30ACF6",
+    "Mac-9F18E312C5C2BF0B",
+    "Mac-937CB26E2E02BB01",
+    "Mac-E43C1C25D4880AD6",
+    "Mac-06F11FD93F0323C5",
+    "Mac-06F11F11946D27C5",
+    "Mac-A369DDC4E67F1C45",
+    "Mac-FFE5EF870D7BA81A",
+    "Mac-DB15BD556843C820",
+    "Mac-B809C3757DA9BB8D",
+    "Mac-65CE76090165799A",
+    "Mac-4B682C642B45593E",
+    "Mac-77F17D7DA9285301",
+    "Mac-BE088AF8C5EB4FA2"
+};
 
 static mach_vm_address_t orig_cs_validate {};
 
@@ -96,19 +112,13 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
     if (vn_getpath(vp, path, &pathlen) == 0 && UNLIKELY(strncmp(path, "/usr/sbin/", dirLength) == 0)) {
         if (strcmp(path + dirLength, "BlueTool") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kSkipUpdateFilePathOriginal, kSkipUpdateFilePathPatched);
-            if (shouldPatchBoardId) {
-                auto boardId = BaseDeviceInfo::get().boardIdentifier;
-                searchAndPatch(data, PAGE_SIZE, path, boardId, kBoardIdSize, kBoardIdInvalid, kBoardIdSize);
-                searchAndPatch(data, PAGE_SIZE, path, kBoardIdMacBookAir7_2, kBoardIdSize, boardId, kBoardIdSize);
-            }
+            if (shouldPatchBoardId)
+                searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
         }
         else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
-            if (shouldPatchBoardId) {
-                auto boardId = BaseDeviceInfo::get().boardIdentifier;
-                searchAndPatch(data, PAGE_SIZE, path, boardId, kBoardIdSize, kBoardIdInvalid, kBoardIdSize);
-                searchAndPatch(data, PAGE_SIZE, path, kBoardIdMacBookAir7_2, kBoardIdSize, boardId, kBoardIdSize);
-            }
+            if (shouldPatchBoardId)
+                searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
         }
     }
 }
@@ -122,7 +132,13 @@ static void pluginStart() {
     if (getKernelVersion() >= KernelVersion::Monterey) {
         lilu.onPatcherLoadForce([](void *user, KernelPatcher &patcher) {
             auto boardId = BaseDeviceInfo::get().boardIdentifier;
-            shouldPatchBoardId = strnlen(boardId, 48) + 1 == kBoardIdSize && strncmp(kBoardIdMacBookAir7_2, boardId, kBoardIdSize);
+            shouldPatchBoardId = strlen(boardId) + 1 == kBoardIdSize;
+            if (shouldPatchBoardId)
+                for (int i = 0; i < sizeof(boardIdsWithUSBBluetooth) / sizeof(boardIdsWithUSBBluetooth[0]); i++)
+                    if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
+                        shouldPatchBoardId = false;
+                        break;
+                    }
             KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
             if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
                 SYSLOG(MODULE_SHORT, "failed to route cs validation pages");
