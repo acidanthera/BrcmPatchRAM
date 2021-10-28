@@ -11,6 +11,7 @@
 #include <Headers/kern_user.hpp>
 #include <Headers/kern_util.hpp>
 #include <Headers/kern_version.hpp>
+#include <Headers/kern_devinfo.hpp>
 
 
 #define MODULE_SHORT "btlfx"
@@ -64,31 +65,51 @@ static const uint8_t kVendorCheckPatched[] =
     0xEB // jmp short
 };
 
+static bool shouldPatchBoardId = false;
+static const char kBoardIdMacBookAir7_2[]  = "Mac-937CB26E2E02BB01";
+static const char kBoardIdInvalid[] =        "WrongBoardIdentifier";
+static const size_t kBoardIdSize = sizeof(kBoardIdMacBookAir7_2);
+static_assert(sizeof(kBoardIdInvalid) == kBoardIdSize, "Size mismatch");
+
 static mach_vm_address_t orig_cs_validate {};
 
 #pragma mark - Kernel patching code
 
-template <size_t findSize, size_t replaceSize>
-static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const uint8_t (&needle)[findSize], const uint8_t (&patch)[replaceSize]) {
-   if (UNLIKELY(KernelPatcher::findAndReplace(const_cast<void *>(haystack), haystackSize, needle, findSize, patch, replaceSize)))
-       DBGLOG(MODULE_SHORT, "found string to patch at %s!", path);
+static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const void *needle, size_t findSize, const void *patch, size_t replaceSize) {
+    if (KernelPatcher::findAndReplace(const_cast<void *>(haystack), haystackSize, needle, findSize, patch, replaceSize))
+        DBGLOG(MODULE_SHORT, "found string to patch at %s!", path);
 }
 
+template <size_t findSize, size_t replaceSize, typename T>
+static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const T (&needle)[findSize], const T (&patch)[replaceSize]) {
+    searchAndPatch(haystack, haystackSize, path, needle, findSize * sizeof(T), patch, replaceSize * sizeof(T));
+}
 
 
 #pragma mark - Patched functions
 
-// For Big Sur
 static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_object_offset_t page_offset, const void *data, int *validated_p, int *tainted_p, int *nx_p) {
     char path[PATH_MAX];
     int pathlen = PATH_MAX;
     FunctionCast(patched_cs_validate_page, orig_cs_validate)(vp, pager, page_offset, data, validated_p, tainted_p, nx_p);
     static constexpr size_t dirLength = sizeof("/usr/sbin/")-1;
     if (vn_getpath(vp, path, &pathlen) == 0 && UNLIKELY(strncmp(path, "/usr/sbin/", dirLength) == 0)) {
-        if (strcmp(path + dirLength, "BlueTool") == 0)
+        if (strcmp(path + dirLength, "BlueTool") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kSkipUpdateFilePathOriginal, kSkipUpdateFilePathPatched);
-        else if (strcmp(path + dirLength, "bluetoothd") == 0)
+            if (shouldPatchBoardId) {
+                auto boardId = BaseDeviceInfo::get().boardIdentifier;
+                searchAndPatch(data, PAGE_SIZE, path, boardId, kBoardIdSize, kBoardIdInvalid, kBoardIdSize);
+                searchAndPatch(data, PAGE_SIZE, path, kBoardIdMacBookAir7_2, kBoardIdSize, boardId, kBoardIdSize);
+            }
+        }
+        else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
+            if (shouldPatchBoardId) {
+                auto boardId = BaseDeviceInfo::get().boardIdentifier;
+                searchAndPatch(data, PAGE_SIZE, path, boardId, kBoardIdSize, kBoardIdInvalid, kBoardIdSize);
+                searchAndPatch(data, PAGE_SIZE, path, kBoardIdMacBookAir7_2, kBoardIdSize, boardId, kBoardIdSize);
+            }
+        }
     }
 }
 
@@ -100,6 +121,8 @@ static void pluginStart() {
     // There is no point in routing cs_validate_range, because this kext should only be running on Monterey+
     if (getKernelVersion() >= KernelVersion::Monterey) {
         lilu.onPatcherLoadForce([](void *user, KernelPatcher &patcher) {
+            auto boardId = BaseDeviceInfo::get().boardIdentifier;
+            shouldPatchBoardId = strnlen(boardId, 48) + 1 == kBoardIdSize && strncmp(kBoardIdMacBookAir7_2, boardId, kBoardIdSize);
             KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
             if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
                 SYSLOG(MODULE_SHORT, "failed to route cs validation pages");
