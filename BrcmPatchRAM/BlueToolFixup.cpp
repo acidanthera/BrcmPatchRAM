@@ -11,6 +11,7 @@
 #include <Headers/kern_user.hpp>
 #include <Headers/kern_util.hpp>
 #include <Headers/kern_version.hpp>
+#include <Headers/kern_devinfo.hpp>
 
 
 #define MODULE_SHORT "btlfx"
@@ -36,9 +37,6 @@ bool BlueToolFixup::start(IOService *provider) {
         return false;
     }
     setProperty("VersionInfo", kextVersion);
-    setName("bluetooth");
-    uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
-    setProperty("transport-encoding", bytes, sizeof(bytes));
     registerService();
     
     return true;
@@ -64,31 +62,61 @@ static const uint8_t kVendorCheckPatched[] =
     0xEB // jmp short
 };
 
+static bool shouldPatchBoardId = false;
+
+static const size_t kBoardIdSize = sizeof(
+    "Mac-F60DEB81FF30ACF6");
+
+static const char boardIdsWithUSBBluetooth[][kBoardIdSize] = {
+    "Mac-F60DEB81FF30ACF6",
+    "Mac-9F18E312C5C2BF0B",
+    "Mac-937CB26E2E02BB01",
+    "Mac-E43C1C25D4880AD6",
+    "Mac-06F11FD93F0323C5",
+    "Mac-06F11F11946D27C5",
+    "Mac-A369DDC4E67F1C45",
+    "Mac-FFE5EF870D7BA81A",
+    "Mac-DB15BD556843C820",
+    "Mac-B809C3757DA9BB8D",
+    "Mac-65CE76090165799A",
+    "Mac-4B682C642B45593E",
+    "Mac-77F17D7DA9285301",
+    "Mac-BE088AF8C5EB4FA2"
+};
+
 static mach_vm_address_t orig_cs_validate {};
 
 #pragma mark - Kernel patching code
 
-template <size_t findSize, size_t replaceSize>
-static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const uint8_t (&needle)[findSize], const uint8_t (&patch)[replaceSize]) {
-   if (UNLIKELY(KernelPatcher::findAndReplace(const_cast<void *>(haystack), haystackSize, needle, findSize, patch, replaceSize)))
-       DBGLOG(MODULE_SHORT, "found string to patch at %s!", path);
+static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const void *needle, size_t findSize, const void *patch, size_t replaceSize) {
+    if (KernelPatcher::findAndReplace(const_cast<void *>(haystack), haystackSize, needle, findSize, patch, replaceSize))
+        DBGLOG(MODULE_SHORT, "found string to patch at %s!", path);
 }
 
+template <size_t findSize, size_t replaceSize, typename T>
+static inline void searchAndPatch(const void *haystack, size_t haystackSize, const char *path, const T (&needle)[findSize], const T (&patch)[replaceSize]) {
+    searchAndPatch(haystack, haystackSize, path, needle, findSize * sizeof(T), patch, replaceSize * sizeof(T));
+}
 
 
 #pragma mark - Patched functions
 
-// For Big Sur
 static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_object_offset_t page_offset, const void *data, int *validated_p, int *tainted_p, int *nx_p) {
     char path[PATH_MAX];
     int pathlen = PATH_MAX;
     FunctionCast(patched_cs_validate_page, orig_cs_validate)(vp, pager, page_offset, data, validated_p, tainted_p, nx_p);
     static constexpr size_t dirLength = sizeof("/usr/sbin/")-1;
     if (vn_getpath(vp, path, &pathlen) == 0 && UNLIKELY(strncmp(path, "/usr/sbin/", dirLength) == 0)) {
-        if (strcmp(path + dirLength, "BlueTool") == 0)
+        if (strcmp(path + dirLength, "BlueTool") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kSkipUpdateFilePathOriginal, kSkipUpdateFilePathPatched);
-        else if (strcmp(path + dirLength, "bluetoothd") == 0)
+            if (shouldPatchBoardId)
+                searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
+        }
+        else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
+            if (shouldPatchBoardId)
+                searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
+        }
     }
 }
 
@@ -100,6 +128,14 @@ static void pluginStart() {
     // There is no point in routing cs_validate_range, because this kext should only be running on Monterey+
     if (getKernelVersion() >= KernelVersion::Monterey) {
         lilu.onPatcherLoadForce([](void *user, KernelPatcher &patcher) {
+            auto boardId = BaseDeviceInfo::get().boardIdentifier;
+            shouldPatchBoardId = strlen(boardId) + 1 == kBoardIdSize;
+            if (shouldPatchBoardId)
+                for (size_t i = 0; i < arrsize(boardIdsWithUSBBluetooth); i++)
+                    if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
+                        shouldPatchBoardId = false;
+                        break;
+                    }
             KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
             if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
                 SYSLOG(MODULE_SHORT, "failed to route cs validation pages");
