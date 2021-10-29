@@ -37,9 +37,6 @@ bool BlueToolFixup::start(IOService *provider) {
         return false;
     }
     setProperty("VersionInfo", kextVersion);
-    setName("bluetooth");
-    uint8_t bytes[] {0x00, 0x00, 0x00, 0x00};
-    setProperty("transport-encoding", bytes, sizeof(bytes));
     registerService();
     
     return true;
@@ -134,7 +131,7 @@ static void pluginStart() {
             auto boardId = BaseDeviceInfo::get().boardIdentifier;
             shouldPatchBoardId = strlen(boardId) + 1 == kBoardIdSize;
             if (shouldPatchBoardId)
-                for (int i = 0; i < sizeof(boardIdsWithUSBBluetooth) / sizeof(boardIdsWithUSBBluetooth[0]); i++)
+                for (size_t i = 0; i < arrsize(boardIdsWithUSBBluetooth); i++)
                     if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
                         shouldPatchBoardId = false;
                         break;
