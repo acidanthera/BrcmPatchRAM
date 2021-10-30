@@ -62,6 +62,24 @@ static const uint8_t kVendorCheckPatched[] =
     0xEB // jmp short
 };
 
+// Workaround for bugged chipset range check that
+// doesn't consider 0 "THIRD_PARTY_DONGLE" as valid.
+// This patch allows bluetooth to turn back on after the first power cycle.
+// See https://github.com/acidanthera/BrcmPatchRAM/pull/18 for more details.
+static const uint8_t kBadChipsetCheckOriginal[] =
+{
+    0x81, 0xF9,     // cmp ecx
+    0xCF, 0x07, 0x00, 0x00,  // int 1999
+    0x72 // jb short
+};
+
+static const uint8_t kBadChipsetCheckPatched[] =
+{
+    0x81, 0xF9,     // cmp ecx
+    0xCF, 0x07, 0x00, 0x00,  // int 1999
+    0xEB // jmp short
+};
+
 static bool shouldPatchBoardId = false;
 
 static const size_t kBoardIdSize = sizeof(
@@ -114,6 +132,7 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
         }
         else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
+            searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
         }
@@ -169,4 +188,3 @@ PluginConfiguration ADDPR(config) {
     KernelVersion::Monterey,
     pluginStart
 };
-
