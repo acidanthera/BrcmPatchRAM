@@ -45,7 +45,7 @@ Also, if you have a non-PatchRAM device (or you're not sure), install one of Brc
 
 ### BrcmBluetoothInjector.kext
 
-To be used for macOS 10.11-11. Use BrcmBluetoothInjectorLetacy.kext for older system. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS Catalina (10.15) requires the use of a separate injector kext. This is due to the removal of the following IOCatalogue methods:
+To be used for macOS 10.11-11. Use BrcmBluetoothInjectorLegacy.kext for older systems. Using BrcmPatchRAM3.kext also requires BrcmBluetoothInjector.kext as changes in macOS Catalina (10.15) requires the use of a separate injector kext. This is due to the removal of the following IOCatalogue methods:
 
     IOCatalogue::addDrivers, IOCatalogue::removeDrivers and IOCatalogue::startMatching
 
