@@ -3,7 +3,7 @@ BrcmPatchRAM Changelog
 #### v2.6.1
 - Improved BlueToolFixup compatibility with macOS 12b10 (thx @dhinakg, @williambj1)
 - Fixed bluetooth support on MBP15,4 and other similar boards (thx @dhinakg, @usr-sse2)
-- Fixed bluetooth not working on macOS 12 after wake (thx @williambj1)
+- Fixed bluetooth not working on macOS 12 after the first power cycle (thx @williambj1, @zxystd)
 
 #### v2.6.0
 - Added BlueToolFixup for macOS 12 compatibility

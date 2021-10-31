@@ -46,20 +46,20 @@ bool BlueToolFixup::start(IOService *provider) {
 #pragma mark - Patches
 
 static const uint8_t kSkipUpdateFilePathOriginal[] = "/etc/bluetool/SkipBluetoothAutomaticFirmwareUpdate";
-static const uint8_t kSkipUpdateFilePathPatched[] = "/System/Library/CoreServices/boot.efi";
+static const uint8_t kSkipUpdateFilePathPatched[]  = "/System/Library/CoreServices/boot.efi";
 
 static const uint8_t kVendorCheckOriginal[] =
 {
-    0x81, 0xFA,     // cmp edx
+    0x81, 0xFA,              // cmp edx
     0x5C, 0x0A, 0x00, 0x00,  // Vendor BRCM,
-    0x74 // jnz short
+    0x74                     // jnz short
 };
 
 static const uint8_t kVendorCheckPatched[] =
 {
-    0x81, 0xFA,     // cmp edx
+    0x81, 0xFA,              // cmp edx
     0x5C, 0x0A, 0x00, 0x00,  // Vendor BRCM,
-    0xEB // jmp short
+    0xEB                     // jmp short
 };
 
 // Workaround for bugged chipset range check that
@@ -68,22 +68,21 @@ static const uint8_t kVendorCheckPatched[] =
 // See https://github.com/acidanthera/BrcmPatchRAM/pull/18 for more details.
 static const uint8_t kBadChipsetCheckOriginal[] =
 {
-    0x81, 0xF9,     // cmp ecx
+    0x81, 0xF9,              // cmp ecx
     0xCF, 0x07, 0x00, 0x00,  // int 1999
-    0x72 // jb short
+    0x72                     // jb short
 };
 
 static const uint8_t kBadChipsetCheckPatched[] =
 {
-    0x81, 0xF9,     // cmp ecx
+    0x81, 0xF9,              // cmp ecx
     0xCF, 0x07, 0x00, 0x00,  // int 1999
-    0xEB // jmp short
+    0xEB                     // jmp short
 };
 
 static bool shouldPatchBoardId = false;
 
-static const size_t kBoardIdSize = sizeof(
-    "Mac-F60DEB81FF30ACF6");
+static const size_t kBoardIdSize = sizeof("Mac-F60DEB81FF30ACF6");
 
 static const char boardIdsWithUSBBluetooth[][kBoardIdSize] = {
     "Mac-F60DEB81FF30ACF6",
