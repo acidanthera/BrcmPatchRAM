@@ -255,6 +255,7 @@ For example, to change `mPostResetDelay` to 400 ms, use the kernel boot argument
 
 Note: Some with the typical "wake from sleep" problems are reporting success with: `bpr_probedelay=100 bpr_initialdelay=300 bpr_postresetdelay=300`.  Or slightly longer delays: `bpr_probedelay=200 bpr_initialdelay=400 bpr_postresetdelay=400`.
 
+On macOS 12.4 and newer versions, a new address check has been introduced in `bluetoothd`, thus an error will be triggered if two Bluetooth devices have the same address. However, this check can be circumvented by adding the boot argument `-btlfxallowanyaddr`.
 
 ### Details
 

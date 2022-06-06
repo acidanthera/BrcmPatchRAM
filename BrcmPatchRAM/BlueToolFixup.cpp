@@ -48,6 +48,27 @@ bool BlueToolFixup::start(IOService *provider) {
 static const uint8_t kSkipUpdateFilePathOriginal[] = "/etc/bluetool/SkipBluetoothAutomaticFirmwareUpdate";
 static const uint8_t kSkipUpdateFilePathPatched[]  = "/System/Library/CoreServices/boot.efi";
 
+
+// Workaround 12.4 Beta 3+ bug where macOS may detect the Bluetooth chipset twice
+// Once as internal, and second as an external dongle:
+// 'ERROR -- Third Party Dongle has the same address as the internal module'
+// Mainly applicable for BCM2046 and BCM2070 chipsets (BT2.1)
+static const uint8_t kSkipAddressCheckOriginal[] =
+{
+    0x48, 0x89, 0xF3,             // mov    rbx, rsi
+    0xE8, 0xE3, 0xF3, 0xFE, 0xFF, // call   sub_1000c5bc6
+    0x85, 0xC0,                   // test   eax, eax
+    0x74, 0x1D,                   // je
+};
+
+static const uint8_t kSkipAddressCheckPatched[] =
+{
+    0x48, 0x89, 0xF3,             // mov        rbx, rsi
+    0xE8, 0xE3, 0xF3, 0xFE, 0xFF, // call       sub_1000c5bc6
+    0x85, 0xC0,                   // test       eax, eax
+    0x72, 0x1D,                   // jb short
+};
+
 static const uint8_t kVendorCheckOriginal[] =
 {
     0x81, 0xFA,              // cmp edx
@@ -81,6 +102,7 @@ static const uint8_t kBadChipsetCheckPatched[] =
 };
 
 static bool shouldPatchBoardId = false;
+static bool shouldPatchAddress = false;
 
 static const size_t kBoardIdSize = sizeof("Mac-F60DEB81FF30ACF6");
 
@@ -134,6 +156,8 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
+            if (shouldPatchAddress)
+                searchAndPatch(data, PAGE_SIZE, path, kSkipAddressCheckOriginal, kSkipAddressCheckPatched);
         }
     }
 }
@@ -154,6 +178,9 @@ static void pluginStart() {
                         shouldPatchBoardId = false;
                         break;
                     }
+            if ((getKernelVersion() == KernelVersion::Monterey && getKernelMinorVersion() >= 5) || getKernelVersion() > KernelVersion::Monterey)
+                // 12.4 Beta 3+, XNU 21.5
+                shouldPatchAddress = checkKernelArgument("-btlfxallowanyaddr");
             KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
             if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
                 SYSLOG(MODULE_SHORT, "failed to route cs validation pages");
