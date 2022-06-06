@@ -180,7 +180,7 @@ static void pluginStart() {
                     }
             if ((getKernelVersion() == KernelVersion::Monterey && getKernelMinorVersion() >= 5) || getKernelVersion() > KernelVersion::Monterey)
                 // 12.4 Beta 3+, XNU 21.5
-                shouldPatchAddress = checkKernelArgument("-skip_address_check");
+                shouldPatchAddress = checkKernelArgument("-btlfxallowanyaddr");
             KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
             if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
                 SYSLOG(MODULE_SHORT, "failed to route cs validation pages");
