@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.2
+- Added Skip Address Check patch for 12.4 Beta 3 and newer (thx @khronokernel)
+
 #### v2.6.1
 - Improved BlueToolFixup compatibility with macOS 12b10 (thx @dhinakg, @williambj1)
 - Fixed bluetooth support on MBP15,4 and other similar boards (thx @dhinakg, @usr-sse2)
