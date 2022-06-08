@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.3
+- Added constants for macOS 13.0 support
+
 #### v2.6.2
 - Added Skip Address Check patch for 12.4 Beta 3 and newer (thx @khronokernel)
 
