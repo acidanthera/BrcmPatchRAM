@@ -56,7 +56,7 @@ static const uint8_t kSkipUpdateFilePathPatched[]  = "/System/Library/CoreServic
 static const uint8_t kSkipAddressCheckOriginal[] =
 {
     0x48, 0x89, 0xF3,             // mov    rbx, rsi
-    0xE8, 0xE3, 0xF3, 0xFE, 0xFF, // call   sub_1000c5bc6
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call   <somewhere>
     0x85, 0xC0,                   // test   eax, eax
     0x74, 0x1D,                   // je
 };
@@ -64,9 +64,17 @@ static const uint8_t kSkipAddressCheckOriginal[] =
 static const uint8_t kSkipAddressCheckPatched[] =
 {
     0x48, 0x89, 0xF3,             // mov        rbx, rsi
-    0xE8, 0xE3, 0xF3, 0xFE, 0xFF, // call       sub_1000c5bc6
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call       <somewhere>
     0x85, 0xC0,                   // test       eax, eax
     0x72, 0x1D,                   // jb short
+};
+
+static const uint8_t kSkipAddressCheckMask[] =
+{
+    0xFF, 0xFF, 0xFF,
+    0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF,
+    0xFF, 0xFF,
 };
 
 static const uint8_t kVendorCheckOriginal[] =
@@ -137,6 +145,16 @@ static inline void searchAndPatch(const void *haystack, size_t haystackSize, con
     searchAndPatch(haystack, haystackSize, path, needle, findSize * sizeof(T), patch, replaceSize * sizeof(T));
 }
 
+static inline void searchAndPatchWithMask(const void *haystack, size_t haystackSize, const char *path, const void *needle, size_t findSize, const void *findMask, size_t findMaskSize, const void *patch, size_t replaceSize, const void *patchMask, size_t replaceMaskSize) {
+    if (KernelPatcher::findAndReplaceWithMask(const_cast<void *>(haystack), haystackSize, needle, findSize, findMask, findMaskSize, patch, replaceSize, patchMask, replaceMaskSize))
+        DBGLOG(MODULE_SHORT, "found string to patch at %s!", path);
+}
+
+template <size_t findSize, size_t findMaskSize, size_t replaceSize, size_t replaceMaskSize, typename T>
+static inline void searchAndPatchWithMask(const void *haystack, size_t haystackSize, const char *path, const T (&needle)[findSize], const T (&findMask)[findMaskSize], const T (&patch)[replaceSize], const T (&patchMask)[replaceMaskSize]) {
+    searchAndPatchWithMask(haystack, haystackSize, path, needle, findSize * sizeof(T), findMask, findMaskSize * sizeof(T), patch, replaceSize * sizeof(T), patchMask, replaceSize * sizeof(T));
+}
+
 
 #pragma mark - Patched functions
 
@@ -157,7 +175,7 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
             if (shouldPatchAddress)
-                searchAndPatch(data, PAGE_SIZE, path, kSkipAddressCheckOriginal, kSkipAddressCheckPatched);
+                searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipAddressCheckOriginal, kSkipAddressCheckMask, kSkipAddressCheckPatched, kSkipAddressCheckMask);
         }
     }
 }
