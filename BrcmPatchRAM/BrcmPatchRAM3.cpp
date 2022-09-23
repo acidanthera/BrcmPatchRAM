@@ -819,7 +819,8 @@ bool BrcmPatchRAM::performUpgrade()
                 
                 // Write first instruction to trigger response
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite(data->getBytesNoCopy(), data->getLength());
+                //changed from bulkWrite for BigSur support
+                hciCommand((void*)(data->getBytesNoCopy()), data->getLength());
                 break;
                 
             case kInstructionWrite:
@@ -830,7 +831,8 @@ bool BrcmPatchRAM::performUpgrade()
                 }
                 
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject()))) {
-                    bulkWrite(data->getBytesNoCopy(), data->getLength());
+                    //changed from bulkWrite for BigSur support
+                    hciCommand((void*)(data->getBytesNoCopy()), data->getLength());                    
                 } else {
                     // Firmware data fully written
                     if (hciCommand(&HCI_VSC_END_OF_RECORD, sizeof(HCI_VSC_END_OF_RECORD)) != kIOReturnSuccess) {
