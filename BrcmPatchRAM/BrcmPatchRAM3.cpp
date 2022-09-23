@@ -818,8 +818,9 @@ bool BrcmPatchRAM::performUpgrade()
                 IOSleep(mInitialDelay);
                 
                 // Write first instruction to trigger response
+                // changed the bulkwrite to hciCommand for BigSur support
                 if ((data = OSDynamicCast(OSData, iterator->getNextObject())))
-                    bulkWrite(data->getBytesNoCopy(), data->getLength());
+                    hciCommand(data->getBytesNoCopy(), data->getLength());
                 break;
                 
             case kInstructionWrite:
