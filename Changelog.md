@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.4
+- Improve compatibility with BCM43142A0 on macOS Big Sur (thx lalithkota)
+
 #### v2.6.3
 - Added constants for macOS 13 support
 - Fixed Skip Address Check patch for 13.0 Beta 1 and newer
