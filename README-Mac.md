@@ -19,7 +19,7 @@ Or for 10.11 and later, to /Library/Extensions:
 ```
 sudo cp -R ~/Downloads/BrcmPatchRAM2.kext /Library/Extensions
 sudo cp -R ~/Downloads/BrcmFirmwareRepo.kext /Library/Extensions
-sudo touch /System/Library/Extensions
+sudo touch /Library/Extensions
 ```
 
 Wait about a minute before rebooting the Mac again.
