@@ -113,6 +113,7 @@ static bool shouldPatchBoardId = false;
 static bool shouldPatchAddress = false;
 
 static const size_t kBoardIdSize = sizeof("Mac-F60DEB81FF30ACF6");
+static const size_t kBoardIdSizeLegacy = sizeof("Mac-F22586C8");
 
 static const char boardIdsWithUSBBluetooth[][kBoardIdSize] = {
     "Mac-F60DEB81FF30ACF6",
@@ -189,7 +190,8 @@ static void pluginStart() {
     if (getKernelVersion() >= KernelVersion::Monterey) {
         lilu.onPatcherLoadForce([](void *user, KernelPatcher &patcher) {
             auto boardId = BaseDeviceInfo::get().boardIdentifier;
-            shouldPatchBoardId = strlen(boardId) + 1 == kBoardIdSize;
+            auto boardIdSize = strlen(boardId) + 1;
+            shouldPatchBoardId = boardIdSize == kBoardIdSize || boardIdSize == kBoardIdSizeLegacy;
             if (shouldPatchBoardId)
                 for (size_t i = 0; i < arrsize(boardIdsWithUSBBluetooth); i++)
                     if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
