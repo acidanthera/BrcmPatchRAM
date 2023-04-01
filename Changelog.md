@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.5
+- Fixed legacy Mac compatibility (thx @AsdMonio)
+
 #### v2.6.4
 - Improve compatibility with BCM43142A0 on macOS Big Sur (thx lalithkota)
 
