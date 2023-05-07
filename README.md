@@ -336,7 +336,7 @@ http://drivers.softpedia.com/get/BLUETOOTH/Broadcom/ASUS-X99-DELUXE-Broadcom-Blu
 
 For an automatic update you can unpack the Broadcom USB bluetooth files and run `firmware_update.tool`.
 
-*Should you come across newer drivers than 12.0.0.9860, please let me know.*
+*Should you come across newer drivers than 12.0.1.1012, please let me know.*
 
 In order to get the device specific firmware for your device take the following steps:
 
