@@ -4,6 +4,8 @@
   * BCM20702A1_001.002.014.1443.1484 (v5580)
 * [`0489:e046`] 20702A1 Acer 43228+20702 combo card  (Bluetooth USB module)
   * BCM20702A1_001.002.014.1443.1465 (v5561)
+* [`0489:e047`] 20702A1 4313 (Bluetooth USB module)
+  * BCM20702A1_001.002.014.1055.1061 (v5157)
 * [`0489:e04f`] 20702A1 Lenovo China 43227 WLAN + 20702A1 Combo card (Broadcom Bluetooth 4.0 USB)
   * BCM20702A1_001.002.014.1443.1486 (v5582)
 * [`0489:e052`] 20702 non-UHE Generic (Broadcom BCM20702 Bluetooth USB Device)

@@ -83,6 +83,27 @@
 			<key>idVendor</key>
 			<integer>1161</integer>
 		</dict>
+		<key>0489_e047</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)</string>
+			<key>DisplayName</key>
+			<string>Bluetooth USB module</string>
+			<key>FirmwareKey</key>
+			<string>BCM20702A1_001.002.014.1055.1061_v5157</string>
+			<key>IOClass</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOMatchCategory</key>
+			<string>BrcmPatchRAM2</string>
+			<key>IOProbeScore</key>
+			<integer>4000</integer>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>idProduct</key>
+			<integer>57415</integer>
+			<key>idVendor</key>
+			<integer>1161</integer>
+		</dict>
 		<key>0489_e04f</key>
 		<dict>
 			<key>CFBundleIdentifier</key>

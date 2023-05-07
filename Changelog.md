@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.6
+- Added firmware for legacy BCM20702A1 (thx @realizelol)
+
 #### v2.6.5
 - Fixed legacy Mac compatibility (thx @AsdMonio)
 
