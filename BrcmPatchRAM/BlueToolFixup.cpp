@@ -109,6 +109,20 @@ static const uint8_t kBadChipsetCheckPatched[] =
     0xEB                     // jmp short
 };
 
+static const uint8_t kBadChipsetCheckOriginal13_3[] =
+{
+    0x81, 0xF9,              // cmp ecx
+    0x9E, 0x0F, 0x00, 0x00,  // int 3998
+    0x77, 0x1A               // ja short
+};
+
+static const uint8_t kBadChipsetCheckPatched13_3[] =
+{
+    0x90, 0x90,
+    0x90, 0x90, 0x90, 0x90,
+    0x90, 0x90
+};
+
 static bool shouldPatchBoardId = false;
 static bool shouldPatchAddress = false;
 
@@ -173,6 +187,7 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
         else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
+            searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal13_3, kBadChipsetCheckPatched13_3);
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
             if (shouldPatchAddress)
