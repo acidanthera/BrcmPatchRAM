@@ -123,6 +123,30 @@ static const uint8_t kBadChipsetCheckPatched13_3[] =
     0x90, 0x90
 };
 
+static const uint8_t kSkipInternalControllerNVRAMCheck13_3[] =
+{
+    0x41, 0x80, 0x00, 0x01, // xor     r15b, 1
+    0x75, 0x00,             // jnz     short
+    0x84, 0xDB,             // test    bl, bl
+    0x75, 0x00              // jnz     short
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheckMask13_3[] =
+{
+    0xFF, 0xFF, 0x00, 0xFF,
+    0xFF, 0x00,
+    0xFF, 0xFF,
+    0xFF, 0x00
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheckPatched13_3[] =
+{
+    0x90, 0x90, 0x90, 0x90,
+    0x90, 0x90,
+    0x90, 0x90,
+    0x90, 0x90
+};
+
 static bool shouldPatchBoardId = false;
 static bool shouldPatchAddress = false;
 
@@ -188,6 +212,7 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal13_3, kBadChipsetCheckPatched13_3);
+            searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipInternalControllerNVRAMCheck13_3, sizeof(kSkipInternalControllerNVRAMCheck13_3), kSkipInternalControllerNVRAMCheckMask13_3, sizeof(kSkipInternalControllerNVRAMCheckMask13_3), kSkipInternalControllerNVRAMCheckPatched13_3, sizeof(kSkipInternalControllerNVRAMCheckPatched13_3), nullptr, 0);
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
             if (shouldPatchAddress)
