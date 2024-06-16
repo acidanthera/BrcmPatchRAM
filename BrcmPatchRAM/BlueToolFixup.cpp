@@ -109,6 +109,33 @@ static const uint8_t kBadChipsetCheckPatched[] =
     0xEB                     // jmp short
 };
 
+static const uint8_t kBadChipsetCheckOriginal15[] =
+{
+    0x81, 0xFA, 0xCF, 0x07, 0x00, 0x00,  // cmp edx, 1999d
+    0x72, 0x00,                          // jb unsupported
+    0xFF, 0xC9,                          // dec ecx
+    0x81, 0xF9, 0x9E, 0x0F, 0x00, 0x00,  // cmp edx, 3998d
+    0x77, 0x00                           // ja unsupported
+};
+
+static const uint8_t kBadChipsetCheckMask15[] =
+{
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0x00,
+    0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0x00
+};
+
+static const uint8_t kBadChipsetCheckPatched15[] =
+{
+    0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+    0x90, 0x90,
+    0x90, 0x90,
+    0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+    0x90, 0x90
+};
+
 static const uint8_t kBadChipsetCheckOriginal13_3[] =
 {
     0x81, 0xF9,              // cmp ecx
@@ -145,6 +172,42 @@ static const uint8_t kSkipInternalControllerNVRAMCheckPatched13_3[] =
     0x90, 0x90,
     0x90, 0x90,
     0x90, 0x90
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheck15[] =
+{
+    0x41, 0x80, 0x00, 0x01,                   // cmp whatever, 1
+    0x4C, 0x8B, 0xA5, 0x00, 0x00, 0x00, 0x00, // mov r12, whatever
+    0x75, 0x00,                               // jne unsupported
+    0x84, 0xDB,                               // test bl, bl
+    0x75, 0x00                                // jne unsupported
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheckMask15[] =
+{
+    0xFF, 0xFF, 0x00, 0xFF,
+    0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0x00,
+    0xFF, 0xFF,
+    0xFF, 0x00
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheckPatched15[] =
+{
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00,
+    0x00, 0x00,
+    0x90, 0x90
+};
+
+static const uint8_t kSkipInternalControllerNVRAMCheckPatchedMask15[] =
+{
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00,
+    0x00, 0x00,
+    0xFF, 0xFF
 };
 
 static bool shouldPatchBoardId = false;
@@ -211,8 +274,11 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
         else if (strcmp(path + dirLength, "bluetoothd") == 0) {
             searchAndPatch(data, PAGE_SIZE, path, kVendorCheckOriginal, kVendorCheckPatched);
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
+            // kBadChipsetCheckOriginal15 is a greater set of kBadChipsetCheckOriginal13_3, and thus will be applied first.
+            searchAndPatchWithMask(data, PAGE_SIZE, path, kBadChipsetCheckOriginal15, sizeof(kBadChipsetCheckOriginal15), kBadChipsetCheckMask15, sizeof(kBadChipsetCheckMask15), kBadChipsetCheckPatched15, sizeof(kBadChipsetCheckPatched15), nullptr, 0);
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal13_3, kBadChipsetCheckPatched13_3);
             searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipInternalControllerNVRAMCheck13_3, sizeof(kSkipInternalControllerNVRAMCheck13_3), kSkipInternalControllerNVRAMCheckMask13_3, sizeof(kSkipInternalControllerNVRAMCheckMask13_3), kSkipInternalControllerNVRAMCheckPatched13_3, sizeof(kSkipInternalControllerNVRAMCheckPatched13_3), nullptr, 0);
+            searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipInternalControllerNVRAMCheck15, sizeof(kSkipInternalControllerNVRAMCheck15), kSkipInternalControllerNVRAMCheckMask15, sizeof(kSkipInternalControllerNVRAMCheckMask15), kSkipInternalControllerNVRAMCheckPatched15, sizeof(kSkipInternalControllerNVRAMCheckPatched15), kSkipInternalControllerNVRAMCheckPatchedMask15, sizeof(kSkipInternalControllerNVRAMCheckPatchedMask15));
             if (shouldPatchBoardId)
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
             if (shouldPatchAddress)
