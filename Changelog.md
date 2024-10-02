@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.6.9
+- Added constants for macOS 15 support
+
 #### v2.6.8
 - Added vendor callback patch for Bluetooth power status toggling on macOS 13.3+ (thx @zxystd)
 - Added patch that skips Internal Bluetooth Controller NVRAM checking (thx @zxystd)
