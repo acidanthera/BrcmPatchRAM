@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,13 +14,13 @@
 		841AD8811BB3C0350082B7B0 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		841AD8821BB3C0350082B7B0 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		841AD8831BB3C0350082B7B0 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
-		841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		841AD8841BB3C0350082B7B0 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		841AD8851BB3C0350082B7B0 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		841AD8911BB3C12F0082B7B0 /* FirmwareData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 841AD8901BB3C12F0082B7B0 /* FirmwareData.cpp */; };
 		842B20BD1BB2F0D900D3C468 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		842B20BE1BB2F0D900D3C468 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		842B20BF1BB2F0D900D3C468 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
-		842B20C01BB2F0D900D3C468 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		842B20C01BB2F0D900D3C468 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		842B20C11BB2F0D900D3C468 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		842B20CC1BB2F0F800D3C468 /* BrcmFirmwareStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4049E551A3252B1003A1893 /* BrcmFirmwareStore.cpp */; };
 		CE8DA13325182BB2008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA13225182BB2008C44E8 /* libkmod.a */; };
@@ -32,18 +32,17 @@
 		CE8DA71C235248C300BCE180 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		CE8DA71E235248C300BCE180 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		CE8DA720235248C300BCE180 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
-		CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		CE8DA721235248C300BCE180 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CE8DA722235248C300BCE180 /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		CE8DA72D23524E4500BCE180 /* USBDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E0A25A1BA30FD300A5FE05 /* USBDeviceShim.cpp */; };
 		D346F7BB23475DF60073A60D /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
 		D346F7BE23475DF60073A60D /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		D346F7BF23475DF60073A60D /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
 		D346F7C023475DF60073A60D /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = D454276C1A2A07A7000B0964 /* Common.h */; };
-		D346F7C123475DF60073A60D /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
 		D346F7C223475DF60073A60D /* hci.h in Headers */ = {isa = PBXBuildFile; fileRef = D45427691A2A045E000B0964 /* hci.h */; };
 		D3DDE0882349F788004B3498 /* BrcmPatchRAM3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3DDE0872349F788004B3498 /* BrcmPatchRAM3.cpp */; };
 		D45C93E01BA3549A006D3FB8 /* USBHostDeviceShim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D45C93DF1BA3549A006D3FB8 /* USBHostDeviceShim.cpp */; };
-		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; };
+		D4E0A25E1BA30FD300A5FE05 /* USBDeviceShim.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E0A25B1BA30FD300A5FE05 /* USBDeviceShim.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		ED5817BE1B7A6AEF006C5522 /* BrcmPatchRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4F91B051A2998CE0030D10D /* BrcmPatchRAM.cpp */; };
 		ED5817C11B7A6AEF006C5522 /* BrcmPatchRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F91B031A2998CE0030D10D /* BrcmPatchRAM.h */; };
 		ED5817C21B7A6AEF006C5522 /* BrcmFirmwareStore.h in Headers */ = {isa = PBXBuildFile; fileRef = D4049E561A3252B1003A1893 /* BrcmFirmwareStore.h */; };
@@ -508,7 +507,6 @@
 				D346F7BE23475DF60073A60D /* BrcmPatchRAM.h in Headers */,
 				D346F7BF23475DF60073A60D /* BrcmFirmwareStore.h in Headers */,
 				D346F7C023475DF60073A60D /* Common.h in Headers */,
-				D346F7C123475DF60073A60D /* USBDeviceShim.h in Headers */,
 				D346F7C223475DF60073A60D /* hci.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -561,7 +559,7 @@
 				4C7783412526A09D00DBB02E /* PBXTargetDependency */,
 			);
 			name = Package;
-			passBuildSettingsInEnvironment = 1;
+			passBuildSettingsInEnvironment = 0;
 			productName = Package;
 		};
 		84CDEE051BB3CA2200238DD1 /* Prebuild */ = {
@@ -740,7 +738,8 @@
 		D4F91AF51A2998CE0030D10D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					4C7783242526A08800DBB02E = {
 						CreatedOnToolsVersion = 12.0.1;
@@ -976,6 +975,8 @@
 		4C7783252526A08800DBB02E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = yes;
+				"ALWAYS_SEARCH_USER_PATHS[arch=x86_64]" = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -990,6 +991,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1001,6 +1003,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
@@ -1012,6 +1015,8 @@
 		4C7783262526A08800DBB02E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = yes;
+				"ALWAYS_SEARCH_USER_PATHS[arch=x86_64]" = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1026,10 +1031,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = "";
@@ -1041,8 +1048,12 @@
 		51E67EFD2673C7FB00FB6051 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = YES;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = YES;
+				CLANG_ANALYZER_NULL_DEREFERENCE = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
@@ -1056,13 +1067,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MODULE_NAME = as.acidanthera.BlueToolFixup;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BlueToolFixup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -1071,7 +1083,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LILU_CUSTOM_IOKIT_INIT=1",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
@@ -1084,13 +1097,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MODULE_NAME = as.acidanthera.BlueToolFixup;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BlueToolFixup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
@@ -1098,8 +1112,12 @@
 		841AD88A1BB3C0350082B7B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1110,10 +1128,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -1122,7 +1141,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LOGNAME=\\\"${LOGNAME}\\\"",
 					"FIRMWAREDATA=1",
@@ -1132,7 +1152,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1143,8 +1163,12 @@
 		842B20C71BB2F0D900D3C468 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1154,10 +1178,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -1166,14 +1191,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "LOGNAME=\\\"${LOGNAME}\\\"";
 				INFOPLIST_FILE = "BrcmPatchRAM/BrcmFirmwareRepo-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				PRODUCT_BUNDLE_IDENTIFIER = as.acidanthera.BrcmFirmwareStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1199,6 +1225,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1217,6 +1244,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
@@ -1243,6 +1271,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1253,6 +1282,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -1263,8 +1293,12 @@
 		CE8DA727235248C300BCE180 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_MAVERICKS=1",
 					"DEBUG=1",
@@ -1275,12 +1309,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1290,7 +1325,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_MAVERICKS=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1300,7 +1336,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1314,8 +1350,12 @@
 		D346F7C723475DF60073A60D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_CATALINA=1",
 					"DEBUG=1",
@@ -1326,12 +1366,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = 0;
 				MODULE_STOP = 0;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1341,7 +1382,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_CATALINA=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1351,7 +1393,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = 0;
 				MODULE_STOP = 0;
@@ -1366,7 +1408,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1381,14 +1423,17 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CURRENT_PROJECT_VERSION = 2.6.9;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1410,7 +1455,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1y";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1425,13 +1470,16 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CURRENT_PROJECT_VERSION = 2.6.9;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1451,8 +1499,12 @@
 		ED5817C71B7A6AEF006C5522 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_ELCAPITAN=1",
 					"DEBUG=1",
@@ -1463,12 +1515,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = BrcmPatchRAM2;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1478,7 +1531,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_ELCAPITAN=1",
 					"LOGNAME=\\\"${LOGNAME}\\\"",
@@ -1488,7 +1542,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.BrcmPatchRAM;
 				MODULE_START = BrcmPatchRAM_Start;
 				MODULE_STOP = BrcmPatchRAM_Stop;
@@ -1502,15 +1556,35 @@
 		ED7470F51D184C5D005F75F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_ON_DEMAND_RESOURCES = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -1518,15 +1592,31 @@
 		ED7470F61D184C5D005F75F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				ENABLE_ON_DEMAND_RESOURCES = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "BrcmNonPatchRAM-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
@@ -1534,15 +1624,20 @@
 		EDC9E2BA1D185240007E69B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_DEADCODE_DEADSTORES = NO;
+				CLANG_ANALYZER_DIVIDE_BY_ZERO = NO;
+				CLANG_ANALYZER_NULL_DEREFERENCE = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -1551,11 +1646,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "BrcmNonPatchRAM2-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/MacKernelSDK/Library/x86_64";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = as.acidanthera.injector.BrcmBluetoothInjector;
 				PRODUCT_BUNDLE_IDENTIFIER = "as.acidanthera.injector.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1573,7 +1669,7 @@
 				4C7783262526A08800DBB02E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		51E67EFF2673C7FB00FB6051 /* Build configuration list for PBXNativeTarget "BlueToolFixup" */ = {
 			isa = XCConfigurationList;
@@ -1582,7 +1678,7 @@
 				51E67EFE2673C7FB00FB6051 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		841AD8891BB3C0350082B7B0 /* Build configuration list for PBXNativeTarget "BrcmFirmwareData" */ = {
 			isa = XCConfigurationList;
@@ -1591,7 +1687,7 @@
 				841AD88B1BB3C0350082B7B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		842B20C61BB2F0D900D3C468 /* Build configuration list for PBXNativeTarget "BrcmFirmwareRepo" */ = {
 			isa = XCConfigurationList;
@@ -1600,7 +1696,7 @@
 				842B20C81BB2F0D900D3C468 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		84CDEE081BB3CA2200238DD1 /* Build configuration list for PBXLegacyTarget "Prebuild" */ = {
 			isa = XCConfigurationList;
@@ -1609,7 +1705,7 @@
 				84CDEE071BB3CA2200238DD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		CE8DA726235248C300BCE180 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM" */ = {
 			isa = XCConfigurationList;
@@ -1618,7 +1714,7 @@
 				CE8DA728235248C300BCE180 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		D346F7C623475DF60073A60D /* Build configuration list for PBXNativeTarget "BrcmPatchRAM3" */ = {
 			isa = XCConfigurationList;
@@ -1627,7 +1723,7 @@
 				D346F7C823475DF60073A60D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		D4F91AF81A2998CE0030D10D /* Build configuration list for PBXProject "BrcmPatchRAM" */ = {
 			isa = XCConfigurationList;
@@ -1636,7 +1732,7 @@
 				D4F91B081A2998CE0030D10D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		ED5817C61B7A6AEF006C5522 /* Build configuration list for PBXNativeTarget "BrcmPatchRAM2" */ = {
 			isa = XCConfigurationList;
@@ -1645,7 +1741,7 @@
 				ED5817C81B7A6AEF006C5522 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		ED7470F41D184C5D005F75F1 /* Build configuration list for PBXNativeTarget "BrcmNonPatchRAM" */ = {
 			isa = XCConfigurationList;
@@ -1654,7 +1750,7 @@
 				ED7470F61D184C5D005F75F1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		EDC9E2B91D185240007E69B6 /* Build configuration list for PBXNativeTarget "BrcmNonPatchRAM2" */ = {
 			isa = XCConfigurationList;
@@ -1663,7 +1759,7 @@
 				EDC9E2BB1D185240007E69B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
