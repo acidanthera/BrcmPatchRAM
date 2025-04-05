@@ -1,9 +1,11 @@
 BrcmPatchRAM Changelog
 ======================
 #### v2.7.0
-- Improved performance on macOS 15 by disabling incompatible patches
+- Improved performance on macOS 15+ by disabling incompatible patches
 - Require setting bluetoothExternalDongleFailed and bluetoothInternalControllerInfo NVRAM variables on all macOS versions
 - Added `-btlfxnvramcheck` to work without NVRAM variables on older systems
+- Disabled automatic `board-id` patch in bluetoothd on macOS 14+, since it is unused by Intel BT
+- Added `-btlfxboardid` boot argument to patch `board-id` on on macOS 14+ if absolutely necessary.
 
 #### v2.6.9
 - Added constants for macOS 15 support

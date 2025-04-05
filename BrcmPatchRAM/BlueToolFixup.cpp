@@ -232,15 +232,19 @@ static void pluginStart() {
     if (getKernelVersion() < KernelVersion::Monterey)
         return;
     lilu.onPatcherLoadForce([](void *user, KernelPatcher &patcher) {
-        auto boardId = BaseDeviceInfo::get().boardIdentifier;
-        auto boardIdSize = strlen(boardId) + 1;
-        shouldPatchBoardId = boardIdSize == kBoardIdSize || boardIdSize == kBoardIdSizeLegacy;
-        if (shouldPatchBoardId)
-            for (size_t i = 0; i < arrsize(boardIdsWithUSBBluetooth); i++)
-                if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
-                    shouldPatchBoardId = false;
-                    break;
-                }
+        if (getKernelVersion() >= KernelVersion::Sonoma) {
+            shouldPatchBoardId = checkKernelArgument("-btlfxboardid");
+        } else {
+            auto boardId = BaseDeviceInfo::get().boardIdentifier;
+            auto boardIdSize = strlen(boardId) + 1;
+            shouldPatchBoardId = boardIdSize == kBoardIdSize || boardIdSize == kBoardIdSizeLegacy;
+            if (shouldPatchBoardId)
+                for (size_t i = 0; i < arrsize(boardIdsWithUSBBluetooth); i++)
+                    if (strcmp(boardIdsWithUSBBluetooth[i], boardId) == 0) {
+                        shouldPatchBoardId = false;
+                        break;
+                    }
+        }
         if ((getKernelVersion() == KernelVersion::Monterey && getKernelMinorVersion() >= 5) || getKernelVersion() > KernelVersion::Monterey)
             // 12.4 Beta 3+, XNU 21.5
             shouldPatchAddress = checkKernelArgument("-btlfxallowanyaddr");
