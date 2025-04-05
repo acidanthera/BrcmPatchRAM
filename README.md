@@ -174,6 +174,13 @@ Required for macOS 12 or newer, as in macOS 12 Apple has changed parts of the Bl
   
 Do not use it with BrcmBluetoothInjector for macOS 12 or newer.
 
+You will need to set the following NVRAM variables through your bootloader for at least Intel Bluetooth to work:
+
+* `7C436110-AB2A-4BBB-A880-FE41995C9F82:bluetoothExternalDongleFailed` — `00`
+* `7C436110-AB2A-4BBB-A880-FE41995C9F82:bluetoothInternalControllerInfo` — `00000000000000000000000000000000`
+
+It is recommended to do it through OpenCore NVRAM section. On macOS 14 and older it is possible to achieve the same with `-btlfxnvramcheck` boot argument, but it is much less efficient.
+
 ### Supported Devices
 
 BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
