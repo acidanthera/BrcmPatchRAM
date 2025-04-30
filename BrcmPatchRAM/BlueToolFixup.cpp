@@ -147,6 +147,20 @@ static const uint8_t kSkipInternalControllerNVRAMCheckPatched13_3[] =
     0x90, 0x90
 };
 
+static const uint8_t kBadChipsetCheckOriginal15_4[] =
+{
+    0x81, 0xF9,              // cmp ecx
+    0x6F, 0x17, 0x00, 0x00,  // int 5999
+    0x77, 0x30               // ja short
+};
+
+static const uint8_t kBadChipsetCheckPatched15_4[] =
+{
+    0x90, 0x90,
+    0x90, 0x90, 0x90, 0x90,
+    0x90, 0x90
+};
+
 static bool shouldPatchBoardId = false;
 static bool shouldPatchAddress = false;
 static bool shouldPatchNvramCheck = false;
@@ -214,6 +228,8 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
             searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal, kBadChipsetCheckPatched);
             if (getKernelVersion() >= KernelVersion::Ventura && getKernelVersion() < KernelVersion::Sequoia)
                 searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal13_3, kBadChipsetCheckPatched13_3);
+            if (getKernelVersion() >= KernelVersion::Sequoia)
+                searchAndPatch(data, PAGE_SIZE, path, kBadChipsetCheckOriginal15_4, kBadChipsetCheckPatched15_4);
             if (shouldPatchNvramCheck)
                 searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipInternalControllerNVRAMCheck13_3, sizeof(kSkipInternalControllerNVRAMCheck13_3), kSkipInternalControllerNVRAMCheckMask13_3, sizeof(kSkipInternalControllerNVRAMCheckMask13_3), kSkipInternalControllerNVRAMCheckPatched13_3, sizeof(kSkipInternalControllerNVRAMCheckPatched13_3), nullptr, 0);
             if (shouldPatchBoardId)
