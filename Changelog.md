@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.7.1
+- Added constants for macOS 26 support
+
 #### v2.7.0
 - Improved performance on macOS 15+ by disabling incompatible patches
 - Require setting bluetoothExternalDongleFailed and bluetoothInternalControllerInfo NVRAM variables on all macOS versions
