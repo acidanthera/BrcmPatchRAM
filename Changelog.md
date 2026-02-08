@@ -1,5 +1,8 @@
 BrcmPatchRAM Changelog
 ======================
+#### v2.7.2
+- Added `bluetoothd` patches for macOS 26 (thx @spotlightishere et al)
+
 #### v2.7.1
 - Added constants for macOS 26 support
 
