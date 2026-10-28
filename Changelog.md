@@ -1,5 +1,14 @@
 BrcmPatchRAM Changelog
 ======================
+#### Unreleased
+- BlueToolFixup: `-btlfxchipsetdetection` no longer needs the `btlfx-product-name` NVRAM variable. The literal `Bluetooth USB Host Controller` that `bluetoothd` compares the `USB Product Name` of Bluetooth USB devices with (`Found_USB_Dongle`, `GetProductAndVendorID`) is replaced by the name the adapter really reports, which must be given in the NVRAM variable `btlfxrealname` under the Lilu GUID `4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102` (max 29 characters, string or data, e.g. `Broadcom 20702 Bluetooth 4.0`; without it the patch is not applied). The comparison stays in `bluetoothd` and is done on every read, so the adapter is only treated as the internal module (chipset detected from the controller, e.g. `BCM_20702A3`) while it currently reports that name. The VSC error bypass is kept
+- BrcmPatchRAM3: verify the controller after the firmware upload and before revealing the USB interfaces (HCI `Read Local Version`, stray events discarded, silence required), so `bluetoothd` does not start its HCI init while the chip may still be busy with the new firmware (`bpr_verify`, `bpr_verifytimeout`, `BPR-LastVerify`); the optional post-reply silence wait (`bpr_verifyquiet`, default off) is not used by default because it broke the transport attach at boot
+- BrcmPatchRAM3: bounded waits for device replies, several upload attempts and background recovery after a failed upload
+- BrcmPatchRAM3: keep USB interfaces unregistered during the firmware upload so `bluetoothd` cannot interfere (`bpr_hide`)
+- BrcmPatchRAM3: check the device after wake and re-enumerate it if it is dead (`bpr_wakeprobe`)
+- BrcmPatchRAM3: publish state as `BPR-*` IORegistry properties
+- BrcmPatchRAM3: limit USB port resets to 3 in a row (cleared by a passing probe or 10 minutes), `bpr_testprobefail=1` runs the probe and reset path as a self test
+
 #### v2.7.2
 - Added `bluetoothd` patches for macOS 26 (thx @spotlightishere et al)
 

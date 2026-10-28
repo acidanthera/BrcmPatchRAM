@@ -16,3 +16,4 @@ GeneratedFirmwares.cpp
 GeneratedFirmwaresMD5.txt
 /MacKernelSDK
 /Lilu.kext
+dist/

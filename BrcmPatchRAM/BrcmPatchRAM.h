@@ -112,7 +112,74 @@ private:
     volatile DeviceState mDeviceState = kInitialize;
     volatile uint16_t mFirmwareVersion = 0xFFFF;
     IOLock* mCompletionLock = NULL;
-    
+
+#ifdef TARGET_CATALINA
+    /*
+     * Robustness additions (BrcmPatchRAM3 only):
+     *  - bounded waits for device replies (mStepTimeout)
+     *  - several upload attempts per start (mMaxAttempts)
+     *  - delayed background recovery if every attempt failed
+     *  - optional USB re-enumeration as a last resort (mAllowPortReset)
+     */
+    UInt32 mMaxAttempts = 3;
+    UInt32 mStepTimeout = 3000;          // ms to wait for one device reply
+    bool mAllowPortReset = false;        // boot-arg bpr_portreset=1 (reset USB port if all upload attempts fail)
+    bool mHideInterfaces = true;         // boot-arg bpr_hide=0 disables: keep interfaces unregistered during upload
+    bool mWakeProbe = true;              // boot-arg bpr_wakeprobe=0 disables: check device health after wake
+    bool mTestProbeFail = false;         // boot-arg bpr_testprobefail=1: pretend the wake probe failed (testing)
+    volatile bool mReadDone = false;     // set by readCompletion, protected by mCompletionLock
+    volatile bool mUploadOk = false;     // result of the most recent upload run
+    volatile bool mShuttingDown = false;
+    volatile bool mResetIssued = false;  // USB re-enumeration requested; device will go away
+    volatile bool mInterfacesHidden = false; // interfaces exist but are not registered for matching yet
+    UInt32 mRecoveryRound = 0;
+    UInt32 mWakeCheckRetries = 0;
+    IOWorkLoop* mRecoveryLoop = NULL;
+    IOTimerEventSource* mRecoveryTimer = NULL;
+    IOTimerEventSource* mWakeTimer = NULL;
+    IOLock* mUploadLock = NULL;          // serialises start()/recovery/wake-check device access
+
+    /*
+     * Controller verification before the interfaces are handed to the native stack.
+     * After the firmware upload the chip may still be rebooting its new firmware and can emit
+     * its own HCI Reset completion. If bluetoothd starts its HCI init in the middle of that, its
+     * first commands are lost, the stack sees an orphan event and times out on ReadLocalVersion
+     * ("HCI initialization failed", crash loop). So, while the interfaces are still hidden,
+     * ask the chip for its local version ourselves, discard any stray events and only continue
+     * once it answers.
+     */
+    bool mVerifyHCI = true;              // boot-arg bpr_verify=0 disables
+    UInt32 mVerifyQuiet = 0;             // boot-arg bpr_verifyquiet: ms of silence required after the reply (0 = skip)
+    UInt32 mVerifyTimeout = 6000;        // boot-arg bpr_verifytimeout: total ms to wait for the controller to answer
+    volatile bool mVerifyMode = false;   // readCompletion routes events to verifyParse (protected by mCompletionLock)
+    volatile bool mVerifyGotVersion = false; // a Command Complete for Read Local Version arrived
+    volatile bool mVerifyFailedLast = false; // the most recent upload attempt failed in verification, not in the upload
+    volatile IOReturn mVerifyReadStatus = kIOReturnSuccess; // last non-success status of a read in verify mode
+    volatile UInt32 mVerifyStray = 0;    // events other than the Read Local Version reply (discarded)
+    volatile UInt16 mVerifyLastStrayOpcode = 0;
+    volatile UInt8 mVerifyLastStrayEvent = 0;
+    UInt8 mVerifyOpStatus = 0;           // HCI status of the Read Local Version reply
+    UInt8 mVerifyHciVersion = 0;
+    UInt16 mVerifyHciRevision = 0;
+    UInt8 mVerifyLmpVersion = 0;
+    UInt16 mVerifyManufacturer = 0;
+    UInt16 mVerifyLmpSubversion = 0;
+
+    bool verifyControllerReady();
+    void verifyParse(void* response, UInt16 length);
+    void abortPendingRead();
+
+    bool uploadFirmwareOnce();
+    bool uploadWithRetries();
+    void scheduleRecovery(UInt32 delayMs);
+    void recoveryTimerFired(IOTimerEventSource* sender);
+    void wakeCheckFired(IOTimerEventSource* sender);
+    bool probeDeviceAlive();
+    void requestReset(const char* reason);
+    void revealInterfaces();
+    void publishStatus(const char* key, const char* format, ...) __printflike(3, 4);
+#endif
+
 #ifdef DEBUG
     static const char* getState(DeviceState deviceState);
 #endif

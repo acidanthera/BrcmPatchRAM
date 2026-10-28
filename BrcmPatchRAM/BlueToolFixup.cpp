@@ -12,6 +12,8 @@
 #include <Headers/kern_util.hpp>
 #include <Headers/kern_version.hpp>
 #include <Headers/kern_devinfo.hpp>
+#include <Headers/kern_nvram.hpp>
+#include <Headers/kern_efi.hpp>
 
 
 #define MODULE_SHORT "btlfx"
@@ -164,6 +166,7 @@ static const uint8_t kBadChipsetCheckPatched15_4[] =
 static bool shouldPatchBoardId = false;
 static bool shouldPatchAddress = false;
 static bool shouldPatchNvramCheck = false;
+static bool shouldPatchChipsetDetection = false;
 
 static constexpr size_t kBoardIdSize = sizeof("Mac-F60DEB81FF30ACF6");
 static constexpr size_t kBoardIdSizeLegacy = sizeof("Mac-F22586C8");
@@ -185,7 +188,164 @@ static const char boardIdsWithUSBBluetooth[][kBoardIdSize] = {
     "Mac-BE088AF8C5EB4FA2"
 };
 
+
+/**
+ * Make bluetoothd treat the Broadcom USB adapter as the internal module instead of a third party dongle.
+ *
+ * bluetoothd (Found_USB_Dongle and GetProductAndVendorID) compares, every time it looks for its controller,
+ * the "USB Product Name" IORegistry property of each Bluetooth USB device with the literal
+ * "Bluetooth USB Host Controller" (Apple's internal module). When equal, the device is not considered an external
+ * dongle and the chipset is identified from the controller itself (e.g. BCM_20702A3).
+ * The literal is replaced with the name the adapter really reports, so the comparison is still done by bluetoothd on
+ * every read: the adapter is only treated as internal when it currently reports that exact name (for example not
+ * while it is in a state where it reports something else), and any other device is handled as before.
+ */
+static const char kBluetoothUSBHostControllerOriginal[] = "Bluetooth USB Host Controller";
+// Required with -btlfxchipsetdetection (btlfxrealname="..."), there is no default
+static char gRealUSBProductName[sizeof(kBluetoothUSBHostControllerOriginal)] = {};
+// Resolved once, when the first page of bluetoothd is patched (the NVRAM is not readable yet while the plugin starts):
+// 0 = not resolved yet, 1 = name available, 2 = not available (patch disabled)
+static UInt32 gRealNameState = 0;
+static IOLock *gRealNameLock = nullptr;
+
+/**
+ * Bypass the Apple proprietary procol which isn't supported on stock BCM cards
+ * which cause bluetoothd to fail due to HCI error
+ */
+static const uint8_t kBypassVSCErrorOriginal[] = {
+    0x80, 0x3D, 0x00, 0x00, 0x00, 0x00, 0x00, // cmp byte ptr [rip+X], 0
+    0x74, 0x00,                             // jz short
+    0x48, 0x8D, 0x35, 0x00, 0x00, 0x00, 0x00, // lea rsi, [rip+string]
+    0x31, 0xFF,                             // xor edi, edi
+    0x5B                                   // pop rbx
+};
+
+static const uint8_t kBypassVSCErrorMask[] = {
+    0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, // cmp
+    0xFF, 0x00,                             // jz
+    0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, // lea
+    0xFF, 0xFF,                             // xor
+    0xFF                                   // pop
+};
+
+static const uint8_t kBypassVSCErrorPatched[] = {
+    0x80, 0x3D, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xEB, 0x00,   // jmp short (offset conservé)
+    0x48, 0x8D, 0x35, 0x00, 0x00, 0x00, 0x00,
+    0x31, 0xFF,
+    0x5B
+};
+
+static const uint8_t kForceFallbackOriginal[] = {
+    0x55,                         // push rbp
+    0x48, 0x89, 0xE5,             // mov rbp, rsp
+    0x41, 0x56,                   // push r14
+    0x53,                         // push rbx
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call sub_1001345D9
+    0x85, 0xC0,                   // test eax, eax
+    0x74, 0x00,                   // jz rel8
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call sub_1001345A7
+    0x84, 0xC0                    // test al, al
+};
+
+
+static const uint8_t kForceFallbackMask[] = {
+    0xFF,                         // push rbp
+    0xFF, 0xFF, 0xFF,             // mov rbp, rsp
+    0xFF, 0xFF,                   // push r14
+    0xFF,                         // push rbx
+    0xFF, 0x00, 0x00, 0x00, 0x00, // call rel32 (wildcard offset)
+    0xFF, 0xFF,                   // test eax, eax
+    0xFF, 0x00,                   // jz opcode exact, offset wildcard
+    0xFF, 0x00, 0x00, 0x00, 0x00, // call rel32 (wildcard)
+    0xFF, 0xFF                    // test al, al
+};
+
+
+static const uint8_t kForceFallbackPatched[] = {
+    0x55,                         // push rbp
+    0x48, 0x89, 0xE5,             // mov rbp, rsp
+    0x41, 0x56,                   // push r14
+    0x53,                         // push rbx
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call sub_1001345D9 (inchangé)
+    0x31, 0xC0,                   // xor eax, eax
+    0xEB, 0x00,                   // jmp rel8 (reprend l’offset du jz)
+    0xE8, 0x00, 0x00, 0x00, 0x00, // call sub_1001345A7 (jamais exécuté)
+    0x84, 0xC0                    // test al, al (jamais exécuté)
+};
+
+
+
 static mach_vm_address_t orig_cs_validate {};
+
+#pragma mark - Helper functions
+
+// Gathered from https://github.com/acidanthera/RestrictEvents/blob/master/RestrictEvents/RestrictEvents.cpp
+static bool readNvramVariable(const char *fullName, const char16_t *unicodeName, const EFI_GUID *guid, void *dst, size_t max) {
+    // First try the os-provided NVStorage. If it is loaded, it is not safe to call EFI services.
+    NVStorage storage;
+    if (storage.init()) {
+        uint32_t size = 0;
+        auto buf = storage.read(fullName, size, NVStorage::OptRaw);
+        if (buf) {
+            // Do not care if the value is a little bigger.
+            if (size <= max) {
+                memcpy(dst, buf, size);
+            }
+            Buffer::deleter(buf);
+        }
+
+        storage.deinit();
+
+        return buf && size <= max;
+    }
+
+    // Otherwise use EFI services if available.
+    auto rt = EfiRuntimeServices::get(true);
+    if (rt) {
+        uint64_t size = max;
+        uint32_t attr = 0;
+        auto status = rt->getVariable(unicodeName, guid, &attr, &size, dst);
+
+        rt->put();
+        return status == EFI_SUCCESS && size <= max;
+    }
+
+    return false;
+}
+
+// btlfxrealname: NVRAM variable under the Lilu GUID. Resolved only once.
+static bool resolveRealUSBProductName() {
+    if (gRealNameLock)
+        IOLockLock(gRealNameLock);
+    if (gRealNameState == 0) {
+        constexpr size_t maxLength = sizeof(gRealUSBProductName) - 1;
+        char name[64] {};
+        // Read the same way btlfx-product-name was read (raw bytes, the last byte of name stays 0)
+        bool haveName = readNvramVariable(NVRAM_PREFIX(LILU_VENDOR_GUID, "btlfxrealname"), u"btlfxrealname", &EfiRuntimeServices::LiluVendorGuid, name, sizeof(name) - 1) && name[0];
+        bool printable = haveName;
+        for (size_t i = 0; printable && name[i]; i++)
+            printable = name[i] >= 0x20 && name[i] < 0x7F;
+        if (!haveName) {
+            SYSLOG(MODULE_SHORT, "-btlfxchipsetdetection requires the NVRAM variable btlfxrealname (Lilu GUID) set to the USB Product Name of the adapter (max %u characters), chipset detection patch disabled", (unsigned)maxLength);
+            gRealNameState = 2;
+        } else if (!printable) {
+            SYSLOG(MODULE_SHORT, "btlfxrealname does not contain a printable name, chipset detection patch disabled");
+            gRealNameState = 2;
+        } else if (strlen(name) > maxLength) {
+            SYSLOG(MODULE_SHORT, "btlfxrealname is longer than %u characters, chipset detection patch disabled", (unsigned)maxLength);
+            gRealNameState = 2;
+        } else {
+            strlcpy(gRealUSBProductName, name, sizeof(gRealUSBProductName));
+            SYSLOG(MODULE_SHORT, "chipset detection patch enabled for USB Product Name '%s'", gRealUSBProductName);
+            gRealNameState = 1;
+        }
+    }
+    bool ok = gRealNameState == 1;
+    if (gRealNameLock)
+        IOLockUnlock(gRealNameLock);
+    return ok;
+}
 
 #pragma mark - Kernel patching code
 
@@ -236,6 +396,16 @@ static void patched_cs_validate_page(vnode_t vp, memory_object_t pager, memory_o
                 searchAndPatch(data, PAGE_SIZE, path, boardIdsWithUSBBluetooth[0], kBoardIdSize, BaseDeviceInfo::get().boardIdentifier, kBoardIdSize);
             if (shouldPatchAddress)
                 searchAndPatchWithMask(data, PAGE_SIZE, path, kSkipAddressCheckOriginal, kSkipAddressCheckMask, kSkipAddressCheckPatched, kSkipAddressCheckMask);
+            
+            if (shouldPatchChipsetDetection && resolveRealUSBProductName()) {
+                // The name comparison itself stays in bluetoothd (see above)
+                searchAndPatch(data, PAGE_SIZE, path, kBluetoothUSBHostControllerOriginal, sizeof(kBluetoothUSBHostControllerOriginal), gRealUSBProductName, sizeof(gRealUSBProductName));
+
+                // Do not fail the HCI initialization on Apple only VSCs that stock BCM adapters do not support
+                searchAndPatchWithMask(data, PAGE_SIZE, path, kBypassVSCErrorOriginal, kBypassVSCErrorMask, kBypassVSCErrorPatched, kBypassVSCErrorMask);
+                searchAndPatchWithMask(data, PAGE_SIZE, path, kForceFallbackOriginal, kForceFallbackMask, kForceFallbackPatched, kForceFallbackMask);
+
+            }
         }
     }
 }
@@ -267,6 +437,11 @@ static void pluginStart() {
             shouldPatchAddress = checkKernelArgument("-btlfxallowanyaddr");
         if (getKernelVersion() <= KernelVersion::Sonoma)
             shouldPatchNvramCheck = checkKernelArgument("-btlfxnvramcheck");
+        
+        shouldPatchChipsetDetection = checkKernelArgument("-btlfxchipsetdetection");
+        if (shouldPatchChipsetDetection)
+            gRealNameLock = IOLockAlloc();
+        
         KernelPatcher::RouteRequest csRoute = KernelPatcher::RouteRequest("_cs_validate_page", patched_cs_validate_page, orig_cs_validate);
         if (!patcher.routeMultipleLong(KernelPatcher::KernelID, &csRoute, 1))
             SYSLOG(MODULE_SHORT, "failed to route cs validation pages");

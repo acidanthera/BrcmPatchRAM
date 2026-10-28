@@ -21,6 +21,8 @@
 #include "Common.h"
 
 #include <IOKit/usb/IOUSBHostInterface.h>
+#include <IOKit/IOLib.h>
+#include <kern/thread.h>
 
 #include <sys/utfconv.h>
 
@@ -111,6 +113,81 @@ IOReturn USBDeviceShim::resetDevice()
     m_pDevice->setConfiguration(0);
     //m_pDevice->reset();
     return kIOReturnSuccess;
+}
+
+IOReturn USBDeviceShim::reEnumerate()
+{
+    if (!m_pDevice)
+        return kIOReturnNoDevice;
+    // Resets the port. The IOUSBHostDevice is torn down and re-enumerated,
+    // which makes the driver match and start again from scratch.
+    return m_pDevice->reset();
+}
+
+/*
+ * reset() terminates the device and all of its children, including the driver
+ * that asked for it. Calling it from start()/stop() or from a work loop that
+ * stop() has to wait for can therefore deadlock, so it runs in its own thread
+ * which only holds a reference to the USB device, never to the driver.
+ */
+static void reEnumerateThread(void* arg, wait_result_t)
+{
+    IOUSBHostDevice* device = static_cast<IOUSBHostDevice*>(arg);
+
+    // give the caller time to return and release its locks
+    IOSleep(200);
+
+    IOReturn result = device->reset();
+    AlwaysLog("USB re-enumeration finished (\"%s\" 0x%08x).\n", result == kIOReturnSuccess ? "success" : "failed", result);
+
+    device->release();
+    thread_terminate(current_thread());
+}
+
+IOReturn USBDeviceShim::reEnumerateAsync()
+{
+    if (!m_pDevice)
+        return kIOReturnNoDevice;
+
+    thread_t thread = THREAD_NULL;
+
+    m_pDevice->retain();
+
+    if (kernel_thread_start(reEnumerateThread, m_pDevice, &thread) != KERN_SUCCESS) {
+        m_pDevice->release();
+        return kIOReturnNoResources;
+    }
+    thread_deallocate(thread);
+    return kIOReturnSuccess;
+}
+
+void USBDeviceShim::registerInterfaces()
+{
+    if (!m_pDevice)
+        return;
+
+    OSIterator* iterator = m_pDevice->getChildIterator(gIOServicePlane);
+
+    if (!iterator)
+        return;
+
+    // Collect first, registering may change the registry while we iterate.
+    OSArray* interfaces = OSArray::withCapacity(4);
+
+    while (OSObject* candidate = iterator->getNextObject())
+    {
+        if (OSDynamicCast(IOUSBHostInterface, candidate) && interfaces)
+            interfaces->setObject(candidate);
+    }
+    iterator->release();
+
+    if (interfaces) {
+        for (unsigned i = 0; i < interfaces->getCount(); i++) {
+            if (IOUSBHostInterface* interface = OSDynamicCast(IOUSBHostInterface, interfaces->getObject(i)))
+                interface->registerService();
+        }
+        interfaces->release();
+    }
 }
 
 UInt8 USBDeviceShim::getNumConfigurations()
