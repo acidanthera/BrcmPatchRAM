@@ -181,6 +181,8 @@ You will need to set the following NVRAM variables through your bootloader for a
 
 It is recommended to do it through OpenCore NVRAM section. On macOS 14 and older it is possible to achieve the same with `-btlfxnvramcheck` boot argument, but it is much less efficient.
 
+On macOS 14 and newer, `BlueToolFixup` no longer automatically patches `board-id` for USB Bluetooth support; add `-btlfxboardid` to boot arguments if your SMBIOS requires it.
+
 ### Supported Devices
 
 BrcmPatchRAM supports any Broadcom USB bluetooth device based on the BCM20702 chipset (possibly other chipsets are supported also, but this has not been tested).
